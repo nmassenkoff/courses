@@ -1,0 +1,110 @@
+<h1 id="heading">Apache</h1>
+<h2 id="heading">Installation</h2>
+
+only focus on linux
+
+download software (binary or source)
+
+prefer source so that you can tweak it.
+
+Option list very long (hundreds)
+
+set c compiler (cc=/usr/sbin/gcc)
+
+get at httpd.apache.org/download.cgi
+
+usually come as tarball (http-NN.tar.gz where NN=version number)
+
+<pre>
+	tar -zxcf httpd-NN.tar.gz
+
+	cd httpd-NN
+	./configure --prefix=xxx (where xxx = any sub directory to install apache i.e. /usr/local/apache, the default is /usr/local)
+</pre>
+
+./configure ouputs makefile
+
+<pre>
+	make (has options install, test, and clean)
+	make test
+	(become root)
+	make install
+	make clean (remove byproducts that are no longer important, often very large)
+</pre>
+<h2 id="heading">Testing Installation</h2>
+
+	<h3 id="heading">First Modify Config File</h3>
+
+<pre>
+	vim xxx/conf/httpd.conf 
+	(Do so modifications, detail later)
+
+</pre>
+	start apache, 3 possible ways:
+<pre>
+	xxx/bin/apachectl -k start
+or
+	cd /etc/init.d
+	httpd start
+or
+	service httpd start
+</pre>
+	After start very silent (hard to know if everything is working)
+
+	Inspect log files to verify httpd is running correct
+
+	something about apache portable run time
+
+	xxx/srclib/apr
+	xxx/srclib/apr-util
+
+	./configure --with-included-apr
+	./configure --with-included-apr-util
+
+	Apache requires perl (or PCRE library [PCRE-xxx.tar.gz]
+
+<h2 id="heading">Upgrading Apache</h2>
+
+	when unpacking apache two configure files exist:
+		./configure
+		./configure.nice
+
+	./configure.nice is used for upgrade
+	./configure.nice downloads latest version
+	use --prefix=xxx to make sure not to have two separate installs
+
+<pre>
+	./configure.nice --prefix=xxx
+	make
+	make test
+	make install
+	make clean
+</pre>
+
+	after upgrade must bring down old httpd, and start new one
+
+<pre>
+	xxx/bin/apachectl -k gracefull stop
+	xxx/bin/apachectl start
+
+<h4 id="heading">using yum</h4>
+yum install httpd
+
+<h4 id="heading">Logfiles</h4>
+
+located: xxx/logs/
+
+xxx/logs/http.pid ("group" process id or parent pid for all httpds
+
+used for "rainy days" ie you need to shutdown httpd server and the only way you can do it is by pid.
+
+kill -9 $(cat xxx/logs/http.pid)
+
+also can kill by using config file directive:
+PidFile /usr/sbin/httpd.pid
+
+if kill must remove xxx/logs/http.pid or else cannot restart httpd (httpd.pid file acts as lockfile)
+
+
+
+<h2 id="heading">Setup/Configuration</h2>

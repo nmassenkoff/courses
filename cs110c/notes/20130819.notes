@@ -1,0 +1,89 @@
+<h1>August 19, 2013</h1>
+<h1>Chapter 1 continued...</h1>
+
+<h2>Program Readability</h2>
+
+<p>Read on your own, pg. 40-45</p>
+
+<h2>Naming conventions</h2>
+
+<p>See notes printout for 8/14/13 (follow book syntax)</p>
+<p>Place { on its own line</p>
+
+<h2>Documentation</h2>
+<p>pg. 44-45</p>
+<p>Be sure to list purpose, preconditions and postconditions for all funcs, including member funcs.</p>
+
+<h2>Principles of OOP</h2>
+<ul>
+	<li>Encapsulation</li>
+	<li>Inheritance</li>
+	<li>Polymorphism</li>
+</ul>
+
+<h2>Unified Modeling language (UML)</h2>
+
+<p>Programming language independent way to structure a program</p>
+<p>Easier to change structure during design phase</p>
+<p>Table structure represents class and member functions</p>
+<h3>Fill in syntax from notes printout</h3>
+
+<h2>ADT (Abstract Data type)</h2>
+<p>Devoped first then UML</p>
+
+
+<h2>In class exercise</h2>
+<p>p.60 self-test 2, Specifications- write UML for func as well as prpose preconditions postconditions</p>
+<h3>From book:</h3>
+<p>Write specifications using UML notation for a func that computes the sum of the first 5 positive integers in an array of n arbitrary<p>
+<pre>
+	firstFivePosSum (in someIntegerArray: integerArray, in n: integer): integer 
+	// Purpose: add first five positive integers of an integer array
+	// Preconditions: A integer array with at least 5 positive values
+	// Postconditions: Returns an integer value representing the sum
+</pre>
+
+
+<h1>Chapter 2: Recursion</h1>
+<p>Recursion: a function that calls itself</p>
+<h2>Example: Factorial Function</h2>
+<ul>
+	<li>4! = 4*3*2*1 = 24</li>
+	<li>2! = 2*1 = 2</li>
+	<li>1! = 1</li>
+	<li>0! = 1</li>
+	<li>n! = n * (n-1) * ... * 2 * 1</li>
+	<li>n! = n (n-1)!</li>
+</ul>
+<p>Base case = simple, nonrecursive problem.</p>
+<p>Basic recursive algorithm:</p>
+<p>If this is a base case, then solve it; else redefine the problem using recursion</p>
+<p>Factorial Problem:</p>
+<ul>
+	<li>Base case: n! = 1 for n= 0</li>
+	<li>Reducing problem n!=n(n-1)! for n &gt; 0</li>
+</ul>
+
+<pre>
+	int fact(int n)
+	// pre n &gt;= 0
+	{
+		if (n == 0)
+			return 1;
+		else
+			return n * fact (n-1);
+	}
+</pre>
+
+<h3>4 Criteria for recursive solution</h3>
+<p>Rules that must be followed to be recursive</p>
+<ol>
+	<li>A recursive func calls itself</li>
+	<li>Each recursive call reduces the size of the problem</li>
+	<li>There is at least 1 base case</li>
+	<li>A base case is released</li>
+</ol>
+
+<h3>The box method (aka box trace)</h3>
+<p>Refer to the notes printout</p>
+

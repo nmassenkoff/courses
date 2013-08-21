@@ -1,0 +1,51 @@
+<h1 id="heading">Final</h1>
+<ul>
+	<li>SSH</li>
+	<li>NIS</li>
+	<li>NFS</li>
+	<li>DNS</li>
+	<li>Apache</li>
+</ul>
+
+<p>12 Questions, couple of short scripts (bash or sh or ksh only), open book open-notes, closed computer, cellphone, tablet</p>
+<p>How to create a daemon</p>
+<h1 id="heading">Install Apache</h1>
+<p>Make sure have APR installed</p>
+
+<pre>
+	./srclib APR
+	./srclib-util APR-UTIL
+	./configure
+</pre>
+<p>Install pcre from pcre.org (libpcre)</p>
+<p>Default location /usr/local/apache2</p>
+
+<h3 id="heading">Install APR</h3>
+<pre>
+	wget http://mirrors.axint.net/apache//apr/apr-1.4.6.tar.gz
+	tar -xvzf apr-1.4.6.tar.gz
+	cd apr-1.4.6
+	./configure 
+	make
+	make install
+</pre>
+<h3 id="heading">Install APR-util</h3>
+<pre>
+	wget http://mirrors.axint.net/apache//apr/apr-util-1.4.1.tar.gz
+	tar -xvzf apr-util-1.4.1
+	cd apr-util-1.4.1
+	./configure --with-apr=/usr/local/apr
+	make
+	make install
+</pre>
+<h3 id="heading">Install Apache</h3>
+<pre>
+</pre>
+
+<h3 id="heading">Make httpd for init.d</h3>
+<pre>
+	#!/bin/bash
+	chkconfig: 345 99 1
+	apache_path=/usr/local/apache2
+	${apache_path}/bin/apachectl -k $1
+</pre>

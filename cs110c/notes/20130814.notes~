@@ -1,0 +1,119 @@
+<h1 id="heading">Software life cycle</h1>
+<h2>Old model - Waterfall</h2>
+<ul>
+	<li>Specification</li>
+	<li>Design</li>
+	<li>Risk Analysis</li>
+	<li>Verification</li>
+	<li>Coding</li>
+	<li>Testing</li>
+	<li>Refining</li>
+	<li>Production</li>
+	<li>Maintenance</li>
+</ul>
+
+<h2 id="heading">cwWindows Method</h2>
+<ul>
+	<li>Phases</li>
+	<li>M5 model</li>
+	<li>Rational unified Process (RUP)</li>
+</ul>
+
+<p>Analysis, design and implementation generally occur throuhout all phases.  Testing all phases except inception.</p>
+<p><b>Risk:</b> An ongoin or upcoming concern that has a significant probability of adversely affecting the completion of major milestones and product quality</p>
+<table border="0">
+	<tr>
+		<th>Phase</th>
+		<th>Inception</th>
+		<th>Elaboration</th>
+		<th>Construction</th>
+		<th>Transition</th>
+	</tr>
+	<tr>
+		<td><p>Key Question</p></td>
+		<td><p>Should we build it?</p></td>
+		<td><p>Can we build it?</p></td>
+		<td><p>Are we building it?</p></td>
+		<td><p>Have we delivered it?</p></td>
+	</tr>
+	<tr>
+		<td><p>Focus</p></td>
+		<td><p>Scope</p></td>
+		<td><p>Risk</p></td>
+		<td><p>Functionality</p></td>
+		<td><p>Delivery</p></td>
+	</tr>
+</table>
+
+<h1 id="heading">Design</h1>
+<ul>
+	<li>Purpose</li>
+	<li>Preconditions</li>
+	<li>Postconditions</li>
+</ul>
+
+<p>Example:</p>
+<pre>
+	sort (anArray, num)
+	// Sorts an array into ascending order
+	// Pre: anAnarray has at least num integers and 0 &lt;= num &lt;= max size of anArray
+	// Post: an Array[0] &lt;= anArray[1] &lt;= ... &lt;- anArray[num-1]
+	// 	num is unchanged
+
+</pre>
+
+<h1 id="heading">Error Handling</h1>
+<p>upon an error, a function should either:</p> 
+<ul>
+	<li>Return a special value</li>
+	<li>Throw an exception</li>
+</ul>
+<p>But generally should not display an error message.  Allows programmer to change behaviour of program based on error.</p>
+
+<h1 id="heading">Testing</h1>
+
+<p>Principles:</p>
+<ul>
+	<li>Quality of test data more important than quantity.<li>
+	<li>Program testing can show the presence of bugs, but generally not their absence</li>
+</ul>
+
+<h3>Testing Methods</h3>
+<h4>Black box method</h4>
+<p>Choose:</p>
+<ul>
+	<li>Easy values</li>
+	<li>Typical, realistic values</li>
+	<li>Extreme values</li>
+	<li>Illegal values</li>
+</ul>
+<h4>White box method</h4>
+<ul>
+	<li>Test all paths through program</li>
+	<li>Test boundary values</li>
+</ul>
+
+<h4>Ticking Box</h4>
+<ul>
+	<li>Put software out of the wild and see what happens</li>
+	<li>Not good</li>
+</ul>
+
+<h4>Good strategy</h4>
+<p>Use white/glass box method for components, use black box method for integrated program.</p>
+
+<h2 id="heading">What is a good solution?</h2>
+<p>A solution is good if the total cost it incurs over all phases of its lifecycle is minimal.</p>
+
+<p>Most efficient is not necessarily the best!</p>
+<ul>
+	<li>Clarity</li>
+</ul>
+<h2>Quality of a solution depends on:</h2>
+<ul>
+	<li>Correctness</li>
+	<li>Efficiency</li>
+	<li>Time to develop</li>
+	<li>Ease of use</li>
+	<li>Cost of modifying and expanding a solution</li>
+</ul>

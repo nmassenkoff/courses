@@ -1,0 +1,98 @@
+<h3 id="sub">Installing NFS</h3>
+<pre>
+	apt-get install nfs-common
+	apt-get install portmap
+	apt-get intall nfs-kernel-server
+	apt-get install portmap
+
+	rcpinfo -p | grep nfs
+	nfsd n [n = number of threads reccomend 8]
+
+	/etc/init.d/nfsd exportfs -a
+</pre>
+
+
+NFS uses port 2049 (tcp/udp)
+portmap use port 111
+
+
+<h4 id="subsub">Check if install successfull</h4>
+<pre>
+	cat /proc/filesystems | grep nfs
+
+output:	noder	nfs
+	noder	nfs4
+
+	if nothing:
+	modprobe nfs
+
+	(forces modules of kernel to be reactivated)
+
+	/etc/syscntl - (modify kernel config)
+
+	rpcinfo -p | grep portmap
+
+</pre>
+
+<h3 id="subsub">Configuring NFS</h3>
+<p>
+<pre>
+/home/boggs	1.9.15.48(rw,no_root_squash)
+/usr		*.abcd.com(rw)
+/etc/xyz	(noaccess)
+</pre>
+
+<p>Squash - means you are no longer root when using nfs</p>
+
+<pre>
+	on client:
+	mkdir /home/nfs_local
+	mount -t nfs 10.1.1.50[server ip]/home/boggs /home/nfs-local
+
+	if timeout error
+	mount -t nfs nfsvers=3 10.1.1.50[server ip]/home/boggs/home/nfs-local
+
+	to test, on server side:
+	cd /home/boggs
+	touch nfs_test_file
+
+	on client:
+	ls /home/nfs_local (should see nfs_test_file)
+
+	more detailed mount:
+	mount -t nfs4 -o proto=tcp,port=2049, 1.2.4.9/data /mnt/data
+
+	other options:
+	hard - get timeout error
+	soft - keep tring to connect forever
+	trynum=n - number of connection tries before timeout
+
+</pre>
+
+<p>Add mount to fstab</p>
+
+<p><i>/etc/hosts.allow</i> list of hosts that are allowed</p>
+<p><i>/etc/hosts.deny</i> list of hosts that are denied</p>
+<h4 id="subsubsub">/etc/hosts.deny</h4>
+<pre>
+	portmap:ALL (means deny everything)
+	locked:ALL
+	mountd:ALL
+	rqutoad:ALL
+	statd:ALL
+</pre>
+<h4 id="subsubsub">/etc/hosts.allow</h4>
+<pre>
+	portmap:192.170.13.95,192.170.13.40,...
+	lockd:ip1,ip2,ip3,...
+	rquotad:ip1,ip2,...
+	statd:ip1,ip2,...
+	mountd:ip1,ip2,ip3,...
+</pre>
+<p>Most admins only do portmap, the rest is optional fine-tuning.</p>
+<p>Allow overrides deny (set deny first then allow)</p>
+<p>Use EXCEPT to designate exceptions</p>
+<pre>
+	portmap:192.170.13.95,192.170.13.40,... EXCEPT ip4,ip5,ip6
+</pre>
+	

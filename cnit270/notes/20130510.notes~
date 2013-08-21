@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+	<title>20130510</title>
+	
+</head>
+<body>
+	<h1 id="heading">Virtual Interface</h1>
+	<p>Used to associate multiple websites/ip addresses with one webserver.</p>
+	<p>Any machine comes with minimum 1 physical interface.  Usually name eth0, eth1, etc ...</p>
+	<p>Use ifconfig to determine interfaces</p>
+
+	<h2 id="heading">Configure Virtual Interface</h2>
+	<h3 id="heading">Manual Config</h3>
+	<p>As root:</p>
+	<pre>
+		ifconfig eth0:0 128.138.243.150 netmask 255.255.255.192 up
+		... (repeat for each ip address just increase eth0:1, eth0:2, ...)
+	</pre>
+	<h3 id="heading">Auto Config: Red Hat</h3>
+	<p>Go to /etc/sysconfig/network-scripts</p>
+	<p>Create a file for each ip address with the name: ifcfg-eth0:0 (ifcfg-eth0:1, ifcfg-eth0:2, ifcfg-eth0:3, ...)</p>
+	<p>In file put:</p>
+	<pre>
+		DEVICE=eth0:0
+		IPADDR=128.138.243.150
+		NETMASK=255.255.255.192
+		NETWORK=128.138.243.128
+		BROADCAST=128.138.243.191
+		ONBOOT=yes
+	</pre>
+	<p>To disable set ONBOOT=no</p>
+	<h3 id="heading">Auto Config: Ubuntu</h3>
+	<p>Go to /etc/network/interfaces/<p>
+	<p>Name of same convention as Red Hat</p>
+	<pre>
+		iface eth0:0 inet static
+		address 128.138.243.150
+		netmask 255.255.255.192
+		broadcast 123.138.243.191
+	</pre>
+	<p>To disable must remove file from directory</p>
+	<h2 id="heading">Configure Apache for Virtual Interfaces</h2>
+	<p>Go to http.conf or httpd.conf file</p>
+	<p>First part of config file for global settings (ie port=80)</p>
+	<p>Middle section is for default settings</p>
+	<p>Bottom section is for everything else</p>
+	<p>Create or modify the VirtualHost tag to look as follows:</p>
+	<pre>
+		&ltVirtualHost 128.138.243.150&gt
+			ServerName	www.abc.com
+			ServerAdmin 	webmaster@www.abc.com
+			DocumentRoot	/var/www/htdocs/abc
+			ErrorLog	logs/www/abc.com.access.log combined
+			ScriptAlias	/cgi-bin/	/var/www/cgi-bin/abc
+		&lt/VirtualHost&gt
+	</pre>
+	<h1 id="heading">Setting up Squid</h1>
+	<p>Squid 
+	<ol>
+		<li>Download program from www.squid-cache.org</li>
+		<li>Unzip</li>
+		<li>make</li>
+		<li>make install</li>
+		<li>make clean</li>
+	</ol>
+	<p>Configuration file squid.conf in htdocs directory</p>
+	<p>To start run /usr/local/squid/RunCache or use alias squid</p>
+	<p>If first time use -z option to empty all directories</p>
+
+
+
+
+</body>
+</html>

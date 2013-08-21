@@ -1,0 +1,17 @@
+<h1>CS 110c</h1>
+<h2>Teacher Info:</h2>
+<table>
+	<tr><td>Name:</td><td>Steve Abensohn</td></tr>
+	<tr><td>Schedule:</td><td>M and W 1:10-3:00 PM</td></tr>
+	<tr><td>Room:</td><td>BATL 453</td></tr>
+	<tr><td>Office:</td><td>   Batmale Hall Room 460 </td></tr>
+	<tr><td>Fall 2013 Office Hours:</td><td>   Mondays and Wednesdays 11:00-11:30 AM and 12:30-1:00 PM </td></tr>
+	<tr><td>Phone:</td><td>   (415) 239-3747 </td></tr>
+	<tr><td>Email:</td><td>   sabensoh@ccsf.edu</td></tr>
+	<tr><td>Web Address</td><td><a href='http://fog.ccsf.edu/~sabensoh'>http://fog.ccsf.edu/~sabensoh</a></td></tr>
+	<tr><td>Book:</td><td>Frank M. Carrano, <i>Data Absttraction and Problem Solving With C++: Walls and Mirrors, 5th edition</i></td></tr>
+</table>
+<h2>Description</h2>
+<p>A course in the analysis and design of computer algorithms and the underlying data structures using an object-oriented approach.  Analysis in the timing and efficiency of algorithms.  Study of lists, stacks, queses, trees, searching, sorting, and recursion.  Introduction to UML, heaps, graphs, tables, hashing, and direct access files.  Further study of abstract data types.</p>
+
+

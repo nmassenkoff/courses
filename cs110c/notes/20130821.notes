@@ -31,4 +31,123 @@
 
 <p>Draw box method to demistrate writeBackward</p>
 
+<h3>Binary Search...?</h3>
+<pre>
+	binarySearch(in anArray: arrayType, in first: integer, in last: integer, in value: elementType): integer //return index of value or something....
+	{
+		if (first &gth; last) // base case
+			value is not in the array
+		else
+		{
+			//Find midpoint of sub array (mid)
+			if (value is anArray[mid])
+				value is found
+			else if (value is less than anArray[mid])
+					value is in the first half of array
+					search first half
+				else
+					search second half
+		}
+	}
+</pre>
+<p>See pg. 96-97 in text for code</p>
 
+
+<p>Box trace of binary search</p>
+<ol>
+	<li>First = 0</li>
+	<li>last = 4</li>
+	<li>value = 15</li>
+	<li>index = 1</li>
+	<li>mid = 2</li>
+	<li>value &lt; anArray[2]</li>
+	<li>x: bs(anArray,0,1,15):__</li>
+	<li>return ___</li>
+</ol>
+<ol>
+	<li>first = 0</li>
+	<li>last = 1</li>
+	<li>value = 15</li>
+	<li>mid =0</li>
+	<li>value &gt; anArray[0]</li>
+	<li>y: bs(anArray,1,1,15) = ___</li>
+	<li>return ____</li>
+</ol>
+
+<ol>
+	<li>first = 1</li>
+	<li>last = 1</li>
+	<li>value = 15</li>
+	<li>mid = 1</li>
+	<li>val == anArray[1]</li>
+	<li>return 1</li>
+</ol>
+
+
+<p>Box trace of binary search with no match</p>
+	
+<ol>
+	<li>first = 0</li>
+	<li>last = 4</li>
+	<li>value = 46</li>
+	<li>mid = 2</li>
+	<li>value &gt; anArray[2]</li>
+	<li>y: bs(anArray,3,4,46) = ___</li>
+	<li>return ___</li>
+</ol>
+
+<ol>
+	<li>first = 3</li>
+	<li>last =4</li>
+	<li>mid = 3</li>
+	<li>value &gt; anArray[3]</li>
+	<li>y:bs(anArray, 4, 4, 46) = ___</li>
+	<li>return ___</li>
+</ol>
+
+<ol>
+	<li>first = 4 last = 4</li>
+	<li>value = 46</li>
+	<li>mid = 4</li>
+	<li>value &lt; anArray[4]</li>
+	<li>x: bs(anArray, 4,3,46) = ____</li>
+	<li>return ____</li>
+</ol>
+
+<p>Note: at this point first index and last index cross over eachother</p>
+
+<ol>
+	<li>first = 4</li>
+	<li>last = 3</li>
+	<li>value = 46</li>
+	<li>index = -1 (negative because of crossover)</li>
+	<li>return -1</li>
+</ol>
+
+<h3>Inefficient Binary search</h3>
+<p>assumptions: rabbits never die, rabbits ...</p>
+<p>To get total count need:</p>
+<ol>
+	<li>How many rabbits were alive last month?</li>
+	<li>How many rabbits were alive 2 months ago? (can reproduce)</li>
+</ol>
+<p>Total count = add (1) and (2)</p>
+
+<p>Assum 1 pair of baby rabbits (male and female) at beginning of month 1.</p>
+<pre>
+n = # of month
+count pairs of rabbits
+
+first 2 Month: 	rabbit(n) = 1 if n &lt;= 2 (base case)
+other month:	rabbit(n) = rabbit(n-1) + rabbit(n-2)
+
+	int rabbit (int n)
+	// pre: n &gt; 0
+	{
+		if (n &lt;= 2)
+			return 1;  //Base case
+		else
+			return rabbit(n-1) + rabbit(n-2);
+	}
+</pre>
+	

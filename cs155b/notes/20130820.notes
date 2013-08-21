@@ -16,4 +16,37 @@
 	grep -i "mysql" /etc/services
 </pre>
 
+<pre>
+	mysql&gt; select * from empl;  <-------- localost: 127.0.0.1
+</pre>
+<p>Semicolon job is to send command (;) when using <pre>sql</pre></p>
+
+<h3>Example of <pre>mysql</pre> Commands</h3>
+<ul>
+	<li>exit</li>
+	<li>quit</li>
+	<li>use mydb</li>
+	<li>show tables</li>
+	<li>show databases</li>
+	<li>prompt</li>
+</ul>
+
+<p>hup: host user password</p>
+
+<pre>
+	sql [commands] &lt;--- send to server
+	mysql [commands] &lt;--- run locally
+</pre>
+
+<h3> Unix Domain Socket</h3>
+
+<p>Special file, normally located in /tmp directory.  (i.e. /tmp/sock.123)</p>
+
+<p>If client server on separat location use TC/IP</p>
+
+<p>If on same maching use unix domain socket</p>
+
+<p>If on same LAN, can use special server as medium (called peer server).  Send request to medium machine and the machine sends to server</p>
+
+
 

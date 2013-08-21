@@ -19,7 +19,7 @@
 <pre>
 	mysql&gt; select * from empl;  <-------- localost: 127.0.0.1
 </pre>
-<p>Semicolon job is to send command (;) when using <pre>sql</pre></p>
+<p>Semicolon job is to send command (;) when using <code>sql</code></p>
 
 <h3>Example of <pre>mysql</pre> Commands</h3>
 <ul>

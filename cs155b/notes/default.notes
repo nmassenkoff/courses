@@ -1,1 +1,57 @@
-<h1>Info about class</h1>
+<h1>CS155B: MySQL Database Administration (DBA)</h1>
+<h2>Course Information</h2>
+
+<table>
+	<tr>
+		<td>Semester</td><td>Fall 2013</td>
+		<td>Section</td><td>501</td>
+		<td>CRN</td><td>74689</td>
+		<td>Day & Hours</td><td>Tuesday 7:00 - 10:00 pm</td>
+		<td>Room</td><td>BATL 453</td>
+		<td>Text Book</td><td>MySQL Administrator's Bible by Sheeri K. Cabral</td>
+		<td>Instructor</td><td>Abbas Moghtanei</td>
+		<td>Office Hours</td><td>Thursday 6:00 - 7:00 pm room L424</td>
+		<td>E-mail</td><td>amoghtan@ccsf.edu</td>
+		<td>Public Directory</td><td>/pub/cs/amoghtan/cs155b</td>
+	</tr>
+</table>
+
+<h2>Grading Policy</h2>
+
+<table>
+	<tr>
+		<th>Num</th>
+		<th>Item</th>
+		<th>Points/Item</th>
+		<th>Total Points</th>
+		<th>Date</th>
+	</tr>
+	<tr>
+		<td>6</td>
+		<td>Lab Assignments</td>
+		<td>20 points</td>
+		<td>120 points</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>2</td>
+		<td>Quizzes</td>
+		<td>20 points</td>
+		<td>40 points</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>Midterm Exam</td>
+		<td>40 points</td>
+		<td>40 points</td>
+		<td>Oct 8, 2013</td>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>Final Exam</td>
+		<td>100 points</td>
+		<td>100 points</td>
+		<td>Dec 17, 2013</td>
+	</tr>
+</table>

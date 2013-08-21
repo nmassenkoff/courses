@@ -2,3 +2,18 @@
 <h2>MySQL Origins</h2>
 <p>Developed in Sweden.  Developer created company to take over development.  Then Sun Microsystems took over, and now Oracle owns.</p>
 
+<h2>MySQL Login</h2>
+<pre>
+	mysql -u [user_name] -p[password] [database]
+</pre>	
+
+<p>Can also use:<pre>--password=[password]</pre></p>
+
+<p>Using <b>port num 3306</b></p>
+
+<p>To find port num use:</p>
+<pre>
+	grep -i "mysql" /etc/services
+</pre>
+
+

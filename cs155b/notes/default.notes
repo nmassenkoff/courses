@@ -2,18 +2,16 @@
 <h2>Course Information</h2>
 
 <table>
-	<tr>
-		<td>Semester</td><td>Fall 2013</td>
-		<td>Section</td><td>501</td>
-		<td>CRN</td><td>74689</td>
-		<td>Day & Hours</td><td>Tuesday 7:00 - 10:00 pm</td>
-		<td>Room</td><td>BATL 453</td>
-		<td>Text Book</td><td>MySQL Administrator's Bible by Sheeri K. Cabral</td>
-		<td>Instructor</td><td>Abbas Moghtanei</td>
-		<td>Office Hours</td><td>Thursday 6:00 - 7:00 pm room L424</td>
-		<td>E-mail</td><td>amoghtan@ccsf.edu</td>
-		<td>Public Directory</td><td>/pub/cs/amoghtan/cs155b</td>
-	</tr>
+	<tr><td>Semester</td><td>Fall 2013</td></tr>
+	<tr><td>Section</td><td>501</td></tr>
+	<tr><td>CRN</td><td>74689</td></tr>
+	<tr><td>Day & Hours</td><td>Tuesday 7:00 - 10:00 pm</td></tr>
+	<tr><td>Room</td><td>BATL 453</td></tr>
+	<tr><td>Text Book</td><td>MySQL Administrator's Bible by Sheeri K. Cabral</td></tr>
+	<tr><td>Instructor</td><td>Abbas Moghtanei</td></tr>
+	<tr><td>Office Hours</td><td>Thursday 6:00 - 7:00 pm room L424</td></tr>
+	<tr><td>E-mail</td><td>amoghtan@ccsf.edu</td></tr>
+	<tr><td>Public Directory</td><td>/pub/cs/amoghtan/cs155b</td></tr>
 </table>
 
 <h2>Grading Policy</h2>

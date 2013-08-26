@@ -5,17 +5,17 @@
 <pre>
 	computeChange(in dollarCost: integer, in centsCost:integer, inout d:integer, inout c:integer)
 	// computes the change remaining from puchasing an item
-	// costing dollarCost dollars and centsCost cents with d dollars//
-	 and c cents
-	 // Pre: dollarCost, centsCost, d and c are all non negative integers
-	 // [ dollarCost 100 + centsCost &lt;= d * 100 + c ]
-	 // c &lt; 100; centsCost &lt; 100 
-	 // Post: d and c contain the computed remainder values in dollars and cents,
-	 // respectively.
+	// costing dollarCost dollars and centsCost cents with d dollars
+	// and c cents
+	// Pre: dollarCost, centsCost, d and c are all non negative integers
+	// [ dollarCost 100 + centsCost &lt;= d * 100 + c ]
+	// c &lt; 100; centsCost &lt; 100 
+	// Post: d and c contain the computed remainder values in dollars and cents,
+	// respectively.
 
-	 // If input value&lt; cost, the proper negative values for the amount 
-	 // owed in d dollars and/or c cents is returned
-	 // dollarsCost and centsCost are unchanged
+	// If input value&lt; cost, the proper negative values for the amount 
+	// owed in d dollars and/or c cents is returned
+	// dollarsCost and centsCost are unchanged
 </pre>
 
 <h3>Problem 2:</h3>

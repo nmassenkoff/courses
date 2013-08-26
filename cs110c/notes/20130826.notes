@@ -104,9 +104,11 @@
 <pre>
 	void count(int num)
 	{
-		if num &lt;= 2
-			return 1;
-		return count(n - 1);
+		if num &gt; 0
+		{
+			cout &lt;&lt; num;
+			countDown(num-1);
+		}
 	}
 </pre>
 
@@ -121,5 +123,6 @@
 
 </pre>
 
+<h2>Chapter 3</h2>
 
 

@@ -70,6 +70,35 @@ On file .bash_profile or .bashrc on hills add:
 		or
 	/etc/init.d/mysqld
 </pre>
-<p>mysql or mysqld depending on system</p.
+<p>mysql or mysqld depending on system</p>
+
+<p>Commands to test system working:</p>
+<pre>
+	select sysdate;
+	select now(); (should be same as sysdate)
+	select version();
+	select database(); (if no database, return 'none')
+	
+	use mydb; &lt;--- select database
+	show databases; &lt;--- list all databases on system
+</pre>
+
+<p>MySQL comes with lots of variables (more than 1,000). To list:</p>
+<pre>
+	show variables;
+	show variables like 'ssl%' &lt;--- use like to filter
+</pre>
+
+<p>Need to create own database:</p>
+<pre>
+	create database [dbname];
+</pre>
+<p>Next create some tables</p>
+
+<p>To run commands from file, file must end in .sql ie demo.sql</p>
+<pre>
+	$ mysql -u [username] -p[password] [databasename] < demo.sql
+</pre>
+
 
 

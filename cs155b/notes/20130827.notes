@@ -109,5 +109,70 @@ or
 
 <p>demo.sql also known as mysql/sql script</p>
 
+<p>Silence echoing of command when using redirection use -s option (short format):</p>
+<pre>
+	$ mysql -s -u [username] -p[password] [databasename] < demo.sql
+</pre>
 
+<p>Or use long format: --silent (other i.e. --password)</p>
+
+<p>Above command still shows output of commands to screen. to send output to file:</p>
+<pre>
+	$ mysql -s -u [username] -p[password] [databasename] &lt; demo.sql &gt; output.file
+</pre>
+
+<p>To send output to file and screen use tee command</p>
+<pre>
+	$ mysql -s -u [username] -p[password] [databasename] &lt; demo.sql | tee output.file
+</pre>
+
+<p>When in mysql client can type system command to do job</p>
+
+<pre>
+	\c (clear)
+	\h (help)
+	\q (quit/exit)
+	\s (status)
+	\T [file] (tee) after command, everything 
+		on screen will also go to [file]
+	\t (notee) ends tee session
+	\G (display output verticaly)
+		i.e. select * from user \G
+	\u [database] (use)
+</pre>
+
+<pre>
+	if use:
+	select now();
+
+	output:
+	2013-08-23 10:53:16
+</pre>
+
+<pre>
+	--i-am-dummy
+</pre>
+<p>Very helpful option in mysql. MySQL won't let you delete record without use 'where' clause</p>
+
+<p>To execute commands from command line us "-e" option:</p>
+<pre>
+	$ mysql -e "select now();" [databasename]
+</pre>
+
+<p>Can use as many -e as needed:</p>
+<pre>
+	$ mysql -e "select now();" \
+		-e "create table ....;"\
+		-e "drop table ...;" [databasename]
+</pre>
+
+<p>Two very important files for mysal</p>
+<pre>
+	/etc/my.cnf (configuration file)
+</pre>
+<p>When installing mysql need to make sure my.cnf is created. If not, installation is incomplete, definitely encounter lots of problem.  Normally automatically getnerated, but as DBA will modify file.  Can use file to retrieve forgotten root password</p>
+<pre>
+	~/.my.cnf (personal configuration file)
+</pre>
+<p>Normally does not exist automatically. Made by each individual user of mysql.  Modifies environment of mysql for individual user.  In file can provide user id and password so that no longer need to type -u and -p (obviously less secure)</p>
 

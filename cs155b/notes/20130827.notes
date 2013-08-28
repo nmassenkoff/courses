@@ -21,4 +21,55 @@ On file .bash_profile or .bashrc on hills add:
 	alias dba3='ssh nmassenk@147.144.23.63'
 </pre>
 
+<h2>Check Version of MySQL</h2>
+
+<p>Four different ways:<p>
+<pre>
+	1. mysql&lt; status; (typed at MySql prompt)
+
+</pre>
+<p>gives current database, mydql version, uptime, location of socket.</p>
+<pre>
+	2. mysql&lt; select version();
+	3. mysql&lt; show variables like 'version';
+</pre>
+<p>At command line:</p>
+<pre>
+	4. $ mysqladmin version
+</pre>
+
+<p>First step to troubleshoot server is to ping server:</p>
+
+<pre>
+	$ mysqladmin ping
+</pre>
+
+<p>If server is dead (down), then must bring server up.  Serveral different ways:</p>
+
+<p>On linux machines:</p>
+<pre>
+	service mysql start
+</pre>
+
+<p>Sometimes mysql is running but not responding.  Must then try restarting server.</p>
+
+<pre>
+	service mysql restart
+</pre>
+
+<p>To kill system:</p>
+<pre>
+	service mysql stop
+</pre>
+
+<p>Location of daemons:</p>
+<pre>
+	cd /etc/init.d
+
+	/etc/init.d/mysql
+		or
+	/etc/init.d/mysqld
+</pre>
+<p>mysql or mysqld depending on system</p.
+
 

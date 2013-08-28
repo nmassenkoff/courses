@@ -176,3 +176,110 @@ or
 </pre>
 <p>Normally does not exist automatically. Made by each individual user of mysql.  Modifies environment of mysql for individual user.  In file can provide user id and password so that no longer need to type -u and -p (obviously less secure)</p>
 
+<p>Set up for automatic logon:</p>
+<pre>
+In file ~/.my.cnf
+
+	# Author: John Doe
+	# Date	: 9/2/13
+
+	[client]
+
+	user=nmassenk
+	password=mypasswd
+	host=localhost
+
+	[mysql]
+	prompt='mysql(\d)&gt;&gt;  &lt;--- (\d will display current db)
+</pre>
+
+<p>Make sure permission for ~/.my.cnf is 600:</p.
+<pre>
+	chmod 600 ~/.my.cnf
+</pre>
+
+<p>If different user name for differnt "product" can categorize:</p>
+<pre>
+In file ~/.my.cnf
+
+	# Author: John Doe
+	# Date	: 9/2/13
+
+	[client]
+
+	user=nmassenk
+	password=mypasswd
+	host=localhost
+
+	[mysqladmin]
+	user=...
+	password=...
+	localhost=...
+
+	[mysql]
+	prompt='mysql(\d)&gt;&gt;  &lt;--- (\d will display current db)
+</pre>
+
+<h3>Very important command</h3>
+
+<pre>
+	$ mysql -BCNnqs --disable-pager -u [powerful account: system (ie)] -p[password: manager]
+</pre>
+
+<p>-B is batch mode. Output no fancy frame, item is separated by tab.</p>
+<p>History file is turned off.  History file contains all the commands you've issued (default .mysql_history). Used when using up arrow in interactive mode</p>
+
+<p>-C means compress commands before sending to server.</p>
+<p>-N means skip column name. When displaying output normally have header.  No column names</p.
+<p>-n means unbuffered.  System normally would put bunch of commands into memory and then send as bundle to server.  Instead, each command will immediately go to server.  Makes it safer and more efficient</p>
+<p>-q means quick.  Optimized, efficient, as fast as possible.</p>
+<p>-s means silent.  Do not echo back commands</p>
+<p>--disable-pager: when in intereactive mode pager is enable, if output is more than screen paging is activated and must push enter to advance next page.  Since no one is present when performing batch job must disable pager.</p>
+
+<p>Above command should only be issued inside script</p>
+
+<h3>Common functions</h3>
+<pre>
+	domysql()
+	{
+		$ mysql -BCNnqs --disable-pager -u [powerful account: system (ie)] -p[password: manager] &lt;&lt;EOJ
+		//EOJ stand for end of job
+
+		$@;
+		exit
+	EOJ
+	}
+</pre>
+
+<h4>Example</h4>
+<p>List all the users on mysql system, sorted</p>
+
+<p>script: allusers</p>
+<pre>
+	#!/bin/bash
+	# Author: name
+	# Date:	date
+
+	domysql()
+	{
+		$ mysql -BCNnqs --disable-pager -u [powerful account: system (ie)] -p[password: manager] &lt;&lt;EOJ
+		//EOJ stand for end of job
+
+		$@;
+		exit
+	EOJ
+	}
+
+	domysql "use mysql; select user from user order by user" &gt; result
+</pre>
+
+<p>From shell</p>
+<pre>
+	$ chmod +x allusers
+	$ allusers
+	$ lpr result
+</pre>
+
+<h2>Next Time</h2>
+<p>Get login id and password</p>
+<p>Receive Project number 1</p>

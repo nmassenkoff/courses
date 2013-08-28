@@ -25,13 +25,13 @@ On file .bash_profile or .bashrc on hills add:
 
 <p>Four different ways:<p>
 <pre>
-	1. mysql&lt; status; (typed at MySql prompt)
+	1. mysql&gt; status; (typed at MySql prompt)
 
 </pre>
 <p>gives current database, mydql version, uptime, location of socket.</p>
 <pre>
-	2. mysql&lt; select version();
-	3. mysql&lt; show variables like 'version';
+	2. mysql&gt; select version();
+	3. mysql&gt; show variables like 'version';
 </pre>
 <p>At command line:</p>
 <pre>
@@ -99,6 +99,15 @@ On file .bash_profile or .bashrc on hills add:
 <pre>
 	$ mysql -u [username] -p[password] [databasename] < demo.sql
 </pre>
+
+<p>Or from with in client</p>
+<pre>
+	mysql&gt; \. demo.sql
+or
+	mysql&gt; source demo.sql
+</pre>
+
+<p>demo.sql also known as mysql/sql script</p>
 
 
 

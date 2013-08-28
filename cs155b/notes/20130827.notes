@@ -1,1 +1,24 @@
 <h1>Notes for August 27, 2013</h1>
+
+<p>Linux machines with mysql for class:</p>
+<ul>
+	<li>dba2 (147.144.23.62)</li>
+	<li>dba3 (147.144.23.63)</li>
+</ul>
+
+<p>Will create user accounts for everyone.</p>
+<pre>
+	username = same as hills
+	password = changeme
+</pre>
+
+<p>Machines are linux red hat.  Must ssh through hills first before accessing</p>
+
+<p>Recommend make alias to access these servers</p>
+<pre>
+On file .bash_profile or .bashrc on hills add:
+	alias dba2='ssh nmassenk@147.144.23.62'
+	alias dba3='ssh nmassenk@147.144.23.63'
+</pre>
+
+

@@ -1,0 +1,151 @@
+<h1>Notes for August 28, 2013</h1>
+
+<h2>In-class Assignment</h2>
+
+<h3>clock.h</h3>
+<pre>
+#include <string.h>
+
+class Clock 
+{
+	int hours;
+	int minutes;
+
+public:
+	Clock();
+	Clock(int, int);
+
+	void setTime(int, int);
+
+	void addMinutes(int);
+
+	void displayMinutes();
+	void display12();
+	void display24();
+};
+</pre>
+<h3>clock.cpp</h3>
+<pre>
+#include "clock.h"
+#include <math.h>
+#include <iostream>
+
+using namespace std;
+
+Clock::Clock()
+{
+	hours = 0;
+	minutes = 0;
+}
+Clock::Clock(int inHours, int inMinutes)
+{
+	if (inHours > 23)
+		inHours = 23;
+	if (inMinutes > 59)
+		inMinutes = 59;
+
+	hours = inHours;
+	minutes = inMinutes;
+}
+
+void Clock::setTime(int inHours, int inMinutes)
+{
+	hours = inHours;
+	minutes = inMinutes;
+}
+
+void Clock::addMinutes(int numMinutes)
+{
+	if (numMinutes < 0) 
+		numMinutes = 0;
+	minutes +=  numMinutes;
+	hours += floor(minutes / 60);
+
+	minutes = minutes % 60;
+}
+
+void Clock::displayMinutes()
+{
+	if (minutes < 10)
+	{
+		cout << "0" << minutes;
+
+	} else {
+		cout << minutes;
+	}
+}
+
+void Clock::display12()
+{
+	if (hours > 12)
+	{
+		cout << hours - 12 << ":" ;
+		displayMinutes();
+		cout << " pm" << endl;
+	} else if (hours == 12) {
+		cout << hours << ":" ;
+		displayMinutes();
+		cout << " pm" << endl;
+	} else {
+		cout << hours << ":" ;
+		displayMinutes();
+		cout << " am" << endl;
+	}
+}
+
+void Clock::display24()
+{
+	cout << hours << ":" ;
+	displayMinutes();
+	cout << endl;
+}
+</pre>
+
+<h3>test.cpp (main program)</h3>
+<pre>
+#include "clock.h"
+#include <iostream>
+
+using namespace std;
+
+int main(int argc, const char *argv[])
+{
+
+	int userHours;
+	int userMinutes;
+
+	cout << "Enter Initial Time." << endl;
+	cout << "Hours (must be 0-23): ";
+	cin >> userHours;
+
+	cout << "Minutes (must be 0-59): ";
+	cin >> userMinutes;
+
+	Clock userClock(userHours, userMinutes);
+
+	cout << "Inital time is: ";
+	userClock.display12();
+	cout << endl << endl;
+
+	char keepGoing = 'y';
+
+	while (keepGoing != 'n')
+	{
+		cout << "Add minutes to time: ";
+		cin >> userMinutes;
+
+		userClock.addMinutes(userMinutes);
+
+		cout << "Time is now: ";
+		userClock.display12();
+		cout << endl << endl;
+
+		cout << "Keep going? (y/n): ";
+		cin >> keepGoing;
+		cout << endl << endl;
+	}
+
+	cout << "Goodbye, come again..." << endl;
+	return 0;
+}
+</pre>

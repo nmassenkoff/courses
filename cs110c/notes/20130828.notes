@@ -4,7 +4,7 @@
 
 <h3>clock.h</h3>
 <pre>
-#include <string.h>
+#include &lt;string.h&gt;
 
 class Clock 
 {
@@ -27,8 +27,8 @@ public:
 <h3>clock.cpp</h3>
 <pre>
 #include "clock.h"
-#include <math.h>
-#include <iostream>
+#include &lt;math.h&gt;
+#include &lt;iostream&gt;
 
 using namespace std;
 
@@ -39,9 +39,9 @@ Clock::Clock()
 }
 Clock::Clock(int inHours, int inMinutes)
 {
-	if (inHours > 23)
+	if (inHours &gt; 23)
 		inHours = 23;
-	if (inMinutes > 59)
+	if (inMinutes &gt; 59)
 		inMinutes = 59;
 
 	hours = inHours;
@@ -56,7 +56,7 @@ void Clock::setTime(int inHours, int inMinutes)
 
 void Clock::addMinutes(int numMinutes)
 {
-	if (numMinutes < 0) 
+	if (numMinutes &lt; 0) 
 		numMinutes = 0;
 	minutes +=  numMinutes;
 	hours += floor(minutes / 60);
@@ -66,45 +66,45 @@ void Clock::addMinutes(int numMinutes)
 
 void Clock::displayMinutes()
 {
-	if (minutes < 10)
+	if (minutes &lt; 10)
 	{
-		cout << "0" << minutes;
+		cout &lt;&lt; "0" &lt;&lt; minutes;
 
 	} else {
-		cout << minutes;
+		cout &lt;&lt; minutes;
 	}
 }
 
 void Clock::display12()
 {
-	if (hours > 12)
+	if (hours &gt; 12)
 	{
-		cout << hours - 12 << ":" ;
+		cout &lt;&lt; hours - 12 &lt;&lt; ":" ;
 		displayMinutes();
-		cout << " pm" << endl;
+		cout &lt;&lt; " pm" &lt;&lt; endl;
 	} else if (hours == 12) {
-		cout << hours << ":" ;
+		cout &lt;&lt; hours &lt;&lt; ":" ;
 		displayMinutes();
-		cout << " pm" << endl;
+		cout &lt;&lt; " pm" &lt;&lt; endl;
 	} else {
-		cout << hours << ":" ;
+		cout &lt;&lt; hours &lt;&lt; ":" ;
 		displayMinutes();
-		cout << " am" << endl;
+		cout &lt;&lt; " am" &lt;&lt; endl;
 	}
 }
 
 void Clock::display24()
 {
-	cout << hours << ":" ;
+	cout &lt;&lt; hours &lt;&lt; ":" ;
 	displayMinutes();
-	cout << endl;
+	cout &lt;&lt; endl;
 }
 </pre>
 
 <h3>test.cpp (main program)</h3>
 <pre>
 #include "clock.h"
-#include <iostream>
+#include &lt;iostream&gt;
 
 using namespace std;
 
@@ -114,38 +114,38 @@ int main(int argc, const char *argv[])
 	int userHours;
 	int userMinutes;
 
-	cout << "Enter Initial Time." << endl;
-	cout << "Hours (must be 0-23): ";
-	cin >> userHours;
+	cout &lt;&lt; "Enter Initial Time." &lt;&lt; endl;
+	cout &lt;&lt; "Hours (must be 0-23): ";
+	cin &gt;&gt; userHours;
 
-	cout << "Minutes (must be 0-59): ";
-	cin >> userMinutes;
+	cout &lt;&lt; "Minutes (must be 0-59): ";
+	cin &gt;&gt; userMinutes;
 
 	Clock userClock(userHours, userMinutes);
 
-	cout << "Inital time is: ";
+	cout &lt;&lt; "Inital time is: ";
 	userClock.display12();
-	cout << endl << endl;
+	cout &lt;&lt; endl &lt;&lt; endl;
 
 	char keepGoing = 'y';
 
 	while (keepGoing != 'n')
 	{
-		cout << "Add minutes to time: ";
-		cin >> userMinutes;
+		cout &lt;&lt; "Add minutes to time: ";
+		cin &gt;&gt; userMinutes;
 
 		userClock.addMinutes(userMinutes);
 
-		cout << "Time is now: ";
+		cout &lt;&lt; "Time is now: ";
 		userClock.display12();
-		cout << endl << endl;
+		cout &lt;&lt; endl &lt;&lt; endl;
 
-		cout << "Keep going? (y/n): ";
-		cin >> keepGoing;
-		cout << endl << endl;
+		cout &lt;&lt; "Keep going? (y/n): ";
+		cin &gt;&gt; keepGoing;
+		cout &lt;&lt; endl &lt;&lt; endl;
 	}
 
-	cout << "Goodbye, come again..." << endl;
+	cout &lt;&lt; "Goodbye, come again..." &lt;&lt; endl;
 	return 0;
 }
 </pre>

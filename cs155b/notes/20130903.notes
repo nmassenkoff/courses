@@ -35,3 +35,19 @@
 <p>Recommend installion using already compiled binary</p>
 
 <h3>Installation from binary</h3>
+
+<ol>
+	<li>Download and un-archive binary for your system</li>
+	<pre>
+		cd /usr/local (directory that normally install mysql)
+		tar -zxvf mysql.1.5.8.tar.gz
+	</pre>
+	<li>Add mysql user account</li>
+	<p>As root type:</p>
+	<pre>
+		groupadd mysql
+		user add -g mysql -s /bin/ksh mysql
+		passwd cs155b
+	</pre>
+
+

@@ -1,4 +1,6 @@
 <h1>Notes for September 4, 2013</h1>
+<p>Mon 9/9 meet in lab batmale 301/PC1</p>
+<p>Lab 1 due Mon 9/16</p>
 <h3>Chapter 2 practice problems answers</h3>
 
 <p>2b)</p>
@@ -79,5 +81,46 @@
 <pre>
 	for (int i = 1; i &lt;= theList.getLenth(); i++);
 </pre>
-<p>One less variable, but must do function call each iteration of for loop.  Function calls are very expensive</p>
+<p>One less variable, but must do function call each iteration of for loop.  Function calls are very expensive.</p>
+
+<h3>Array-Based List Implementation</h3>
+
+<pre>
+	const int MAX_LIST = 100;
+	typedef	desired-type ListItemType;
+
+	ListItemType items[MAX_LIST];
+	int size;
+
+	// Array index for the last item:
+	// size - 1
+	// ListIndex -1 = Array Index
+
+	//helper funtion
+	-translate(in index:integer): integer {query}
+</pre>
+<p>See pg 156-160 for reference, see pg 162-164 use this</p>
+
+<p>To avoid compile errors for re-defining classes:</p>
+<p>ListA.h</p>
+<pre>
+	#ifndef _LISTA_
+	#define _LISTA_
+
+	.
+	.
+	.
+
+
+	#endif
+</pre>
+<p>ListA.cpp</p>
+<pre>
+	#include "ListA.h"
+</pre>
+
+<p>prog.cpp</p>
+<pre>
+	#include "ListA.h"
+</pre>
 

@@ -64,8 +64,38 @@
 		vim /etc/my.cnf
 	</pre>
 	<p>Anywhere in file add lines under group [mysql.server] (if not there create it)</p>
+	<p>Whenever modifing config files add name above modifcation</p>
 	<pre>
+		## [name] ie: Nicholas Massenkoff ##
 		[mysql.server]
 		
+		basedir	= /usr/local/mysql
+		datadir	= /usr/local/mysql/data
+		user	= mysql
+	</pre>
+	<ul> 
+		<li>basedir = where mysql is installed</li>
+		<li>datadir = location where data is stored</li>
+		<li>user = user that mysql runs</li>
 
+	</ul>
+	<li>Change ownership of MySQL</li>
+	<p>Must be owned by root, and in mysql group</p>
+	<p>From /usr/local/mysql</p>
+	<pre>
+		chown -R root .
+		chgrp -R mysql .
+	</pre>
+	<li><b>Create grant tables</b></li>
+	<p>Grant tables are system tables like user tables, password tables, etc (about 10-12 tables)</p>
+	<p>These tables are essential for mysql to run.  Part of job to monitor these tables, create backups constantly keep in good health.</p>
+	<p>In sub-directory "scripts" many scripts for adminstering mysql, including one to make grant talbes:</p>
+	<pre>
+		scripts/mysql_install.db --user=mysql
+	</pre>
+	<li>Bring up mysql</li>
+	<pre>
+		bin/mysql_safe --user=mysql &amp;
+	</pre>
+	<li>Conduct tests</li>
 </ol>

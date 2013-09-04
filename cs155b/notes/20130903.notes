@@ -1,1 +1,21 @@
 <h1>Notes for September 3, 2013</h1>
+<h2>MySQL Installation</h2>
+<p>Worst ways is package installation</p>
+
+<p>Normally not good for industry, (ok for grandma)</p>
+
+<p>Best way is to get binary and step by step setup</p.
+
+<h3>Installation from source</h3>
+
+<ol>
+	<li>Download source and unarchive</li>
+	<pre>
+		tar -zxvf mysql.1.5.8.tar.gz
+	</pre>
+	<li>Change into new directory and run configure script</li>
+	<pre>
+		cd mysql.1.5.8
+		./configure --prefix=/usr/local
+	</pre>
+</ol>

@@ -130,7 +130,7 @@
 	<li>Change Path</li>
 	<p>Choose a startup file (.bash_profile, .bashrc) and add line:</p>
 	<pre>
-		PATH=$PATH:/usr/local/bin/mysql:/usr/local/bin/mysql/bin
+		PATH=$PATH:/usr/local/mysql:/usr/local/mysql/bin
 		export PATH
 	</pre>
 	<li>Test msyql</li>

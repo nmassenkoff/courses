@@ -22,7 +22,7 @@
 	<pre>
 		make
 	</pre>
-	<li>Make will compile source code, link with libraries, etc and make binary. (Note: warnings ok, errors=problem)</li>
+	<p>Make will compile source code, link with libraries, etc and make binary. (Note: warnings ok, errors=problem)</p>
 	
 	<li>Make sure you are root and then install binary</li>
 	<pre>
@@ -46,8 +46,26 @@
 	<p>As root type:</p>
 	<pre>
 		groupadd mysql
-		user add -g mysql -s /bin/ksh mysql
+		user add -g mysql -s /bin/bash mysql
 		passwd cs155b
 	</pre>
+	<li>Change directory name to something shorter by using symbolic link</li>
+	<pre>
+		ln -s mysql.1.5.8 mysql
+		cd mysql
+	</pre>
+	<li>Create configuration file, my.cnf</li>
+	<pre>
+		cp support-files/my-large.cnf /etc/my.cnf
+	</pre>
+	<li>Modify configuration file (after make backup)</li>
+	<pre>
+		cp /etc/my.cnf /etc/my.cnf.orig
+		vim /etc/my.cnf
+	</pre>
+	<p>Anywhere in file add lines under group [mysql.server] (if not there create it)</p>
+	<pre>
+		[mysql.server]
+		
 
-
+</ol>

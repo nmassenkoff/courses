@@ -144,3 +144,9 @@
 		
 	</pre>
 </ol>
+<h3>Make Installation Secure</h3>
+
+<ol>
+	<li>Give password to root</li>
+	<li>Remove annonymous accounts (or add passwords)</li>
+</ol>

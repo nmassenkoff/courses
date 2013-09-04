@@ -4,7 +4,7 @@
 
 <p>Normally not good for industry, (ok for grandma)</p>
 
-<p>Best way is to get binary and step by step setup</p.
+<p>Best way is to get binary and step by step setup</p>
 
 <h3>Installation from source</h3>
 
@@ -18,4 +18,20 @@
 		cd mysql.1.5.8
 		./configure --prefix=/usr/local
 	</pre>
+	<li>Run make</li>
+	<pre>
+		make
+	</pre>
+	<li>Make will compile source code, link with libraries, etc and make binary. (Note: warnings ok, errors=problem)</li>
+	
+	<li>Make sure you are root and then install binary</li>
+	<pre>
+		make install
+		make clear (or clean)
+	</pre>
 </ol>
+
+<p>Don't normally reccomend installing from source because may require installation of many libraries.</p>
+<p>Recommend installion using already compiled binary</p>
+
+<h3>Installation from binary</h3>

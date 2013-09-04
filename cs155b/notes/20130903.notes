@@ -97,5 +97,31 @@
 	<pre>
 		bin/mysql_safe --user=mysql &amp;
 	</pre>
-	<li>Conduct tests</li>
+	<li>Should set up mysql to start automatically</li>
+	<pre>
+		mysqladmin -u root shutdown  (shutdown mysql)
+		cp support-file/mysql.server /etc/init.d/mysqld
+		chmod +x /etc/init.d/mysqld
+
+		cd /etc/init.d
+
+		chkconfig --add mysqld
+	or
+		chkconfig --level 345 mysqld
+
+	</pre>
+
+	<p>Run level information:</p>
+	<ol>
+		<li>single-user mode</li>
+		<li>multi-user mode</li>
+		<li>multi-user with networking</li>
+		<li>user-defined</li>
+		<li>Normal with gui</li>
+		<li>Reboot</li>
+	</ol>
+	<li>Bring MySQL up</li>
+	<pre>
+		/etc/init.d/mysql start
+	</pre>
 </ol>

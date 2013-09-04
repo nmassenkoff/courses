@@ -32,7 +32,7 @@
 </ol>
 
 <p>Don't normally reccomend installing from source because may require installation of many libraries.</p>
-<p>Recommend installion using already compiled binary</p>
+<p>Recommend installing using already compiled binary</p>
 
 <h3>Installation from binary</h3>
 
@@ -111,7 +111,7 @@
 
 	</pre>
 
-	<p>Run level information:</p>
+	<p>Run level information:
 	<ol>
 		<li>single-user mode</li>
 		<li>multi-user mode</li>
@@ -120,6 +120,7 @@
 		<li>Normal with gui</li>
 		<li>Reboot</li>
 	</ol>
+	</p>
 	<li>Bring MySQL up</li>
 	<pre>
 		/etc/init.d/mysql start

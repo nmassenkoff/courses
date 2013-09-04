@@ -93,6 +93,10 @@
 	<pre>
 		scripts/mysql_install.db --user=mysql
 	</pre>
+	<p>Make mysql owner of data tables</p>
+	<pre>
+		chown -R mysql data
+	</pre>
 	<li>Bring up mysql</li>
 	<pre>
 		bin/mysql_safe --user=mysql &amp;

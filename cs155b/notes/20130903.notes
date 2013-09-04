@@ -127,7 +127,7 @@
 		service mysqld start
 	</pre>
 	<li>Change Path</li>
-	<p>Choose a startup file (.bash_profil, .bashrc) and add line:</p>
+	<p>Choose a startup file (.bash_profile, .bashrc) and add line:</p>
 	<pre>
 		PATH=$PATH:/usr/local/bin/mysql:/usr/local/bin/mysql/bin
 		export PATH

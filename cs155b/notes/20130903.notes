@@ -153,5 +153,55 @@
 
 <ol>
 	<li>Give password to root</li>
+	<pre>
+		mysql -u root mysql
+		set password=password('[password]');
+	or
+		alter user set password=password('[password]')
+		where user='root';
+
+		flush privileges;  (run after making any changes)
+	</pre>
 	<li>Remove annonymous accounts (or add passwords)</li>
+
+	<pre>
+		delete from user where user='';
+		flush privileges;
+	</pre>
+	<li>Create powerfull account as backup to root</li>
+	<pre>
+		grant all on *.* to '[username]'@'localhost' identified by '[password]' with grant option;
+	</pre>
 </ol>
+
+<h1>Homework Assignment</h1>
+<p>Create script called users. Gives information about all the users of mysql.</p>
+
+<p>if type:</p>
+
+<pre>
+	users
+</pre>
+
+<p>Lists all users of mysql sorted (select user from users order by user)</p>
+<p>Provide following options:</p>
+<ol>
+	<li>-n = displays "Number of users is [num_of_users]"</li>
+	<li>[regex] = filter by regex (select user from users where regexp "[regex]")</li>
+	<li>-n [regex] = number users matching regex</li>
+</ol>
+
+<p>If want to use java, professor provided api. Copy Mysql.class to directory. </p>
+
+<pre>
+	class DemoMySql
+	{
+		public static void main(String args[])
+		{
+			MySql ms = new MySql("[username]", "[password]", "[database]");
+			String x[] = ms.sql("select * from employee");
+			for(String s: x) Systemout.println(s);
+		}
+	}
+</pre>
+<h2>Due Next Week</h2>

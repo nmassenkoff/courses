@@ -123,5 +123,24 @@
 	<li>Bring MySQL up</li>
 	<pre>
 		/etc/init.d/mysql start
+	or
+		service mysqld start
+	</pre>
+	<li>Change Path</li>
+	<p>Choose a startup file (.bash_profil, .bashrc) and add line:</p>
+	<pre>
+		PATH=$PATH:/usr/local/bin/mysql:/usr/local/bin/mysql/bin
+		export PATH
+	</pre>
+	<li>Test msyql</li>
+	<pre>
+		mysqladmin ping
+		mysqlshow (shows all databases that are created)
+		mysqlshow [database] (shows all tables created in [database])
+
+		mysql -e "select host,db,user from db" [database]
+		mysqladmin version
+		mysqladmin -u root shutdown
+		
 	</pre>
 </ol>

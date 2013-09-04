@@ -67,6 +67,7 @@
 		}
 	}
 </pre>
+<p>Above code will work regardless of how things like getLength() and retrieve() are implemented internally</p>
 
 <p>Example:</p>
 <ol>

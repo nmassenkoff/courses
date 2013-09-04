@@ -1,1 +1,82 @@
 <h1>Notes for September 4, 2013</h1>
+<h3>Chapter 2 practice problems answers</h3>
+
+<p>2b)</p>
+<pre>
+	void countDown(int n)
+	{
+		if (n &gt; 0)
+		{
+			cout &lt;&lt; n &lt;&lt; endl;
+			countDown(n-1);
+		}
+		
+	}
+
+</pre>
+<p>7)</p>
+<pre>
+	void writeIntegers(int n)
+	{
+		if (n &gt; 0)
+		{
+			writeIntegers(n-1);
+			cout &lt;&lt; n &lt;&lt; " ";
+		}
+	}
+</pre>
+<p>9)</p>
+<pre>
+	void writeReverse(int n)
+	{
+		if (n &gt; 0)
+		{
+			cout &lt;&lt; n % 10;
+			writeReverse(n/10);
+		}
+	}
+</pre>
+
+<p>11)</p>
+<pre>
+	void writeBackword2(string )
+	{
+		if (!s.empty())
+		{
+			writeBAckward2(s.substr(1, s.size()-1));
+			cout &lt;&lt; s[0];
+		}
+	}
+</pre>
+
+
+
+<h2>Chapter 3 Continued</h2>
+<h3>Independent of Implementation</h3>
+<p>Code can be written regardless of implementation of the actual class</p>
+<pre>
+	void displayList(List theList)
+	{
+		ListItemType item;
+		int length = theList.getLength();
+
+		for (int i = 1 ; i &lt;- length ; i++)
+		{
+			theList.retrieve(i, item);
+			cout &lt;&lt; item &lt;&lt; endl;
+		}
+	}
+</pre>
+
+<p>Example:</p>
+<ol>
+	<li>milk</li>
+	<li>eggs</li>
+	<li>buffer</li>
+</ol>
+<p>Less efficient:</p>
+<pre>
+	for (int i = 1; i &lt;= theList.getLenth(); i++);
+</pre>
+<p>One less variable, but must do function call each iteration of for loop.  Function calls are very expensive</p>
+

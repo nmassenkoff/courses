@@ -95,4 +95,66 @@
 	rename 'root'@'localhost' to 'dummy'@'localhost';
 </pre>
 
+<h3>rcopy</h3>
+<p>Script made by proffessor to copy files remotely</p>
+<p>usage:</p>
+<pre>
+to send:
+	rcopy mydata dba2
+to receive:
+	rcopy -r abcd dba2
+</pre>
+
+<h1>Homework 2</h1>
+<p>Script to automate user creation</p>
+
+<pre>
+	mysql_create_acct [crn] 
+
+	output:
+	login_id	password
+	...		...
+	...		...
+	...		...
+	...		...
+	...		...
+	...		...
+</pre>
+<p>use /etc/group file on hills.</p>
+<p>Must be fully automatic</p>
+<h3>rcopy.rb</h3>
+<p>use to copy file within batch script.  Can be interactive or automatic.</p>
+<p>To set up:</p>
+<pre>
+	rcopy.rb -m
+	hostname: [hills.ccsf.edu]
+	usernmae: [nmassenk]
+	password: [password]
+	countinue(y/n) [n]
+</pre>
+
+<p>Creates .hupfile (hup=host user password)</p>
+<p>To use:</p>
+<pre>
+to receive
+	rcopy.rb -r /etc/group
+
+to send
+	rcopy.rb [-s] /etc/group
+</pre>
+
+<p>For homework</p>
+<pre>
+	rcopy.rb -r -q /etc/group
+</pre>
+
+<h2>After copy /etc/hosts</h2>
+<p>extract crn number</p>
+<p>must do for any number of crn's, ie mysql_create_acct crn1 crn2 crn3 ...</p>
+<p>Student might be in several classes, do not create account if already exists.</p>
+<p>May also create account using only username</p>
+
+<h2>To mark tables as junk prepend assigned letter to account</h2>
+<p>My letter is <b>O</b></p>
+
 

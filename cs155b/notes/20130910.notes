@@ -29,4 +29,36 @@
 <h4>func</h4>
 <p>Contains information about all the procedures and functions on the system (including source code)</p>
 
+<h3>Automatic User creation</h3>
+<p>scripts/install_mysql_db also creates 6 users automatically.</p>
+<p>3 root accts</p>
+<p>2 anonymous accnts</p>
 
+<p>Any client could access mysql either through internet or using socket. 3 roots are abailable: 1 root for clients accessing system through internet, 1 root account is for users accessing system from socket, and 1 is for any other method (ie shared memory...).</p>
+
+<p>Root accounts as follows:</p>
+<ul>
+	<li>root@localhost</li>
+	<li>root@hostname</li>
+	<li>root@''</li>
+</ul>
+
+<p>root@localhost allows you to access via socket</p>
+
+<p>root@hostname allows you to access via internet. Kind of ridiculous for system that client and server on same system. Not a good idea to use if on the same machine.</p>
+
+<p>Anonymous accounts</p>
+<ul>	
+	<li>''@localhost<p>For socket access of anonymous user</p></li>
+	<li>''@hostname<p>For internet access of anonymous user</p></li>
+</ul>
+<p><b>All of these account also have no password.</b></p>
+
+<h3>Remove empty accounts</h3>
+<p>Delete all the users from mysql.user where user is nothing.</p>
+<pre>
+	use mysql;
+	delete from user where user = '';
+
+	flush privileges;
+</pre>

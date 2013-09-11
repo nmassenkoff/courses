@@ -62,3 +62,37 @@
 
 	flush privileges;
 </pre>
+
+<h3>Add Password to Root</h3>
+<p>Change all 3 root accounts to same password:</p>
+<pre>
+	use mysql;
+	update user set password = password('gold1234') where user = 'root';
+
+	flush privileges;
+</pre>
+<p>Change each root account specifically:</p>
+<pre>
+	use mysql;
+	update user set password = password('gold1234') where user = 'root'@'localhost'
+	update user set password = password('gold56') where user = 'root'@'hostname'
+	update user set password = password('gold78') where user = 'root'@''
+	flush privileges;
+</pre>
+
+<p>Can also use:</p>
+<pre>
+	mysqladmin -u root password="godl1234"
+</pre>
+
+<h3>Create Account with same powers as Root</h3>
+<pre>
+	grant all on *.* to 'system'@'localhost' identified by '[password]' with grant option;
+</pre>
+
+<p>Can keep root accounts, delete, or rename. Rename is better than delete:</p>
+<pre>
+	rename 'root'@'localhost' to 'dummy'@'localhost';
+</pre>
+
+

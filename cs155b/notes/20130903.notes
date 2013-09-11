@@ -187,7 +187,7 @@
 <p>Provide following options:</p>
 <ol>
 	<li>-n = displays "Number of users is [num_of_users]"</li>
-	<li>[regex] = filter by regex (select user from users where regexp "[regex]")</li>
+	<li>[regex] = filter by regex (select user from users where user regexp "[regex]")</li>
 	<li>-n [regex] = number users matching regex</li>
 </ol>
 

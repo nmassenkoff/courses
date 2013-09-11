@@ -1,1 +1,32 @@
 <h1>Notes for September 10, 2013</h1>
+
+<h2>Make Installation Secure Continued</h2>
+
+<h3>For convenience...</h3>
+<p>To login script (ie .bashrc) add lines:</p>
+<pre>
+	export BASEDIR=/usr/local/mysql
+	export DATADIR=$BASEDIR/data
+</pre>
+<p>Now whenever need to get to data dir can just type:</p>
+<pre>
+	cd $DATADIR
+</pre>
+
+<p>Two databases created automatically: mysql and test</p>
+<p>Everyone can access test database.</p>
+
+<h3>mysql Database Tables</h3>
+<h4>user</h4>
+<p>Contains all the users who can acces the mysql server.</p>
+<p>Very important to back up</p>
+<h4>db</h4>
+<p>Has information about all the databases that have been created or are available. Out of the box, has information about 2 databases: mysql and test.</p>
+<h4>host</h4>
+<p>Has information aboutdifferent hosts.  Mysql database is client server system.  Server somewhere, client somewhere else.  Can access mysql from all over the world, from any host.  Security of mysql is very tricky when dealing with the hosts table.</p>
+<h4>tables_priv</h4>
+<p>priv stands for privilege.  All of the tables on the system are in this table, as well as information about it (name, size, owner, etc).</p>
+<h4>func</h4>
+<p>Contains information about all the procedures and functions on the system (including source code)</p>
+
+

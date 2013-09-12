@@ -28,7 +28,7 @@
 
 <p>Instead see how the algorithm's time requirement grows as the problem size increases (see figure 9.1)</p>
 <div class="figure">
-	<img src="../images/figure9_1.jpg" width="682" height="493" />
+	<img src="/~nmassenk/images/cs110c/figure9_1.jpg" width="682" height="493" />
 	<p>Figure 9.1</p>
 </div>
 

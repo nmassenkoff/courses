@@ -1,0 +1,35 @@
+<h1>Notes for September 11, 2013</h1>
+
+<h3>Ch.3 In class practice</h3>
+<p>p.166 selft-test 2,3,6 and draw the array-based list that results from the following statements:</p>
+<pre>
+	List theList;
+
+	theList.insert(1,4);
+	theList.insert(1,7);
+	theList.insert(22,3);
+	theList.remove(1);
+</pre>
+
+<p>2 - in fun header void swap(List&amp; theList, int i, int j)</p>
+<p>3 - omit success, List aList;</p>
+
+<h2>Ch. 9</h2>
+<h3>Efficiency</h3>
+
+<p>Problems with using a computer to measure efficiency.</p>
+<ol>
+	<li>How is the algorithm coded?</li>
+	<li>On what computer is the program run? Different computers are optimized for different operations. Computers change over time.</li>
+	<li>What data is used?  ie sequential search vs binary search? Depends on the data.</li>
+</ol>
+
+<p><b>Ignore all of these!</b></p>
+
+<p>Instead see how the algorithm's time requirement grows as the problem size increases (see figure 9.1)</p>
+<div class="figure">
+	<img src="../images/figure9_1.jpg" width="682" height="493" />
+	<p>Figure 9.1</p>
+</div>
+
+

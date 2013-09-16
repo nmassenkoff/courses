@@ -57,7 +57,7 @@
 		<p>For each pass of the data, order each pair of datums.  Eventually largest datum "bubbles" to the end.</p>
 		<p>Must pass through n-1 times, or complete pass through with no exchanges</p>
 		<p>Best case scenario is the data is sorted, and algorithms goes through data with no exchanges</p></li>
-	<li>Mergesort (A recursive algorithm)
+	<li>Mergesort (A recursive algorithm), worst &amp; average: O(n*log<sub>2</sub>n)
 		<ol>
 			<li>Sort 1st half of the array</li>
 			<li>Sort 2nd half of the array</li>
@@ -68,6 +68,34 @@
 			<li>While both subarrays are not processed, copy the smaller lead item into the temporary array</li>
 			<li>Copy the rest of the elements from the subarray that has not been completely processed</li>
 			<li>Copy the items from the temporary array back to the original array</li>
-		</ol></li>
+		</ol>
+		<p>Drawback: Requires temporary array, roughly doubles the memory requirements</p></li>
+		<li>Quicksort - Another recursive sort (most complicated), worst: O(n<sup>2</sup>) average: O(n * log<sub>2</sub>n)
+			<ol>
+				<li>Choose Pivot (we'll choose the first element)
+					<p>Goal: everything left of pivot &lt; everything right of pivot</p></li>
+				<li>Place other elements into 2 regions, one element at a time:
+					<ul>
+						<li>s1 - elements &lt; pivot</li>
+						<li>s2 - elements &gt;= pivot</li>
+					</ul>
+					<ol>
+						<li>Keep track of indexes first, last+s1, first unknown, last</li>
+						<li>Initializtions: last s1 = 0, first unknown = 1</li>
+						<li>To move an element from Unknown into s2: Add 1 to first unknown</li>
+						<li>To move an element from unknown into s1: 
+							<ol>
+								<li>Swap array[first unknown] with the first element in s2</li>
+								<li>Adjust boundaries: Add 1 to last s1, Add 1 to first unknown</li>
+							</ol>
+						</li>
+					</ol>
+				</li>
+				<li>Place pivot between s1 and s2
+					<p>Swap pivot with theArray[last s1]</p></li>
+				<li>Sort region s1 (recursive using quicksort)</li>
+				<li>Sort region s2 (recursive using quicksort)</li>
+			</ol>
+		</li>
 </ul>
 

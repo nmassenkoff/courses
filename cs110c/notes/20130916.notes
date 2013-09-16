@@ -30,6 +30,31 @@
 <ol>
 	<li>May not apply to small n</li>
 	<li>One ADT implementation may be faster at some operations and slower at other operations compared to another ADT/implementation.  How often are the operations used?</li>
-	<li>
+	<li>Some operations in some programs must respond within a critical time</li>
+	<li>Remember to consdier algorithm's memory requirements</li>
+	<li>Remember to consider algorithm's simplicity for small n and small gains in efficiency</li>
+</ol>
+<p><b>Summary:</b>Big O analysis is for large problem size.</p>
 
-	
+<h3>Big O Examples</h3>
+<p>If we want to retrieve nth item in a list<p>
+<ul>
+	<li>Array-based list: O(1)</li>
+	<li>Pointer-based list: O(n)</li>
+</ul>
+<p>Searching Algorithms:</p>
+<ul>
+	<li>Sequential Search: O(n)</li>
+	<li>Binary Search: O(log<sub>2</sub>n) (must be sorted)</li>
+</ul>
+
+<p>Sorting Alogorithms:</p>
+<ul>
+	<li>Selection Sort, worst: O(n<sup>2</sup>) Average: O(n<sup>2</sup>)
+		<p>Swap largest item with last item</p>
+		<p>With remaining data, swap largest with last, keep repeating</p></li>
+	<li>Bubble Sort, worst: O(n<sup>2</sup>) Average: O(<sup>2</sup>) Best: O(n)
+		<p>For each pass of the data, order each pair of datums.  Eventually largest datum "bubbles" to the end.</p>
+		<p>Must pass through n-1 times, or complete pass through with no exchanges</p></li>
+</ul>
+

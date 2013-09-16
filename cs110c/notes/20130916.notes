@@ -79,7 +79,7 @@
 						<li>s1 - elements &lt; pivot</li>
 						<li>s2 - elements &gt;= pivot</li>
 					</ul>
-					<ol>
+					<ul>
 						<li>Keep track of indexes first, last+s1, first unknown, last</li>
 						<li>Initializtions: last s1 = 0, first unknown = 1</li>
 						<li>To move an element from Unknown into s2: Add 1 to first unknown</li>
@@ -89,7 +89,7 @@
 								<li>Adjust boundaries: Add 1 to last s1, Add 1 to first unknown</li>
 							</ol>
 						</li>
-					</ol>
+					</ul>
 				</li>
 				<li>Place pivot between s1 and s2
 					<p>Swap pivot with theArray[last s1]</p></li>

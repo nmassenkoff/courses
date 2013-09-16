@@ -55,6 +55,19 @@
 		<p>With remaining data, swap largest with last, keep repeating</p></li>
 	<li>Bubble Sort, worst: O(n<sup>2</sup>) Average: O(<sup>2</sup>) Best: O(n)
 		<p>For each pass of the data, order each pair of datums.  Eventually largest datum "bubbles" to the end.</p>
-		<p>Must pass through n-1 times, or complete pass through with no exchanges</p></li>
+		<p>Must pass through n-1 times, or complete pass through with no exchanges</p>
+		<p>Best case scenario is the data is sorted, and algorithms goes through data with no exchanges</p></li>
+	<li>Mergesort (A recursive algorithm)
+		<ol>
+			<li>Sort 1st half of the array</li>
+			<li>Sort 2nd half of the array</li>
+			<li>Merge the 2 sorted halves</li>
+		</ol>
+		Rules:
+		<ol>
+			<li>While both subarrays are not processed, copy the smaller lead item into the temporary array</li>
+			<li>Copy the rest of the elements from the subarray that has not been completely processed</li>
+			<li>Copy the items from the temporary array back to the original array</li>
+		</ol></li>
 </ul>
 

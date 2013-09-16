@@ -1,10 +1,35 @@
 <h1>Notes for September 16, 2013</h1>
-<h2>Class Announcements</h2>
+<h4>Class Announcements</h4>
 <ul>
-	<li>Lab 2 (assigned today) due wed 10/2</li>
+	<li>Lab 2 (assigned today) due wed 10/7</li>
 	<li>Exam 1 - Wed 9/25
 		<p>You may bring 1 sheet of notes both sides (no restrictions)</p></li>
+	<li>Review sheet next time</li>
+	<li>Best way to prepare is do all practice problems</li>
 
 </ul>
 
+<h2>Efficiency Continued</h2>
 
+<div class="figure">
+	<img src="/~nmassenk/images/cs110c/figure9_1.jpg" width="682" height="493" />
+	<p>Figure 9.1</p>
+</div>
+
+<p>If algorithm A requires time proportional to n<sup>2</sup>, then we say that algorithm A is O(n<sup>2</sup>). (Big O Notation)</p>
+<p>Rules for Big O Math:
+<ol>
+	<li>You can ignore lower-order terms 
+		<p>i.e. O(n<sup>2</sup> + 3n + 4) is also O(n<sup>2</sup>)</p>
+		<p>O(1) &lt; O(log<sub>2</sub>n) &lt; O(n) &lt; O(nlog<sub>2</sub>n) &lt; O(n<sup>2</sup>) &lt; O(n<sup>3</sup>) &lt; O(2<sup>n</sup>) &lt; O(n!)</p></li>
+	<li>You can ignore a multiplicative constant in a higher-order term
+		<p>e.g. O(4n<sup>3</sup>) is also O(n<sup>3</sup>)</p></li>
+</ol>
+<p>Worst case vs Average case analysis</p>
+<p>Practical considerations for use of Big O:</p>
+<ol>
+	<li>May not apply to small n</li>
+	<li>One ADT implementation may be faster at some operations and slower at other operations compared to another ADT/implementation.  How often are the operations used?</li>
+	<li>
+
+	

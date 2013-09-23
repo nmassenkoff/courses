@@ -11,7 +11,7 @@
 	<li>Determine effect of list operations on list object (1 question)</li>
 	<li>Determine results of code that uses a list class</li>
 	<li>Determine results of calls to polynomial, know list class uml, don't need to know polynomial uml (2 questions)</li>
-	<li>Following 1 question each:</li>
+	<p>Following 1 question each:</p>
 	<li>Given a function determine the Big O</li>
 	<li>Determine order of items for selections sort at end of a given pass</li>
 	<li>Determine order of a bubble sort at the end of a given pass</li>
@@ -25,3 +25,56 @@
 	<li>Write a function that operates on list objects that is independant of list implementation</li>
 	<li>Trace a quick sort</li>
 </ul>
+
+
+<h2>Chapter 4, Linked List</h2>
+
+<pre>
+	typedef int ItemType;
+	struct Node
+	{
+		Itemtype item;
+		node * next;
+	}
+</pre>
+
+<p>struct like class, default is public. Structs go back to c language.</p>
+
+ <p>Allocate a new noe:</p>
+ <pre>
+ 	node * p = new Node;
+</pre>
+
+ <pre>
+	p&rarr;item  ...
+	...
+</pre>
+
+<p>Empty list:</p>
+<pre>
+	Node *head = NULL;
+</pre>
+
+<p>Head is just a pointer.  Head node is the first node, different from head which is a pointer to head.</p>
+<p><b>Do not do the following:</b></p>
+<pre>
+	Node *head;
+	head = new Node;
+	head = NULL;
+</pre>
+<p>Creates memory leak</p>
+
+<p>Programmer's responsibility to prevent memory leaks.</p>
+
+<h3>Displaying a list</h3>
+
+<pre>
+	void displayList(Node *head)
+	{
+		for (Node *cur = head, cur != NULL; cur = cur&rta;next)
+			cout &lt;&lt; cur&rarr;item &lt;&lt; endl;
+	}
+
+	displayList(head);
+
+

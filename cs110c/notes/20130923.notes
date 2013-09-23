@@ -1,0 +1,27 @@
+<h1>Notes for September 23, 2013</h1>
+<p>Beginning of class go over answers to in-class problems from last week</p>
+
+<h2>Midterm Breakdown:</h2>
+
+
+<p>17 multiple choice questions, 3pts each</p>
+<ul>
+	<li>5 question UML (fill in parts of UML)
+	<li>Given a recursive func determine num of boxes is box trace, or determine the output, 4 questions total</li>
+	<li>Determine effect of list operations on list object (1 question)</li>
+	<li>Determine results of code that uses a list class</li>
+	<li>Determine results of calls to polynomial, know list class uml, don't need to know polynomial uml (2 questions)</li>
+	<li>Following 1 question each:</li>
+	<li>Given a function determine the Big O</li>
+	<li>Determine order of items for selections sort at end of a given pass</li>
+	<li>Determine order of a bubble sort at the end of a given pass</li>
+	<li>Determine the number of passes for buble sort</li>
+</ul>
+
+<p>Written questions (49 points):</p>
+<ul>
+	<li>Write a recursive function</li>
+	<li>Write an exception class, then modify a function to throw an exception</li>
+	<li>Write a function that operates on list objects that is independant of list implementation</li>
+	<li>Trace a quick sort</li>
+</ul>

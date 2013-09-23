@@ -1,2 +1,30 @@
 <h1>Notes for September 18, 2013</h1>
 
+<h4>Important Notes</h4>
+<ul>
+	Ch.9 practive problems mon 9/23
+	exam 1 - wed 9/25 (bring sharpened number 2 pencil)
+	Lab 3 due Mon 10/7
+	Certficate C++:
+	<ul>
+		cs160a
+		cs110a
+		cs110b
+		cs110c
+		cs150b or 151a or 155a
+	</ul>
+</ul>
+
+<h3>Quicksort continued...</h3>
+<p>Most popular algorithm in industry</p>
+<p>Worst case efficiency: O(n<sup>2</sup>) (occurs when items are already sorted!)</p>
+<p>Average Case: O(n * log<sub>n</sub>)</p>
+<p>Can modify quicksort so that if the items are already sorted to give O(nlog<sub>2</sub>n)</p>
+<p>In average case, quicksort is faster than mergesort</p>
+
+<h3>Pigeon hole sort O(n) sort</h3>
+
+<p>Most efficient, but requires a lot of memory and limited by datatype</p>
+
+<h3>Bucket Sort</h3>
+

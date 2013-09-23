@@ -62,5 +62,9 @@ int main(int argc, const char *argv[])
 	cout << endl;
 	showCommas(7282485);
 	cout << endl;
+	showCommas(1001000);
+	cout << endl;
+	showCommas(1000000);
+	cout << endl;
 	return 0;
 }

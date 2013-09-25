@@ -1,5 +1,6 @@
 <h1>Notes for September 24, 2013</h1>
 
+<h2>Sample answer for Asssignment 1</h2>
 <pre>
 	#! /bin/bash
 	usage()
@@ -105,6 +106,7 @@
 <h2>Privileges</h2>
 
 <p>MySQL comes with many options.  Important to give just the right amount of power to users, not too much and not too little.</p>
+<p>To give privileges use grant</p>
 
 <p>Possible privileges:</p>
 <table>
@@ -143,3 +145,11 @@
 			</ul>
 		</td>
 </table>
+
+<p>Use revoke to remove privileges, i.e. :</p>
+<pre>
+	revoke select on *.* from 'john'@'localhost';  (remove select privileges for all databases)
+	revoke all on *.* from 'john'@'localhost';     (remove all privileges for all databases)
+	revoke all on *.* from 'john'.'%'; 	       (remove all privileges for all hosts)
+</pre>
+

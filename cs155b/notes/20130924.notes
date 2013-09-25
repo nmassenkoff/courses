@@ -1,1 +1,107 @@
 <h1>Notes for September 24, 2013</h1>
+
+<pre>
+	#! /bin/bash
+	usage()
+	{
+	cat &lt;&lt;-EOF
+		Usage: users &lt;option(s)&gt;&lt;regex&gt;
+		where options are:
+		-h  : displays help
+		-n  : displays number of users
+	EOF
+
+		exit 0
+	}
+
+	domysql()
+	{
+		mysql -BCNnqs --disable-pager -usystem -pmanager mysql &lt;&lt;-EOF
+
+		$e;
+		exit
+	EOF
+	}
+
+	if (( $$ == 0 )); then
+		domysql "select user from user order by user"
+	elif (( $$ == 1))
+		if [[ $1 == "-n" ]]; then
+			echo -n "number of users:"
+			domysql "select count(*) from user"
+		elif [[ $1 == "-h" ]; then
+			usage
+		else
+			domysql "select user from user where user regexp '$1' order by user"
+		fi
+	elif (( $$ == 2 )); then
+		echo -n "number of users:"
+		domysql "select count(*) from user where user regexp '$2'"
+	
+			
+
+</pre>
+
+<h2>Recover root password</h2>
+
+<ol>
+	<li>Shutdown server</li>
+	<pre>
+		service mysqld stop
+	</pre>
+	<li>Modify configuration file</li>
+	<pre>
+		cd /etc
+		vim my.cnf
+	</pre>
+	<p>Under mysqld group add lines:</p>
+	<pre>
+		[mysqld]
+		skip_grant_tables
+	</pre>
+	<li>Startup system</li>
+	<pre>
+		service mysqld start
+	</pre>
+	<li>Log into mysql</li>
+	<pre>
+		mysql -u root mysql
+	</pre>
+	<li>Change password</li>
+	<pre>
+		update user set password=password('[new_password]') where user='root' and host = 'localhost'
+	</pre>
+	<li>Shutdown mysql</li>
+	<pre>
+		mysqladmin -u root -p[new_password] shutdown
+	</pre>
+	<li>Restor configuration file</li>
+	<pre>
+		cd /etc/
+		vim my.cnf
+		# skip_grant_tables
+	</pre>
+</ol>
+
+<p>Can also avoid modifying configuration file by setting the option when bringing up mysqld</p>
+
+<ol>
+	<li>Shutdown server</li>
+	<pre>
+		service mysqld stop
+	</pre>
+	<li>Startup system with --skip-grant-tables</li>
+	<pre>
+		cd $BASEDIR/bin
+		mysqld_safe --skip-grant-tables &amp;
+		mysqladmin -u root flush-privileges password "[new_password]"
+	</pre>
+	<li>Shutdown mysql</li>
+	<pre>
+		mysqladmin -u root -p[new_password] shutdown
+	</pre>
+</ol>
+
+<h2>Privileges</h2>
+
+

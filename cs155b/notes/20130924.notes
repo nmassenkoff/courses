@@ -58,7 +58,7 @@
 	<p>Under mysqld group add lines:</p>
 	<pre>
 		[mysqld]
-		skip_grant_tables
+		skip-grant-tables
 	</pre>
 	<li>Startup system</li>
 	<pre>
@@ -109,7 +109,7 @@
 <p>To give privileges use grant</p>
 
 <p>Possible privileges:</p>
-<table>
+<table style="margin:10px auto;">
 	<tr>
 		<td>
 			<ul>
@@ -120,19 +120,23 @@
 				<li>lock tables</li>
 				<li>create</li>
 				<li>create temporary table</li>
+			</ul>
+		</td>
+		<td>
+			<ul>
 				<li>alter</li>
 				<li>index</li>
 				<li>drop</li>
 				<li>create view</li>
 				<li>show view</li>
 				<li>alter routine</li>
+				<li>create routine</li>
+				<li>execute</li>
+				<li>file</li>
 			</ul>
 		</td>
 		<td>
 			<ul>
-				<li>create routine</li>
-				<li>execute</li>
-				<li>file</li>
 				<li>create user</li>
 				<li>grant option</li>
 				<li>show databases</li>
@@ -152,4 +156,92 @@
 	revoke all on *.* from 'john'@'localhost';     (remove all privileges for all databases)
 	revoke all on *.* from 'john'.'%'; 	       (remove all privileges for all hosts)
 </pre>
+
+<h2>Homework 3: Deleting accounts</h2>
+<p>Due next week</p>
+
+<p>create script called delete_acct</p>
+<p>-f filename (filename of file with list of user id's, one id per line)</p>
+<p>To delete account:</p>
+<pre>
+	delete from user where user='jlin05';
+	flush privileges;
+</pre>
+
+<p>Can also accept list of login id's/crn</p>
+<pre>
+	delete_acct [-f filename] crn1/id1 crn2/id2 ...
+output:
+	deleted accounts:
+	...
+	...
+	...
+</pre>
+
+<h2>Restrictions</h2>
+<p>Sometimes when creating account need to add restrictions to account</p>
+
+<p>MySQL does not have very many options for this</p>
+
+
+<pre>
+	grant all on *.* to 'alex'@'localhost'
+	with MAX_CONNECTION_PER_HOUR 10
+	     MAX_QUERIES_PER_HOUR 200
+	     MAX_UPDATES_PER_HOUR 50
+	     MAX_USER_CONNECTIONS 10;
+</pre>
+
+<p>If any restriction set to 0, then means <b>unlimited</b></p>
+
+<h2>Query Privileges</h2>
+
+<pre>
+	show grants for 'alex'@'localhost';
+	show grants;	&larr;shows your privileges
+	show grants for current_user();	&larr;shows your privileges
+</pre>
+
+<h2>Locking Tables</h2>
+<pre>
+	#lock table table1 locktype, table2 locktype ...
+	lock table empl READ;  &larr;(employee table only able to read)
+</pre>
+<p>READLOCAL - able to read and insert</p>
+<p>WRITE - able to read and modify</p>
+
+<p>dbas are usually locking and unlocking tables constantly</p>
+<p>Always make sure to flush table</p>
+
+<pre>
+	lock table pretty read;
+	flush table pretty;
+or
+	flush tables with read lock; &larr;(locks all the table);
+	set global read_only=on;
+
+	set global read_only=off;
+
+	unlock tables;
+</pre>
+<p>These commands can only be used if have lock table privileges</p>
+
+<h2>Daily use sql commands</h2>
+
+<pre>
+	select * from students;
+	select count(*) from students;
+	select count(distinct age) from students;
+	select name like '%s' from students;
+	select name regexp '^s' from students; 
+	select name from students order by name desc;
+	select name from students limit 5;
+	select name from students limit 10,5;
+	delete from students where name regexp 'n$';
+	update students set final='A' where scores &gt;= 90;
+	insert into students values (........);
+	insert into students values (....),(....),(...),(....);
+	insert into students (name,age) values(...,..),(....,...);
+</pre>
+
 

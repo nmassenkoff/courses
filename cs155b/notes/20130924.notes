@@ -104,4 +104,42 @@
 
 <h2>Privileges</h2>
 
+<p>MySQL comes with many options.  Important to give just the right amount of power to users, not too much and not too little.</p>
 
+<p>Possible privileges:</p>
+<table>
+	<tr>
+		<td>
+			<ul>
+				<li>select</li>
+				<li>insert</li>
+				<li>update</li>
+				<li>delete</li>
+				<li>lock tables</li>
+				<li>create</li>
+				<li>create temporary table</li>
+				<li>alter</li>
+				<li>index</li>
+				<li>drop</li>
+				<li>create view</li>
+				<li>show view</li>
+				<li>alter routine</li>
+			</ul>
+		</td>
+		<td>
+			<ul>
+				<li>create routine</li>
+				<li>execute</li>
+				<li>file</li>
+				<li>create user</li>
+				<li>grant option</li>
+				<li>show databases</li>
+				<li>process</li>
+				<li>super</li>
+				<li>reload</li>
+				<li>replication client</li>
+				<li>replication slave</li>
+				<li>shutdown</li>
+			</ul>
+		</td>
+</table>

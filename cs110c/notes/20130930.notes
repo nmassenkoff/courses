@@ -1,0 +1,56 @@
+<h1>Notes for September 30, 2013</h1>
+<h2>Review Midterm</h2>
+<h2>Continue Notes for Chapter 6</h2>
+
+<h3>Inserting a node</h3>
+<ol>
+	<li>Determine point of insertion (details later)</li>
+	<li>Create a new node and store the new item in it
+	<pre>
+		Node *newNode = new Node;
+		newNode-&gt;item = newItem;
+	</pre> </li>
+	<li>Connect new node to the linked list by changing pointers</li>
+	<p>To insert at beginning:</p>
+	<pre>
+		newNode-&gt;next = head;
+		head = newNode;
+	</pre>
+</ol>
+
+<p>Finding the correct place to insert or delete a node in a sorted linked list</p.
+<p>First attempt:</p>
+<pre>
+	Prev = NULL;
+	cur = head;
+
+	while (newValue &gt; cor-&gt;item)
+	{
+		prev = cur;
+		cur = cur-&gt;next;
+	}
+</pre>
+<p>This fails if new item is largest, or if list is empty (cur-&gt;item when cur is NULL is illegal, can't dereference NULL)</p>
+<p>Correction:</p>
+<pre>
+	Prev = NULL;
+	cur = head;
+
+	while (cur != NULL &amp;&amp; newValue &gt; cor-&gt;item)
+	{
+		prev = cur;
+		cur = cur-&gt;next;
+	}
+</pre>
+<p>Same thing using a for loop:</p>
+<pre>
+	for (prev= NULL, cur = head; cur != NULL &amp;&amp; newValue &gt; cur-&ht;item; prev = cur, cur = cur-&gt;next)
+	;
+</pre>
+
+<h3>Passing by value, passing by reference</h3>
+
+<p>When passing by value, parameter is copied. Passing by reference does not.</p>
+
+<h4>Passing pointers by reference</h4>
+

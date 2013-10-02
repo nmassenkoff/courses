@@ -216,3 +216,7 @@ extended-insert:
 	#[ not_root ] &amp;&amp; echo "need to be root or mysql" &amp;&amp; exit 1
 
 </pre>
+
+<h2>Midterm next week</h2>
+<p>chapters 1, 2, 3, 13 in book</p>
+

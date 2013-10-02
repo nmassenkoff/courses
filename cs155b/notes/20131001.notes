@@ -38,4 +38,68 @@
 <p>Example:</p>
 <pre>
 	use information_schema;
+	select table_name, engine, table_schema, table_type
+	from table;
+
+	select schema_name from schemata;
+
+same as:
+	show databases;
+
+
+</pre>
+
+<h4>Processlist</h4>
+<p>A view that shows all the processes that are running</p>
+<pre>
+	select user, id from processlist;
+</pre>
+
+<p>Can also provide host, what database, what command user is using, time, ...</p>
+
+<p>Can also type:</p>
+<pre>
+	show processlist;
+</pre>
+
+<h4>To kill process</h4>
+<p>User very helpful program mysqladmin</p>
+
+<pre>
+	mysqladmin kill 50,52,57
+</pre>
+<p>Where 50, 52, 57 are process id</p>
+
+
+<h2>Backup</h2>
+<p>Logical and Physical</p>
+<h3>Logical</h3>
+<p>Save all the mysql commands that create the databases, all the insert statements that insert all of the data.</p>
+<p>These are saved into file, just a bunch of sql commands.</p>
+<p>When you run the file it runs the commands and restores all the databases</p>
+
+<p>Created by using "dump"</p>
+
+<h3>Physical</h3>
+<p>Backing up the actual phyical files and directories that contain the mysql databases</p>
+
+<p>Logical is portable, while physical is not.</p>
+<p>Physical backup is much faster, especially when restoring.</p>
+
+<h3>Full Backup</h3>
+<p>Backup everything, all tables, databases, data, etc. Usually done weekly.</p>
+<h3>Incremental</h3>
+<p>Backing up only the changes since the previouse full backup. Usually run very often, ie 3 times a day.</p>
+
+<h3>Backup Methods:</h3>
+<ul>
+	<li>cold</li>
+		<p>Shutdown server, then backup</p>
+	<li>hot</li>
+		<p>Server is up and running, everything active during backup</p>
+	<li>warm</li>
+	<p>Mixture, of both</p>
+</ul>
+
+
 

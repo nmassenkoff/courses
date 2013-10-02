@@ -98,8 +98,106 @@ same as:
 	<li>hot</li>
 		<p>Server is up and running, everything active during backup</p>
 	<li>warm</li>
-	<p>Mixture, of both</p>
+	<p>Locks all the tables, but doesn't shutdown</p>
 </ul>
 
+<h4>mysqldump</h4>
+<p>Used to do a logical warm backup</p>
 
+<p>Beginning lines say if your version is 4.1.1 set old_character_set_client to char_set_client:
+<pre>
+	/!40101 set @@OLD_CHARACTER_SET_CLIENT = @@CHAR_SET_CLIENT */;
+</pre>
+<p>Many lines like this help maximize compatibility between versions</p>
 
+<p>Example of using mysqldump:</p>
+<pre>
+	mysql --user=root --password=[password] --all-databases &gt; dump.sql
+
+	mysqldump mydb table1 table2 --skip-extended-insert
+extended-insert:
+	insert into emp (name, age) values ('john',23), ("Alex',25), ('sue', 18),...
+</pre>
+<p>Extended insert much faster but compatibility can be issue (use --skip-extended-insert for compatibility with older version that don't support this type of insert)</p>
+
+<p>--lock-all-tables: locks all the tables for the whole time<br />
+--nodata: dump only structure, not data that is in database<br />
+--lock-tables: only lock tables currently dumping<br />
+--where: i.e. --where 'name="John" and age&gt;60', should normally come with other options to specifiy database/table<br />
+--databases good bad nice (backs up only good, bad, and nice)</p>
+
+<p>Restoration:</p>
+<pre>
+	mysql &lt; dump.sql
+</pre>
+
+<h4>Backup single table</h4>
+<pre>
+	mysql&gt; select * into outfile 'abcd' from emp;
+</pre>
+<p>Creates binary file (abcd) not logical, and therefore not portable</p>
+<p>To load into system:</p>
+<pre>
+	mysql&gt; load data infile 'abcd' into table emp;
+</pre>
+
+<p>In older version, had to make table first</p>
+
+<p>If emp table already exists, load will remove table and all table and replace it</p>
+
+<h4>Backup Command</h4>
+
+<pre>
+	mysql&gt; backup database mydb to 'xyz.sql'
+</pre>
+<p>Creates logical backup of database mydb</p>
+<p>To restore:</p>
+<pre>
+	mysql&gt; restore from 'xyz.sql'
+</pre>
+<p>Save only into $DATADIR</p>
+<p>After using backup and restore, will receive backup id and restore id</p>
+
+<p>While using backup, two tables created automatically:</p>
+<ul>
+	<li>backup_history</li>
+	<li>backup_progress</li>
+</ul>
+
+<p>Normally when backup is done, backup_progress will be removed (only exists while doing backup).</p>
+<p>backup_history stays and stores all sorts of information about the backups (errors, user, host, etc)</p>
+<p>Example:</p>
+<pre>
+	select * from backup_history where backup_id=450\G
+</pre>
+
+<p><b>Backup cannot be used to backup mysql</b> because during backup process mysql tables are constantly changing and cannot be locked</p>
+
+<h4>mysqlhotcopy</h4>
+<p>perl script that only works on:</p>
+<ul>
+	<li>MyISAM</li>
+	<li>Archive</li>
+</ul>
+<p>Also only work on unix, linux and mac</p>
+
+<pre>
+	mysqlhotcopy mydb1 mydb2 /tmp
+</pre>
+<p>Must specify directory name (/tmp).  Will backup everything into directory</p>
+<p>Advantage is that is a hotcopy, and server can keep running and no lock tables</p>
+
+<h4>Sample Test Question</h4>
+<p>How can you determine the engine type of a table, ie employee</p>
+<p>Create a function to do this</p>
+
+<pre>
+	engine_name()
+	{
+		select engine from information_schema.table 
+		where table_schema = '$1' and table_name = '$2;
+	}
+	
+	engine_name mydb emp
+
+</pre>

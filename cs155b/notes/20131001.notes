@@ -1,1 +1,41 @@
 <h1>Notes for October 1, 2013</h1>
+
+<p>After installation create two databases and one virtual database:</p>
+<ul>
+	<li>mysql</li>
+	<li>test</li>
+	<li>Information_Schema (only in memory)</li>
+</ul>
+
+<h3>Information_Schema</h3>
+<p>Provides metadata</p>
+<p>Metadata is information about itself</p>
+
+<p>schema = database, schemata = databases</p>
+
+<p>Four types of information:</p>
+<ol>
+	<li>object catalog
+	<p>Information About:</p>
+	<ul>
+		<li>databases</li>
+		<li>tables</li>
+		<li>views</li>
+		<li>etc (objects)</li>
+	</ul>
+	<li>System Information</li>
+	<p>Information about:
+	<ul>
+		<li>names of variables</li>
+		<li>constants</li>
+		<li>options</li>
+	</ul>
+	<li>Permissions</li>
+	<li>Storage Engine Information</li>
+	<p>MySQL comes with more than 20 different engines, default MyIsam</p>
+</ol>
+
+<p>Example:</p>
+<pre>
+	use information_schema;
+

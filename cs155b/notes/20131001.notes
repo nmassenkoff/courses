@@ -201,3 +201,18 @@ extended-insert:
 	engine_name mydb emp
 
 </pre>
+
+<h2>Add security check to script</h2>
+<p>Code that prevents script from running if user running it does not have permission</p>
+
+<pre>
+	not_root()
+	{
+		# Returns true if your not root
+		w=$(whoami)
+		[ $w != "mysql" -a $w != "root" ] &amp;&amp; return 0 || return 1
+	}
+
+	#[ not_root ] &amp;&amp; echo "need to be root or mysql" &amp;&amp; exit 1
+
+</pre>

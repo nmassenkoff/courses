@@ -38,7 +38,7 @@ int main(int argc, const char *argv[])
 					break;
 				}
 
-				if (players[i].numSpins() < 3)
+				if (players[i].numSpins() < 2)
 				{
 					cout << "Whould you like to spin again? (y/n):  ";
 					cin >> spinAgain;

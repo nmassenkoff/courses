@@ -11,6 +11,7 @@ int main(int argc, const char *argv[])
 	char spinAgain;
 	char userInput;
 	char playAgain = 'y';
+	int bustCounter = 0;
 
 	while(playAgain == 'y')
 	{
@@ -34,28 +35,36 @@ int main(int argc, const char *argv[])
 
 				if (players[i].totalPoints() > 100)
 				{
-					cout << "Oh no! You've busted... your total score is over 100.  Better luck next time." << endl;
+					cout << "Oh no! You've busted... your total score is over 100.  Better luck next time." << endl << endl;
+					bustCounter++;
 					break;
 				}
 
-				if (players[i].numSpins() < 2)
+				if (players[i].numSpins() < 2 && bustCounter < 2)
 				{
 					cout << "Whould you like to spin again? (y/n):  ";
 					cin >> spinAgain;
 				}
 				else
 					spinAgain = 'n';
+
+				cout << endl;
 			}
 		}
+
+		cout << "****************************" << endl;
+		cout << "*       Final Scores       *" << endl;
+		cout << "****************************" << endl;
 
 		for (int i = 0; i < 3; i++)
 		{
 			if (players[i].totalPoints() <= 100)
-				cout << "Player " << i+1 << " final score:" << players[i].totalPoints() << endl;
+				cout << "Player " << i+1 << " final score: " << players[i].totalPoints() << endl;
 			else
-				cout << "Player " << i+1 << " final score:" << players[i].totalPoints() << "  **(Busted)** " << endl;
-
+				cout << "Player " << i+1 << " final score: " << players[i].totalPoints() << "  **(Busted)** " << endl;
 		}
+		
+		cout << endl;
 
 		// Initialize rankings array
 		for (int i = 0; i < 3; i++)
@@ -83,7 +92,7 @@ int main(int argc, const char *argv[])
 		}
 
 		// Find the highest score that isn't a bust
-		int highestWithoutBust = NULL;
+		int highestWithoutBust;
 		for (int i = 0; i < 3; i++)
 			if (players[playerRanking[i]].totalPoints() <= 100)
 			{
@@ -94,7 +103,6 @@ int main(int argc, const char *argv[])
 		// Determine if there are any ties
 		bool twoTieFlag = false;
 		bool threeTieFlag = false;
-		bool allBustFlag = false;
 		switch(highestWithoutBust)
 		{
 			case 0:
@@ -107,8 +115,6 @@ int main(int argc, const char *argv[])
 				if (players[playerRanking[highestWithoutBust]].totalPoints() == players[playerRanking[2]].totalPoints())
 					twoTieFlag = true;
 				break;
-			default:
-				allBustFlag = true;
 		}
 		
 		cout << endl;
@@ -116,17 +122,15 @@ int main(int argc, const char *argv[])
 		// Display correct message for whether there were any ties, or if there was a winner
 		if (threeTieFlag)
 		{
-			cout << "All three players tied with a score of: " << players[0].totalPoints();
+			cout << "All three players tied with a score of " << players[0].totalPoints();
 		}
 		else if (twoTieFlag)
 			cout << "Players " 
 				<< playerRanking[highestWithoutBust]+1 
 				<< " and " 
-				<< playerRanking[highestWithoutBust]+2 
-				<< " tied with a score of: " 
+				<< playerRanking[highestWithoutBust+1]+1 
+				<< " tied with a score of " 
 				<< players[playerRanking[highestWithoutBust]].totalPoints();
-		else if (allBustFlag)
-			cout << "All of you busted, your scores were over 100";
 		else
 			cout << "Player "
 				<< playerRanking[highestWithoutBust]+1
@@ -136,9 +140,9 @@ int main(int argc, const char *argv[])
 				
 		cout << endl;
 		cout << endl;
-		cout << "**********************" << endl;
-		cout << "*      GAME OVER     *" << endl;
-		cout << "**********************" << endl;
+		cout << "****************************" << endl;
+		cout << "*         GAME OVER        *" << endl;
+		cout << "****************************" << endl;
 		cout << endl;
 		cout << endl;
 

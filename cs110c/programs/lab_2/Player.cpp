@@ -53,6 +53,11 @@ void Player::reset()
 	spins.clear();
 }
 
+void Player::addSpin(int score)
+{
+	spins.push(score);
+}
+
 void Player::printScore()
 {
 	int total = 0;

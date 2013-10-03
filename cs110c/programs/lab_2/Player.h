@@ -50,6 +50,11 @@ class Player
 		// Resets player data in prepartion for new game
 		// pre: none
 		// post: none
+
+		void addSpin(int score);
+		// This function allows you to manually add spins to the player
+		// pre: 0 < score <= 100, should be multiples of 5
+		// post: Adds score to spins List as if resulting from a spin
 	private:
 		// A list containing the values spun by the player
 		List spins;

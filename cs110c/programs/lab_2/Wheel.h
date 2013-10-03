@@ -3,10 +3,13 @@
 //       Filename:  Wheel.h
 // 
 //    Description:  Inherits from List.h, implements a circular list
-//    		    that keeps track of current position of the list
-//    		    as well as provides a method for spinning the wheel
-//    		    and moving the current postion forward a random number
-//    		    of times between  22 and 42
+//    		        that keeps track of current position of the list
+//    		        as well as provides a method for spinning the wheel
+//    		        and moving the current postion forward a random number
+//    		        of times between  22 and 42.
+//				    
+//					Also initiates the wheel with 20 numbers from 5 to 100, incrementing
+// 					by 5 and ordered randomly
 // 
 //        Version:  1.0
 //        Created:  10/02/2013 12:30:44

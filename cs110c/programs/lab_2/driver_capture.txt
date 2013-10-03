@@ -1,0 +1,128 @@
+~/dropbox/documents/ccsf/notes/courses/cs110c/programs 🍔  cat -n lab2_driver_script 
+     1	Script started on Thu Oct  3 11:39:11 2013
+     2	~/dropbox/documents/ccsf/notes/courses/cs110c/programs/lab_2 🍔  ls -l
+     3	total 144
+     4	-rw-r--r--  1 Nick  admin   1642 Oct  2 21:37 List.cpp
+     5	-rw-r--r--  1 Nick  admin   2175 Oct  2 21:37 List.h
+     6	-rw-r--r--  1 Nick  admin   1325 Oct  3 10:16 Player.cpp
+     7	-rw-r--r--  1 Nick  admin   1561 Oct  3 10:15 Player.h
+     8	-rw-r--r--  1 Nick  admin   6253 Oct  2 21:27 Wheel.cpp
+     9	-rw-r--r--  1 Nick  admin   2025 Oct  2 14:52 Wheel.h
+    10	-rw-r--r--  1 Nick  admin   5223 Oct  3 11:37 driver.cpp
+    11	-rw-r--r--  1 Nick  admin   4009 Oct  3 11:20 main.cpp
+    12	-rwxr-xr-x  1 Nick  admin  24556 Oct  3 11:23 mainProgram
+    13	-rw-r--r--@ 1 Nick  admin   6211 Oct  3 11:29 main_capture.txt
+    14	~/dropbox/documents/ccsf/notes/courses/cs110c/programs/lab_2 🍔  
+    15	~/dropbox/documents/ccsf/notes/courses/cs110c/programs/lab_2 🍔  
+    16	~/dropbox/documents/ccsf/notes/courses/cs110c/programs/lab_2 🍔  g++ List.cpp Wheel.cpp Player.cpp driver.cpp -o driverProgram
+    17	~/dropbox/documents/ccsf/notes/courses/cs110c/programs/lab_2 🍔  
+    18	~/dropbox/documents/ccsf/notes/courses/cs110c/programs/lab_2 🍔  ./driverProgram
+    19	Enter Player 1 score for spin 1: 25
+    20	Would you like to spin again? (y/n):  y
+    21	Enter Player 1 score for spin 2: 65
+    22	Enter Player 2 score for spin 1: 
+    23	10
+    24	Would you like to spin again? (y/n):  y
+    25	Enter Player 2 score for spin 2: 45
+    26	Enter Player 3 score for spin 1: 20
+    27	Would you like to spin again? (y/n):  y
+    28	Enter Player 3 score for spin 2: 70
+    29	****************************
+    30	*       Final Scores       *
+    31	****************************
+    32	Player 1 final score: 90
+    33	Player 2 final score: 55
+    34	Player 3 final score: 90
+    35	
+    36	
+    37	Players 1 and 3 tied with a score of 90
+    38	
+    39	****************************
+    40	*         GAME OVER        *
+    41	****************************
+    42	
+    43	
+    44	Would you like to play again? (y/n): y
+    45	Enter Player 1 score for spin 1: 20
+    46	Would you like to spin again? (y/n):  y
+    47	Enter Player 1 score for spin 2: 40
+    48	Enter Player 2 score for spin 1: 50
+    49	Would you like to spin again? (y/n):  y
+    50	Enter Player 2 score for spin 2: 10
+    51	Enter Player 3 score for spin 1: 30
+    52	Would you like to spin again? (y/n):  y
+    53	Enter Player 3 score for spin 2: 30
+    54	****************************
+    55	*       Final Scores       *
+    56	****************************
+    57	Player 1 final score: 60
+    58	Player 2 final score: 60
+    59	Player 3 final score: 60
+    60	
+    61	
+    62	All three players tied with a score of 60
+    63	
+    64	****************************
+    65	*         GAME OVER        *
+    66	****************************
+    67	
+    68	
+    69	Would you like to play again? (y/n): y
+    70	Enter Player 1 score for spin 1: 25
+    71	Would you like to spin again? (y/n):  y
+    72	Enter Player 1 score for spin 2: 60
+    73	Enter Player 2 score for spin 1: 40
+    74	Would you like to spin again? (y/n):  y
+    75	Enter Player 2 score for spin 2: 85
+    76	Oh no! You've busted... your total score is over 100.  Better luck next time.
+    77	
+    78	Enter Player 3 score for spin 1: 90
+    79	Would you like to spin again? (y/n):  n
+    80	****************************
+    81	*       Final Scores       *
+    82	****************************
+    83	Player 1 final score: 85
+    84	Player 2 final score: 125  **(Busted)** 
+    85	Player 3 final score: 90
+    86	
+    87	
+    88	Player 3 had the highest score of 90 and is the WINNER!
+    89	
+    90	****************************
+    91	*         GAME OVER        *
+    92	****************************
+    93	
+    94	
+    95	Would you like to play again? (y/n): y
+    96	Enter Player 1 score for spin 1: 40
+    97	Would you like to spin again? (y/n):  y
+    98	Enter Player 1 score for spin 2: 90
+    99	Oh no! You've busted... your total score is over 100.  Better luck next time.
+   100	
+   101	Enter Player 2 score for spin 1: 10
+   102	Would you like to spin again? (y/n):  y
+   103	Enter Player 2 score for spin 2: 95
+   104	Oh no! You've busted... your total score is over 100.  Better luck next time.
+   105	
+   106	Enter Player 3 score for spin 1: 5
+   107	****************************
+   108	*       Final Scores       *
+   109	****************************
+   110	Player 1 final score: 130  **(Busted)** 
+   111	Player 2 final score: 105  **(Busted)** 
+   112	Player 3 final score: 5
+   113	
+   114	
+   115	Player 3 had the highest score of 5 and is the WINNER!
+   116	
+   117	****************************
+   118	*         GAME OVER        *
+   119	****************************
+   120	
+   121	
+   122	Would you like to play again? (y/n): n
+   123	~/dropbox/documents/ccsf/notes/courses/cs110c/programs/lab_2 🍔  
+   124	~/dropbox/documents/ccsf/notes/courses/cs110c/programs/lab_2 🍔  exit
+   125	exit
+   126	
+   127	Script done on Thu Oct  3 11:43:29 2013

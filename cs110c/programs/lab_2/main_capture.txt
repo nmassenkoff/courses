@@ -1,0 +1,141 @@
+~/dropbox/documents/ccsf/notes/courses/cs110c/programs 🍔  cat -n lab2_main_script 
+     1	Script started on Thu Oct  3 11:22:39 2013
+     2	~/dropbox/documents/ccsf/notes/courses/cs110c/programs/lab_2 🍔  ls -l
+     3	total 80
+     4	-rw-r--r--  1 Nick  admin  1642 Oct  2 21:37 List.cpp
+     5	-rw-r--r--  1 Nick  admin  2175 Oct  2 21:37 List.h
+     6	-rw-r--r--  1 Nick  admin  1325 Oct  3 10:16 Player.cpp
+     7	-rw-r--r--  1 Nick  admin  1561 Oct  3 10:15 Player.h
+     8	-rw-r--r--  1 Nick  admin  6253 Oct  2 21:27 Wheel.cpp
+     9	-rw-r--r--  1 Nick  admin  2025 Oct  2 14:52 Wheel.h
+    10	-rw-r--r--  1 Nick  admin  4815 Oct  3 11:21 driver.cpp
+    11	-rw-r--r--  1 Nick  admin  4009 Oct  3 11:20 main.cpp
+    12	~/dropbox/documents/ccsf/notes/courses/cs110c/programs/lab_2 🍔  
+    13	~/dropbox/documents/ccsf/notes/courses/cs110c/programs/lab_2 🍔  
+    14	~/dropbox/documents/ccsf/notes/courses/cs110c/programs/lab_2 🍔  g++ List.cpp Wheel.cpp Player.cpp main.cpp -o mainProgram
+    15	~/dropbox/documents/ccsf/notes/courses/cs110c/programs/lab_2 🍔  
+    16	~/dropbox/documents/ccsf/notes/courses/cs110c/programs/lab_2 🍔  ./mainProgram
+    17	Player 1 are you ready to spin? (y/n):  y
+    18	                                    |
+    19	                                    |
+    20	                                    |
+    21	                                    V
+35  15  95  60  50  45  10  25  55  90  85  75  5   30 100  70  20  65  80  40  85  75  
+    23	For spin number 1 you landed on: 90
+    24	Your total score is: 90
+    25	Would you like to spin again? (y/n):  n
+    26	
+    27	Player 2 are you ready to spin? (y/n):  y
+    28	                                    |
+    29	                                    |
+    30	                                    |
+    31	                                    V
+80  40  35  15  95  60  50  45  10  25  55  90  85  75  5   30 100  70  20  65  80  40  
+    33	For spin number 1 you landed on: 25
+    34	Your total score is: 25
+    35	Would you like to spin again? (y/n):  y
+    36	
+    37	                                    |
+    38	                                    |
+    39	                                    |
+    40	                                    V
+70  20  65  80  40  35  15  95  60  50  45  10  25  55  90  85  75  5   30 100  20  65  
+    42	For spin number 1 you landed on: 25
+    43	For spin number 2 you landed on: 50
+    44	Your total score is: 75
+    45	
+    46	Player 3 are you ready to spin? (y/n):  y
+    47	                                    |
+    48	                                    |
+    49	                                    |
+    50	                                    V
+90  85  75  5   30 100  70  20  65  80  40  35  15  95  60  50  45  10  25  55  30 100  
+    52	For spin number 1 you landed on: 80
+    53	Your total score is: 80
+    54	Would you like to spin again? (y/n):  y
+    55	
+    56	                                    |
+    57	                                    |
+    58	                                    |
+    59	                                    V
+40  35  15  95  60  50  45  10  25  55  90  85  75  5   30 100  70  20  65  80  25  55  
+    61	For spin number 1 you landed on: 80
+    62	For spin number 2 you landed on: 55
+    63	Your total score is: 135
+    64	Oh no! You've busted... your total score is over 100.  Better luck next time.
+    65	
+    66	****************************
+    67	*       Final Scores       *
+    68	****************************
+    69	Player 1 final score: 90
+    70	Player 2 final score: 75
+    71	Player 3 final score: 135  **(Busted)** 
+    72	
+    73	
+    74	Player 1 had the highest score of 90 and is the WINNER!
+    75	
+    76	****************************
+    77	*         GAME OVER        *
+    78	****************************
+    79	
+    80	
+    81	Would you like to play again? (y/n): y
+    82	Player 1 are you ready to spin? (y/n):  y
+    83	                                    |
+    84	                                    |
+    85	                                    |
+    86	                                    V
+10  25  55  90  85  75  5   30 100  70  20  65  80  40  35  15  95  60  50  45  65  80  
+    88	For spin number 1 you landed on: 70
+    89	Your total score is: 70
+    90	Would you like to spin again? (y/n):  n
+    91	
+    92	Player 2 are you ready to spin? (y/n):  y
+    93	                                    |
+    94	                                    |
+    95	                                    |
+    96	                                    V
+45  10  25  55  90  85  75  5   30 100  70  20  65  80  40  35  15  95  60  50  50  45  
+    98	For spin number 1 you landed on: 100
+    99	Your total score is: 100
+   100	Would you like to spin again? (y/n):  n
+   101	
+   102	Player 3 are you ready to spin? (y/n):  y
+   103	                                    |
+   104	                                    |
+   105	                                    |
+   106	                                    V
+80  40  35  15  95  60  50  45  10  25  55  90  85  75  5   30 100  70  20  65  60  50  
+   108	For spin number 1 you landed on: 25
+   109	Your total score is: 25
+   110	Would you like to spin again? (y/n):  y
+   111	
+   112	                                    |
+   113	                                    |
+   114	                                    |
+   115	                                    V
+00  70  20  65  80  40  35  15  95  60  50  45  10  25  55  90  85  75  5   30 120  65  
+   117	For spin number 1 you landed on: 25
+   118	For spin number 2 you landed on: 60
+   119	Your total score is: 85
+   120	
+   121	****************************
+   122	*       Final Scores       *
+   123	****************************
+   124	Player 1 final score: 70
+   125	Player 2 final score: 100
+   126	Player 3 final score: 85
+   127	
+   128	
+   129	Player 2 had the highest score of 100 and is the WINNER!
+   130	
+   131	****************************
+   132	*         GAME OVER        *
+   133	****************************
+   134	
+   135	
+   136	Would you like to play again? (y/n): n
+   137	~/dropbox/documents/ccsf/notes/courses/cs110c/programs/lab_2 🍔  exit
+   138	exit
+   139	
+   140	Script done on Thu Oct  3 11:26:38 2013

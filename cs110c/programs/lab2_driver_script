@@ -1,0 +1,127 @@
+Script started on Thu Oct  3 11:39:11 2013
+[?1034h~/dropbox/documents/ccsf/notes/courses/cs110c/programs/lab_2 🍔  ls -l
+total 144
+-rw-r--r--  1 Nick  admin   1642 Oct  2 21:37 List.cpp
+-rw-r--r--  1 Nick  admin   2175 Oct  2 21:37 List.h
+-rw-r--r--  1 Nick  admin   1325 Oct  3 10:16 Player.cpp
+-rw-r--r--  1 Nick  admin   1561 Oct  3 10:15 Player.h
+-rw-r--r--  1 Nick  admin   6253 Oct  2 21:27 Wheel.cpp
+-rw-r--r--  1 Nick  admin   2025 Oct  2 14:52 Wheel.h
+-rw-r--r--  1 Nick  admin   5223 Oct  3 11:37 driver.cpp
+-rw-r--r--  1 Nick  admin   4009 Oct  3 11:20 main.cpp
+-rwxr-xr-x  1 Nick  admin  24556 Oct  3 11:23 mainProgram
+-rw-r--r--@ 1 Nick  admin   6211 Oct  3 11:29 main_capture.txt
+~/dropbox/documents/ccsf/notes/courses/cs110c/programs/lab_2 🍔  
+~/dropbox/documents/ccsf/notes/courses/cs110c/programs/lab_2 🍔  
+~/dropbox/documents/ccsf/notes/courses/cs110c/programs/lab_2 🍔  g++ List.cpp Wheel.cpp Player.cpp driver.cpp -o driverProgram
+~/dropbox/documents/ccsf/notes/courses/cs110c/programs/lab_2 🍔  
+~/dropbox/documents/ccsf/notes/courses/cs110c/programs/lab_2 🍔  ./driverProgram
+Enter Player 1 score for spin 1: 25
+Whould you like to spin again? (y/n):  y
+Enter Player 1 score for spin 2: 65
+Enter Player 2 score for spin 1: 
+10
+Whould you like to spin again? (y/n):  y
+Enter Player 2 score for spin 2: 45
+Enter Player 3 score for spin 1: 20
+Whould you like to spin again? (y/n):  y
+Enter Player 3 score for spin 2: 70
+****************************
+*       Final Scores       *
+****************************
+Player 1 final score: 90
+Player 2 final score: 55
+Player 3 final score: 90
+
+
+Players 1 and 3 tied with a score of 90
+
+****************************
+*         GAME OVER        *
+****************************
+
+
+Would you like to play again? (y/n): y
+Enter Player 1 score for spin 1: 20
+Whould you like to spin again? (y/n):  y
+Enter Player 1 score for spin 2: 40
+Enter Player 2 score for spin 1: 50
+Whould you like to spin again? (y/n):  y
+Enter Player 2 score for spin 2: 10
+Enter Player 3 score for spin 1: 30
+Whould you like to spin again? (y/n):  y
+Enter Player 3 score for spin 2: 30
+****************************
+*       Final Scores       *
+****************************
+Player 1 final score: 60
+Player 2 final score: 60
+Player 3 final score: 60
+
+
+All three players tied with a score of 60
+
+****************************
+*         GAME OVER        *
+****************************
+
+
+Would you like to play again? (y/n): y
+Enter Player 1 score for spin 1: 25
+Whould you like to spin again? (y/n):  y
+Enter Player 1 score for spin 2: 60
+Enter Player 2 score for spin 1: 40
+Whould you like to spin again? (y/n):  y
+Enter Player 2 score for spin 2: 85
+Oh no! You've busted... your total score is over 100.  Better luck next time.
+
+Enter Player 3 score for spin 1: 90
+Whould you like to spin again? (y/n):  n
+****************************
+*       Final Scores       *
+****************************
+Player 1 final score: 85
+Player 2 final score: 125  **(Busted)** 
+Player 3 final score: 90
+
+
+Player 3 had the highest score of 90 and is the WINNER!
+
+****************************
+*         GAME OVER        *
+****************************
+
+
+Would you like to play again? (y/n): y
+Enter Player 1 score for spin 1: 40
+Whould you like to spin again? (y/n):  y
+Enter Player 1 score for spin 2: 90
+Oh no! You've busted... your total score is over 100.  Better luck next time.
+
+Enter Player 2 score for spin 1: 10
+Whould you like to spin again? (y/n):  y
+Enter Player 2 score for spin 2: 95
+Oh no! You've busted... your total score is over 100.  Better luck next time.
+
+Enter Player 3 score for spin 1: 5
+****************************
+*       Final Scores       *
+****************************
+Player 1 final score: 130  **(Busted)** 
+Player 2 final score: 105  **(Busted)** 
+Player 3 final score: 5
+
+
+Player 3 had the highest score of 5 and is the WINNER!
+
+****************************
+*         GAME OVER        *
+****************************
+
+
+Would you like to play again? (y/n): n
+~/dropbox/documents/ccsf/notes/courses/cs110c/programs/lab_2 🍔  
+~/dropbox/documents/ccsf/notes/courses/cs110c/programs/lab_2 🍔  exit
+exit
+
+Script done on Thu Oct  3 11:43:29 2013

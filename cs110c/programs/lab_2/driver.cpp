@@ -19,7 +19,7 @@ int main(int argc, const char *argv[])
 	Player players[3];
 	int playerRanking[3];
 	char spinAgain;
-	char userInput;
+	char playerReady;
 	char playAgain = 'y';
 	int scoreInput = 0;
 	int bustCounter = 0;
@@ -27,26 +27,43 @@ int main(int argc, const char *argv[])
 	while(playAgain == 'y')
 	{
 		// Main game loop
+		bustCounter = 0;
 		for (int i = 0; i < 3; i++)
 		{
-			for (int j = 0; j < 2; j++)
+			spinAgain = 'y';
+			while(spinAgain == 'y')
 			{
-				cout << "Enter Player " << i+1 << " score for spin " << j+1 << ": ";
+				cout << "Enter Player " << i+1 << " score for spin " << players[i].numSpins()+1 << ": ";
 				cin >> scoreInput;
 
 				players[i].addSpin(scoreInput);
+
+				if (players[i].totalPoints() > 100)
+				{
+					cout << "Oh no! You've busted... your total score is over 100.  Better luck next time." << endl << endl;
+					bustCounter++;
+					break;
+				}
+
+				if (players[i].numSpins() < 2 && bustCounter < 2)
+				{
+					cout << "Would you like to spin again? (y/n):  ";
+					cin >> spinAgain;
+				}
+				else
+					spinAgain = 'n';
 			}
 
 /* 
  * Game logic pertaining to player spinning and receiving scores
  *
 			spinAgain = 'y';
-			userInput = 'n';
+			playerReady = 'n';
 			
-			while(userInput != 'y')
+			while(playerReady != 'y')
 			{
 				cout << "Player " << i+1 << " are you ready to spin? (y/n):  " ;
-				cin >> userInput;
+				cin >> playerReady;
 			}
 
 			while(spinAgain == 'y')
@@ -64,7 +81,7 @@ int main(int argc, const char *argv[])
 
 				if (players[i].numSpins() < 2 && bustCounter < 2)
 				{
-					cout << "Whould you like to spin again? (y/n):  ";
+					cout << "Would you like to spin again? (y/n):  ";
 					cin >> spinAgain;
 				}
 				else

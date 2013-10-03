@@ -77,4 +77,7 @@ void List::retrieve(int pos, ListItemType& dataItem) const
 	dataItem = items[pos-1];
 }
 
-
+void List::clear()
+{
+	size = 0;
+}

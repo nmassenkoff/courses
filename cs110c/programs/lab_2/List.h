@@ -67,6 +67,10 @@ class List
 		// pre: 1 <= pos <= getLength()
 		// post: item at pos is passed by reference to dataItem
 
+		void clear();
+		// Clears the list to empty
+		// pre: none
+		// post none
 	private:
 		// Number of items in the list
 		int size;

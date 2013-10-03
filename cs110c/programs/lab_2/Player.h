@@ -46,6 +46,10 @@ class Player
 		// pre: none
 		// post: none
 
+		void reset();
+		// Resets player data in prepartion for new game
+		// pre: none
+		// post: none
 	private:
 		// A list containing the values spun by the player
 		List spins;

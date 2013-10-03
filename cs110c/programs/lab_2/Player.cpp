@@ -48,6 +48,11 @@ int Player::numSpins() const
 	return spins.getLength();
 }
 
+void Player::reset()
+{
+	spins.clear();
+}
+
 void Player::printScore()
 {
 	int total = 0;

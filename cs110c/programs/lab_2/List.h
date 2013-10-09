@@ -70,7 +70,7 @@ class List
 		void clear();
 		// Clears the list to empty
 		// pre: none
-		// post none
+		// post Sets the list to size = 0
 	private:
 		// Number of items in the list
 		int size;

@@ -34,7 +34,7 @@ int List::getLength() const
 void List::insert(int pos, const ListItemType& newItem)
 {
 	// Starting at the end of the arrays shift each element 
-	// by one until you reach pos
+	// down the list by one until you reach pos
 
 	for (int curPos = size; curPos >= pos; curPos--)
 		items[curPos] = items[curPos - 1];

@@ -146,15 +146,20 @@ int main(int argc, const char *argv[])
 		switch(highestWithoutBust)
 		{
 			case 0:
+			// No players have busted, so check for both 3-way and 2-way ties
 				if (players[playerRanking[highestWithoutBust]].totalPoints() == players[playerRanking[2]].totalPoints())
+					// If highest score == lowest score, all three scores are equal becaues playerRanking[] is orderd 
+					// from highest score to lowest score;
 					threeTieFlag = true;
 				else if (players[playerRanking[highestWithoutBust]].totalPoints() == players[playerRanking[1]].totalPoints())
 					twoTieFlag = true;
 				break;
 			case 1:
+				// One player has busted so check only for 2-way tie
 				if (players[playerRanking[highestWithoutBust]].totalPoints() == players[playerRanking[2]].totalPoints())
 					twoTieFlag = true;
 				break;
+			// If 2 players busted than no ties are possible
 		}
 		
 		cout << endl;

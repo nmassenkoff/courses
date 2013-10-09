@@ -1,0 +1,36 @@
+<h1>Notes for October 8, 2013</h1>
+
+<p>Midterm day, no lecture just assign homework</p>
+
+<h2>Homework 4</h2>
+<h3>Script backup</h3>
+
+<ul>
+	<li>-b</li>
+	<p>Backup</p>
+	<li>-r</li>
+	<p>restore</p>
+	<li>-d</li>
+	<p>list of databases</p>
+	<li>-D [database]</li>
+	<p>lists one database and then lists tables to backup</p>
+	<li>-t</li>
+	<p>lists tables in the form database.table</p>
+	<li>-a</li>
+	<p>all databases and tables</p>
+	<li>-h</li>
+	<p>help message</p>
+	<li>-f [filename]</li>
+	<p>Specify filename of backup</p>
+</ul>
+
+<pre>
+	backup -b -d dba1 dba2 ... ...  &lt;- backup list of databases
+	backup -r -d dba1 dba2 ... ... restore list of databses
+	backup -b -D dba tb1 tb2 tb3 ... ...
+	backup -b -a
+use tar
+cd to $DATADIR
+</pre>
+
+

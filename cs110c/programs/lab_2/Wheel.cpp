@@ -86,23 +86,29 @@ void printFirstNum(int offset, int value)
 	// pre: 0 <= offset <= 3; value representing whatever is currently the first
 	//      number displayed on the wheel.
 	// post: none
+	// note: * = space in comments
 	
 	int dec = value % 100;
 	if (dec >= 10)
 	{
 		// value is 2 digits
+		// displayed as *10*
 		switch(offset)
 		{
 			case 0:
+				// output *10*
 				cout << ' ' << value << ' ';
 				break;
 			case 1:
+				// output 10*
 				cout << value << ' ';
 				break;
 			case 2:
+				// output 0*
 				cout << value % 10 << ' ';
 				break;
 			case 3:
+				// output *
 				cout << ' ';
 				break;
 		}
@@ -110,18 +116,23 @@ void printFirstNum(int offset, int value)
 	else if (dec >= 1)
 	{
 		// value is 1 digit
+		// displayed as **1*
 		switch(offset)
 		{
 			case 0:
+				// output *1**
 				cout << ' ' << value << "  ";
 				break;
 			case 1:
+				// output 1**
 				cout << value << "  ";
 				break;
 			case 2:
+				// output **
 				cout << "  ";
 				break;
 			case 3:
+				// output *
 				cout << ' ';
 				break;
 		}
@@ -129,18 +140,23 @@ void printFirstNum(int offset, int value)
 	}
 	else 
 		// value is 100
+		// Displayed as 100*
 		switch(offset)
 		{
 			case 0:
+			// output 100*
 				cout << value << ' ';
 				break;
 			case 1:
+			// output 00*
 				cout << "00 ";
 				break;
 			case 2:
+			// output 0*
 				cout << "0 ";
 				break;
 			case 3:
+			// output *
 				cout << " ";
 				break;
 		}
@@ -152,22 +168,28 @@ void printLastNum(int offset, int value)
 	// pre: 0 <= offset <= 3; value representing whatever is currently the last
 	//      number displayed on the wheel.
 	// post: none
+	// note: * = space
 
 	int dec = value % 100;
 	if (dec >= 10)
 	{
 		// value is 2 digits
+		// displayed as *10*
 		switch(offset)
 		{
 			case 0:
+			// output: 
 				break;
 			case 1:
+			// output: *
 				cout << ' ';
 				break;
 			case 2:
+			// output: *1
 				cout << ' ' << value / 10;
 				break;
 			case 3:
+			// output: *10
 				cout << ' ' << value;
 				break;
 		}
@@ -175,17 +197,22 @@ void printLastNum(int offset, int value)
 	else if (dec >= 1)
 	{
 		// value is 1 digit
+		// displayed as *1**
 		switch(offset)
 		{
 			case 0:
+			// output: 
 				break;
 			case 1:
+			// output: *
 				cout << " ";
 				break;
 			case 2:
+			// output: *1
 				cout << ' ' << value;
 				break;
 			case 3:
+			// output: *1*
 				cout << ' ' << value << ' ';
 				break;
 		}
@@ -193,17 +220,22 @@ void printLastNum(int offset, int value)
 	}
 	else 
 		// value is 100
+		// displayed as 100*
 		switch(offset)
 		{
 			case 0:
+			// output:
 				break;
 			case 1:
+			// output: 1
 				cout << "1";
 				break;
 			case 2:
+			// output: 10
 				cout << "10";
 				break;
 			case 3:
+			// output: 100
 				cout << "100";
 				break;
 		}
@@ -240,11 +272,13 @@ void Wheel::displaySpin(int targetPos) const
 		retrieve(firstItem, listItemValue);
 		printFirstNum(offset, listItemValue);
 
-		j = 2; // skip 1st item of wheel
-		for (i = firstItem + 1; j <= numItems ; i++) {
+		for (i = firstItem + 1, j = 2; j <= numItems ; i++, j++) // skip 1st item of wheel
+		{ 
 			// This loop prints all the values that aren't the first value
 			// and depending on the position and number of digits, spaces
 			// before the value or after
+			// j keeps count of the actual number of items that we have printed
+			// i keeps track of the actual index of the item currently being printed
 
 			retrieve(translatePos(i), listItemValue);
 			if (listItemValue % 100 >= 10)
@@ -254,10 +288,9 @@ void Wheel::displaySpin(int targetPos) const
 			else
 				cout << listItemValue << ' ';
 
-			j++;
 		}
 
-		// Determine what to print at the end of the line depending on the position
+		// Determine what to print at the end of the line depending on the offset
 		retrieve(firstItem, listItemValue);
 		printLastNum(offset, listItemValue);
 
@@ -265,7 +298,7 @@ void Wheel::displaySpin(int targetPos) const
 		offset = (offset + 1) % 3;
 		if (offset == 0) 
 		{
-			// Advance tempPos if position has cycled through current number
+			// Advance tempPos if position has cycled through to zero
 			tempPos = translatePos(tempPos + 1);
 			firstItem = translatePos(tempPos + 11);
 		}
@@ -292,13 +325,17 @@ void Wheel::displaySpin(int targetPos) const
 		
 		// If spin slows enough and current offset matches target position then stop
 		// animation and exit function
-		if (delay > 80000 && tempPos == targetPos && offset == 2)
+		if (delay > 90000 && tempPos == targetPos && offset == 2)
 		{
+		// end animation after pausing on final number
+		// by breaking out of the loop and ending function
+			usleep(800000);
 			cout << endl;
 			break;
 		} 
 		else if (delay < 0)
 		{
+		// Delay can't be negative
 			delay = 10;
 		}
 

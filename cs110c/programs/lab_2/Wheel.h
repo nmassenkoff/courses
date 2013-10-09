@@ -28,7 +28,7 @@ class Wheel : public List
 	public:
 		Wheel();
 		// Default Constructor
-		// Parrent constructor called first
+		// Parent constructor called first
 		// pre: none
 		// post: A randomly order list of 20 numbers
 		// 	 whose values run from 5 to 100 (inclusive)
@@ -56,13 +56,14 @@ class Wheel : public List
 		// return: random number between min and max
 
 		void displaySpin(int targetPos) const;
-		// Displays an animated wheel that starts from current pos and ends at targetPos
+		// Displays an animated wheel that starts with pointer at current pos
+		// and ends when pointer is pointed at targetPos
 		// pre: 1 <= targetPos <= 20
 		// post: none
 
 		int translatePos(int linearPos) const;
 		// Converts a linear pos to the actual position of the wheel 
-		// which is circular
+		// which is circular (i.e. 21 and 41 would convert to position 1)
 		// pre: linearPos > 0
 		// post: none
 		// return: current position of the wheel

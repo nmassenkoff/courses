@@ -3,62 +3,61 @@
 
 <ol>
 	<li>
-		<pre>
-			login as root
-			cp $BASEDIR/support-files/my.large.cnf /etc/my.cnf
-		</pre>
+	<pre>
+		login as root
+		cp $BASEDIR/support-files/my.large.cnf /etc/my.cnf
+	</pre>
 	</li>
 	<li>
-		<pre>
-			login as mysql
-			$BASEDIR/scripts/mysql_install_db --user=mysql
-		</pre>
+	<pre>
+		login as mysql
+		$BASEDIR/scripts/mysql_install_db --user=mysql
+	</pre>
 	</li>
 	<li>
-		<pre>
-			mysql -u root -pmanager mysql
-			grant all on *.* to 'super'@'localhost' identified by 'xxx' with grant option;
-		</pre>
+	<pre>
+		mysql -u root -pmanager mysql
+		grant all on *.* to 'super'@'localhost' identified by 'xxx' with grant option;
+	</pre>
 	</li>
 	<li>
-		<pre>
-			mysqladmin -u root -pxxx ping
-		</pre>
+	<pre>
+		mysqladmin -u root -pxxx ping
+	</pre>
 	</li>
 	<li>
-		<pre>
-			service mysqld start
-		or
-			/etc/init.d
-			mysqld start
-		or
-			#BASEDIR/mysql_safe --user=mysql 
-		</pre>
+	<pre>
+		service mysqld start
+	or
+		/etc/init.d
+		mysqld start
+	or
+		#BASEDIR/mysql_safe --user=mysql 
+	</pre>
 	</li>
 	<li>
-		<pre>
-			ITEM
-		</pre>
+	<pre>
+		service mysqld stop
+		/etc/init.d/mysqld --skip-grant-tables start
+	</pre>
 	</li>
 	<li>
-		<pre>
-			ITEM
-		</pre>
+	<pre>
+		ITEM
+	</pre>
 	</li>
 	<li>
-		<pre>
-			ITEM
-		</pre>
+	<pre>
+		ITEM
+	</pre>
 	</li>
 	<li>
-		<pre>
-			ITEM
-		</pre>
+	<pre>
+		ITEM
+	</pre>
 	</li>
 	<li>
-		<pre>
-			ITEM
-		</pre>
+	<pre>
+		ITEM
+	</pre>
 	</li>
-
-

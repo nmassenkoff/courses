@@ -129,7 +129,7 @@ or
 <ul>
 	<li>ANSI</li>
 	<li>TRADITIONAL</li>
-	<li>ALLOW_INVALIDE_DATE</li>
+	<li>ALLOW_INVALID_DATE</li>
 	<li>ANSI_QUOTES(allowing double quotes and single quotes normaly only single)</li>
 	<li>ERROR_FOR_DIVISION_BY_ZERO (normally only give warning and continue)</li>
 	<li>IGNORE_SPACE</li>
@@ -141,3 +141,108 @@ or
 
 	<li>PIPES_AS_CONCAT ('x'||'y' is 'xy')</li>
 	<li>REAL_AS_FLOAT (REAL and FLOAT technically the same but one or the other is used depending on the version of sql)</li>
+</ul>
+
+<h3>How to use</h3>
+
+<pre>
+	mysql&gt; set session sql_mode=''; (sets sql_mode to nothing)
+	mysql&gt; use test;
+	mysql&gt; create table sqlmode_test (num tinyint not null);
+	mysql&gt; insert into sql_mode_test values(126),(127),(128);
+	mysql&gt; show warnings;  (will show warnings of previous command)
+
+</pre>
+<p> Above will have warning about inserting 128 because it is to big for tinyint type</p>
+<pre>
+	mysql&gt; select num from sql_mode_test;
+result:
+	126
+	127
+	127
+</pre>
+
+<p>Mysql automatically "fixed" 128 to fit into tinyint.  Sometimes this is good, sometimes this is bad</p>
+<p>To change behaviour, modify sql_mode:</p>
+
+<pre>
+	set session sql_mode='TRADITIONAL'
+</pre>
+<p>Now will receive error message and not enter anything for '128'</p>
+
+<h2>Variables</h2>
+<p>To set:</p>
+<pre>
+	set global x=25;
+	set @@global.x=25;
+
+	set session y=12;
+	set @@session y=12;
+
+	set session z=18, global g=20;
+
+</pre>
+
+<h2>Sending Shock to Daemon</h2>
+<p>Most of the time your daemon is sleeping, (it is their nature)</p>
+
+<p>In order to wake up daemon of course could "shutdown" but cannot do that in real world because people need to access daemon</p>
+
+<p>Simple script called "nudge" that does this job</p>
+
+<pre>
+	#!/bin/bash
+	# nudge
+	# To wake up &amp; read /etc/my.cnf
+
+	pid=$(cat $DATADIR/$(hostname).err)
+
+	kill 1 $pid
+</pre>
+<p>signal 1 = SIGHUP, or aka HUP</p>
+
+<p>Example of use is to disable grant tables</p>
+<pre>
+	su root
+	replace #skip_grant_tables skip_grant_tables --  /etc/mycnf
+	nudge
+</pre>
+<p>replace comes with mysql, can replace any number of values.  -- signals end of list</p>
+<p>i.e.:</p>
+<pre>
+	replace good bad nice ugly tall short -- myfile
+</pre>
+
+<h2>Other commands that come with mysql</h2>
+<h3>perror</h3>
+<p>Give perror the error number, and will tell you the error message</p>
+
+<pre>
+	perror 25,30,42,...
+</pre>
+
+<h4>Example final exam question</h4>
+<p>what does this do:</p>
+<pre>
+	replace a b b a -- file1 file2 file3
+</pre>
+<p>answer: replaces all b's to a's in file1 file2 and file3</p>
+
+<h3>mysql_zap</h3>
+
+<pre>
+	mysql_zap "abc*"
+</pre>
+<p>Will kill all the programs that start with abc.</p>
+
+<pre>
+	mysql_zap "mysql"
+</pre>
+<p>Use -f to force kill without confirmation, use -t to only test (not actually kill)</p>
+
+<p>To change "killing" method:</p>
+<pre>
+	mysql_zap -signal SIGHUP "abc*"
+</pre>
+
+

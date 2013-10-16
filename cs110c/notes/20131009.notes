@@ -1,0 +1,106 @@
+<h1>Notes for October 9, 2013</h1>
+
+<p>Note: missed last two lectures</p>
+<p>Lab 3 due Wed 10/30</p>
+
+<h2>Chapter 6</h2>
+<h3>Stacks</h3>
+<p>A stack is a list with the restriction that items can only be inserted and removed from one end (called the top).  Only the top item is accessible.</p>
+<p>Push = insert item on top <br />
+pop = remove an item from top</p>
+<p>A stack is LIFO - <u>L</u>ast <u>I</u>n <u>F</u>irst <u>O</u>ut</p>
+<p>A queue is FIFO - <u>F</u>irst <u>I</u>n <u>F</u>irst <u>O</u>ut</p>
+
+
+<h3>Stack Applications</h3>
+<p>Compilers: commonly known as "call stack" where each function called is pushed onto the stack, ie:</p>
+<p>
+f3<br />
+f2<br />
+f1<br />
+main<br />
+</p>
+
+<h4>Also checking for balanced parentheses</h4>
+<p>eg (((( 12 + 9 )/3 ) + 7.2) * ((6-4)/8))</p>
+<p>)( not balanced</p>
+<p>Balanced if:</p>
+<ol>
+	<li>Each time you encounter a ), it must balance a preceding (.</li>
+	<li>At the end of the string, each ( must be matched</li>
+</ol>
+<p>Algorithm:
+</p>
+<ol>
+	<li>make an empty stack
+	<li>read chars until end of string</li>
+	<ol>
+		<li>if (, push</li>
+		<li>if ) if stack is empty, report an error( violates 1), else pop</li>
+	</ol>
+	<li>If stack is not empty, report an error (violates 2)</li>
+	<li>if no errors reported, parentheses are balanced</li>
+</ol>
+
+<p>see pg. 293</p>
+
+<p>can use count also (increase count if open parenth, decrease if closing), but must use stack if more than one type of parenth (ie curly brace)</p>>
+
+<h4>Evaluating Algebra</h4>
+<p>Postfix Expressions: operator is entered after operands (ie RPN style)</p>
+
+<p>for stack algorithm for calculating see pp.312-313</p>
+<p>to match char '+' for operation use switch</p>
+<pre>
+	case '+': result= operand1 + operand2;
+</pre>
+
+<h4>Pointer implementation</h4>
+<p>pp.302-305</p>
+
+<h4>Copy Constructor:</h4>
+<ol>
+	<li>pass arg (by value) to a fn</li>
+	<li>declarations<p>Stack s1;<br />Stack s2(s1);</p></li>
+	<li>Value return statement</li>
+</ol>
+<p>Initializers</p>
+<ol>
+	<li>Array-based stack:</li>
+	<pre>
+		Stack::stack() : top(-1)
+		{
+		}
+	</pre>
+	<p>Equivalent:</p>
+	<pre>
+		Stack::stack()
+		{
+			top = -1;
+		}
+	</pre>
+	<li>ADT List - Base stack:</li>
+	<pre>
+		Stack::stack(const Stack&amp; aStack): aList(aStack.aList)
+		{
+		}
+	</pre>
+</ol>
+<p>Calls a list class copy constructor to copy from aStack.aList to aList</p>
+
+<p>Not the same as:</p>
+<pre>
+	Stack::stack(const Stack &amp; aStack)
+	{
+		aList = aStack.aList;
+	}
+</pre>
+<p>calls assignment, In case of our textbook, gets a shallow copy, not a "deep" copy (copies the pointer pointing to same object)</p>
+
+<p>When using initializer, if it is an object (ie not a primitive like int) then the copy constructor is called and not the assignment operator</p>
+
+<p>Initializers allow us to execute the code for the copy constructor without creating a new object.</p>
+
+
+
+

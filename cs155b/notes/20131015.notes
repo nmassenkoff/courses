@@ -66,12 +66,24 @@ mysql -u jane -p mysql
 </li>
 <li>
 <pre>
-ITEM
+--databases
+	must specify which database to use, ie: mysqldump --databases dba1 dba2 ...
+--all-databases
+	all databases are selected, ie: mysqldump --all-databases
 </pre>
 </li>
 <li>
 <pre>
-ITEM
+mysqldump --user=root --password=[root password] --databases mysql &gt; mysql_backup.sql
+
+or to prevent corruption
+
+mysqldump --databases mysql --lock-all-tables &gt; mysql_backup.sql
+
+or physical
+
+cd $DATADIR/mysql
+tar -zcvf /tmp/yyy.tz .
 </pre>
 </li>
 </ol>

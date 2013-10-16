@@ -4,61 +4,74 @@
 <ol>
 <li>
 <pre>
-	login as root
-	cp $BASEDIR/support-files/my.large.cnf /etc/my.cnf
+login as root
+cp $BASEDIR/support-files/my.large.cnf /etc/my.cnf
 </pre>
 </li>
 <li>
 <pre>
-	login as mysql
-	$BASEDIR/scripts/mysql_install_db --user=mysql
+login as mysql
+$BASEDIR/scripts/mysql_install_db --user=mysql
 </pre>
 </li>
 <li>
 <pre>
-	mysql -u root -pmanager mysql
-	grant all on *.* to 'super'@'localhost' identified by 'xxx' with grant option;
+mysql -u root -pmanager mysql
+grant all on *.* to 'super'@'localhost' identified by 'xxx' with grant option;
 </pre>
 </li>
 <li>
 <pre>
-	mysqladmin -u root -pxxx ping
+mysqladmin -u root -pxxx ping
 </pre>
 </li>
 <li>
 <pre>
-	service mysqld start
+service mysqld start
 or
-	/etc/init.d
-	mysqld start
+/etc/init.d
+mysqld start
 or
-	#BASEDIR/mysql_safe --user=mysql 
+#BASEDIR/mysql_safe --user=mysql 
 </pre>
 </li>
 <li>
 <pre>
-	service mysqld stop
-	/etc/init.d/mysqld --skip-grant-tables start
+service mysqld stop
+/etc/init.d/mysqld --skip-grant-tables start
 </pre>
 </li>
 <li>
 <pre>
-	ITEM
+use mysql;
+update user set password=password('xxx') where user='root' and host='localhost';
+or
+set password=password('xxx');
+flush privileges;
+or
+mysqladmin -u root -pyyy password='xxx'
 </pre>
 </li>
 <li>
 <pre>
-	ITEM
+mysql -u jane -pmysql
+	logs you in as jane with password 
+	mysql, and no database is selected
+
+mysql -u jane -p mysql
+	logs you in as jane and prompts you
+	to enter in password, and will automatically
+	select mysql database as current database.
 </pre>
 </li>
 <li>
 <pre>
-	ITEM
+ITEM
 </pre>
 </li>
 <li>
 <pre>
-	ITEM
+ITEM
 </pre>
 </li>
 </ol>

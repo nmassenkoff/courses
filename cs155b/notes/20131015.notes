@@ -87,3 +87,57 @@ tar -zcvf /tmp/yyy.tz .
 </pre>
 </li>
 </ol>
+
+
+<h2>Tweak Binary Installation</h2>
+<h3>sql_mode</h3>
+<p>For example you are able to set your system to behave like oracle, or change system to accept invalid data, or if invalid data is entered to try and be smart enough to modify data to correct</p>
+
+<p>Modify the sql_mode in:</p>
+<ol>
+	<li>Modify configuration file</li>
+	<li>add to option of mysqld on command line when starting mysql</li>
+</ol>
+<p>Can also affect behaviour by using global or local(session) variables</p>
+
+<p>Syntax:</p>
+<pre>
+for command line:
+	--sql-mode="comma delineated list of modes"
+for config file:
+	[mysqld]
+	sql-mode="comma delineated list of modes"
+</pre>
+
+<p>To see what modes are set:</p>
+<pre>
+	show global variables like 'sql_mode';
+or
+	select @@global.sql_mode;
+	select @@session.sql_mode;
+or
+	select variable_name, variable_value
+	from information_schema.global_variables
+	where variable_name='sql_mode';
+
+	select variable_name, variable_value
+	from information_schema.session_variables
+	where variable_name='sql_mode';
+</pre>
+
+<p>Popular modes:</p>
+<ul>
+	<li>ANSI</li>
+	<li>TRADITIONAL</li>
+	<li>ALLOW_INVALIDE_DATE</li>
+	<li>ANSI_QUOTES(allowing double quotes and single quotes normaly only single)</li>
+	<li>ERROR_FOR_DIVISION_BY_ZERO (normally only give warning and continue)</li>
+	<li>IGNORE_SPACE</li>
+	<pre>
+		select sqrt(49);
+		vs
+		select sqrt (49);
+	</pre>
+
+	<li>PIPES_AS_CONCAT ('x'||'y' is 'xy')</li>
+	<li>REAL_AS_FLOAT (REAL and FLOAT technically the same but one or the other is used depending on the version of sql)</li>

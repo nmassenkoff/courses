@@ -1,0 +1,24 @@
+<h1>Notes for October 22, 2013</h1>
+
+<p>Note: missed first hour of class</p>
+
+<p>What was on board:</p>
+<pre>
+	process d file : hostname.pid
+	error log file: hostname.err
+	General Query log: hostnmae.log
+	Binary log file :hostname-bin.nnnnn
+	Binary log index : hostname-bin.index
+	relay log file : hostname-relay-bin.nnnnn
+</pre>
+
+<p>Second board:</p>
+<pre>
+	select information_schema.global_status
+	where variable_name like 'key or
+	varia le_name like 'Qcache';
+	show variables like 'basedir';
+	show variables where variable_name like '%timeout%' and value < 60
+</pre>
+
+

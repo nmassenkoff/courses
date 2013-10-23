@@ -116,3 +116,5 @@ or
 <p>If make max size smaller will create more files, can cause problem of running out of inodes</p>
 
 
+<p>Sometimes filesize is larger than max, because transactions are added to the log in completion and therefore if the logfile is under max but transaction is larger than what is left, the transaction is still added to the log file resulting in a log file that is larger than max</p>
+

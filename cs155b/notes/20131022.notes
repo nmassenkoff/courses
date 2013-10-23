@@ -2,6 +2,7 @@
 
 <p>Note: missed first hour of class</p>
 
+<h3>Log files</h3>
 <p>What was on board:</p>
 <pre>
 	process d file : hostname.pid
@@ -10,15 +11,108 @@
 	Binary log file :hostname-bin.nnnnn
 	Binary log index : hostname-bin.index
 	relay log file : hostname-relay-bin.nnnnn
+	relay log index: hostnmae_relay_bin.index
+	master info file: master.info
+	relay info : relay_log.info
+
+	nnnnn = a count (ie 00001 00002 00003 ...)
 </pre>
 
 <p>Second board:</p>
 <pre>
+	/etc/init.d/mysqld -max_size=2048
 	select information_schema.global_status
 	where variable_name like 'key or
 	varia le_name like 'Qcache';
 	show variables like 'basedir';
 	show variables where variable_name like '%timeout%' and value < 60
+
 </pre>
+
+
+<p>if query takes a long time to finish, data about it is stored here:</p>
+<pre>
+	show query logfile: hostname-slow.log
+</pre>
+
+<p>How to change name of table</p>
+<pre>
+	rename user from good pretty;
+	rename [database] from [old_table] [new_table]
+</pre>
+
+<p>changing log file location and name can be done in configuration file or when starting up the daemon</p>
+
+<p>To clean up log files use:</p>
+<pre>
+	mysql&gt; FLUSH LOGS
+or
+	mysqladmin flush-logs
+or	
+	mysqladmin refresh
+</pre>
+<p>Forces mysql to close and reopen the log files.  As a result the contents of the file will be gone.</p>
+
+<h3>Error Log</h3>
+<p>Always availble on system, cannot enable/disable.</p>
+<p>Logging info about startup and shutdown.</p>
+<p>In configuration file find:</p>
+<pre>
+	[mysqld]
+	log-error=/var/log/mysql/errorlog	#set location of file
+</pre>
+
+<p>When flushing the log file it is copied to file name filename_old in the same directory of original log file</p>
+
+<p>If you comment out the log-error line than all the messages are sent to stdout or stderror</p>
+
+<p>For default</p>
+<pre>
+	[mysqld]
+	log-error
+</pre>
+<p>Log file located somewhere in datadir... must look up</p>
+
+<p>Set level of warnings to log (0 means no data, 2 is log most)</p>
+<pre>
+	[mysqld]
+	log-error
+	log-warning=[0 or 1 or 2]
+</pre>
+
+<h3>Query Log File</h3>
+<p>AKA General Query Log</p>
+
+
+<p>Default is disabled, to enable:</p>
+<pre>
+	[mysqld]
+	log=/var/log/log.query #location
+</pre>
+<p>Good for monitoring what people are querying</p>
+
+<p>When starting up or shuting down have nothing to do with query log file.</p>
+<p>Logs the following:</p>
+<ul>
+	<li>login</li>
+	<li>logout</li>
+	<li>run query</li>
+	<li>run command</li>
+</ul>
+
+<h3>Binary Log File</h3>
+<p>Logs only things where you are modifying your databases</p>
+<p>In binary, not text, cannot not just read</p>
+
+<p>To activate:</p>
+<pre>
+	[mysqld]
+	log-bin=[file_name]
+	max-binlog-size=[max_size] (default 1gb)
+</pre>
+<p>Note: no extension because automatically provide one (form nnnnn)</p>
+
+<p>Mysql creates new binary log when restarting the server, when flushing the log file, when size of binary log exceeds max-binlog-size (default=1gb)</p>
+<p>If make max size smaller will create more files, can cause problem of running out of inodes</p>
 
 

@@ -1,0 +1,733 @@
+Script started on Tue 22 Oct 2013 07:20:42 PM PDT
+[mysql@dba3 nmassenk]$ cat backup 
+#!/usr/local/bin/ruby
+# Author: Nicholas Massenkoff
+# Date: October 22, 2013
+# File: backup
+# Description: 	This ruby script helps create physical backups of a 
+# 		mysql installation.
+#
+require 'getoptlong'
+
+# Error handling function
+def error(msg)
+	puts msg
+	exit 1
+end
+
+# Function to display help message
+def help()
+	help_msg = <<-EOJ
+		usage:	#{$0.split('/').last} <-r|-b> [-f filename] -d dba1 dba2 dba3 ...
+			#{$0.split('/').last} <-r|-b> [-f filename] -D dba table1 table2 table3 ...
+			#{$0.split('/').last} <-r|-b> [-f filename] -t dba1.table1 dba2.table2 dba3.table3 ...
+			#{$0.split('/').last} <-r|-b> [-f filename] -D dba table1 table2 table3 ...
+			#{$0.split('/').last} <-r|-b> [-f filename] -a
+
+		options are:
+		
+		-h : displays this help message
+		-b : Creates a backup of the indicated databases and tables
+		-r : Restores from the backup file the indicated databases and tables
+		-f : Specifies the backup file name (either to create the backup, or use for restore)
+		-D : Specifies a Database and then lists the tables individually to backup
+		-d : Specifies a list of databases to backup all the tables in each
+		-t : list tables to backup in the form database_name.table_name
+		-a : Backup all the databases and all the tables
+		-s : Set the data directory path, default is /usr/local/mysql/data
+		
+		The default filename is of the form YYYYMMDD_HHMMSS.backup of the time that the backup was initiated. 
+		If this file already exists, then it will be overwritten without warning.
+	EOJ
+	puts help_msg
+	exit 0
+end
+
+# Show help message if no arguments provided
+help if ARGV.size == 0
+
+# Initialize flags and variables
+hflag, bflag, rflag = false, false, false
+tflag, dflag, aflag = false, false, false
+qflag, fflag = false, false
+
+file_path = Time.now.strftime("%Y%m%d_%H%M%S.backup")
+data_dir = '/usr/local/mysql/data'
+databases = Array.new();
+warnings = Array.new();
+
+# Create new opts object
+opts = GetoptLong.new(
+		      	["-h", GetoptLong::NO_ARGUMENT],
+			["-b", GetoptLong::NO_ARGUMENT],
+			["-r", GetoptLong::NO_ARGUMENT],
+			["-f", GetoptLong::REQUIRED_ARGUMENT],
+			["-D", GetoptLong::REQUIRED_ARGUMENT],
+			["-d", GetoptLong::NO_ARGUMENT],
+			["-a", GetoptLong::NO_ARGUMENT],
+			["-q", GetoptLong::NO_ARGUMENT],
+			["-s", GetoptLong::REQUIRED_ARGUMENT],
+			["-t", GetoptLong::NO_ARGUMENT]
+		     )
+
+# Process any options
+# Note: for any option that
+# specifies a database and/or tables
+# they go into an array called databases
+# this array is an array of hashes where each element
+# is key value pair of database => table
+# later this array is iterate through and constructs the correct 
+# filepaths for the tar command using this array
+# if for any key value pair, the value is nil then the whole 
+# database is backed up
+begin
+	opts.each do | opt, arg |
+		case opt
+			when "-h"
+				hflag = true
+			when "-q"
+				qflag = true
+			when "-b"
+				bflag = true
+			when "-f"
+				fflag = true
+				file_path = arg
+			when "-s"
+				data_dir = arg
+			when "-r"
+				rflag = true
+			when "-a"
+				aflag = true
+			when "-d"
+				help if ARGV.size == 0
+				dflag = true
+				ARGV.each { |dbname| databases.push({ dbname => nil }) }
+			when "-D"
+				help if ARGV.size == 0
+				dflag = true
+				ARGV.each { |tablename| databases.push({ arg => tablename }) }
+			when "-t"
+				help if ARGV.size == 0
+				tflag = true
+				ARGV.each do | item | 
+					item_array = item.split('.')
+					databases.push({ item_array[0] => item_array[1] })
+				end
+		end
+	end
+rescue => err
+	puts err
+#	help()
+end
+
+help if ARGV.size == 0 && !aflag
+help if (!bflag && !rflag)
+if (rflag && !fflag)
+	# Since I have a dynamic default naming scheme, I must be passed a name for the backup file
+	# in order to restore
+	error("Error: must use -f to indicate backup file when using -r option")
+end
+
+path_list = Array.new() # this array will contain all of the paths that will either be backed up or restored
+if !aflag
+	# only do extensive database and table processing if there is no -a option
+	if bflag
+		# since we are creating backups, the data directory is checked for existence of our target databases and tables
+		databases.each do |db_pair|
+			db_pair.each do |dbname, tblname|
+				if (File.directory?("#{data_dir}/#{dbname}"))
+					if !tblname.nil?
+						if (`ls #{data_dir}/#{dbname}/#{tblname}.* 2> /dev/null`.empty?)
+							warnings.push("Warning: table '#{tblname}' for database '#{dbname}' doesn't exist")
+						else
+							path_list.push("#{data_dir}/#{dbname}/#{tblname}.*")
+						end
+					else
+						path_list.push("#{data_dir}/#{dbname}")
+					end
+				else
+					warnings.push("Warning: database '#{dbname}' does not exist")
+				end
+			end
+		end
+	elsif rflag
+		# since we are restoring, the tar command is used to check our archive file for existence of our target databases and tables
+		databases.each do |db_pair|
+			db_pair.each do |dbname, tblname|
+				if (!`tar -tzf #{file_path} #{data_dir}/#{dbname} 2> /dev/null`.empty?)
+					if !tblname.nil?
+						if (`tar -tzf #{file_path} #{data_dir}/#{dbname}/#{tblname}.* 2> /dev/null`.empty?)
+							warnings.push("Warning: table '#{tblname}' for database '#{dbname}' doesn't exist")
+						else
+							path_list.push("#{data_dir}/#{dbname}/#{tblname}.*")
+						end
+					else
+						path_list.push("#{data_dir}/#{dbname}");
+					end
+
+				else
+					warnings.push("Warning: database '#{dbname}' does not exist")
+				end
+			end
+		end
+	end
+end
+
+if (!path_list.empty?)
+	# only has items if successfull arguments leading to matching databases and tables has occured
+	# safe to run tar command
+	if bflag
+		`tar -czPf #{file_path} #{path_list.join(' ')}`
+	elsif rflag
+		`tar -xzPf #{file_path} #{path_list.join(' ')}`
+	end
+
+elsif aflag
+	if bflag
+		`tar -czPf #{file_path} #{data_dir}`
+	elsif rflag
+		`tar -xzPf #{file_path}`
+	end
+else
+	error("Error: No matching databases and/or tables found, unable to create backup.")
+end
+	
+# Output any warning messages
+puts warnings unless qflag
+exit 0
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ cat expl 
+Please note, for these demonstrations I will be using the -s option which allows me to set the mysql data directory to something other than the default of /usr/local/mysql/data.  This is just for testing purposes, and without the option the restores would go to the correct directory.
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ll test_datadir/
+total 22068
+-rw-r----- 1 mysql mysql     4231 Oct 22 19:00 dba3.ccsf.edu.err
+-rw-r----- 1 mysql mysql        6 Oct 22 19:00 dba3.ccsf.edu.pid
+drwx------ 2 mysql mysql     4096 Oct 22 19:00 dkaplan_test
+drwx------ 2 mysql mysql     4096 Oct 22 19:00 dkaplan_test_2
+-rw-r----- 1 mysql mysql 10485760 Oct 22 19:00 ibdata1
+-rw-r----- 1 mysql mysql  5242880 Oct 22 19:00 ib_logfile0
+-rw-r----- 1 mysql mysql  5242880 Oct 22 19:00 ib_logfile1
+drwxr-x--- 2 mysql mysql     4096 Oct 22 19:00 mysql
+-rw-r----- 1 mysql mysql    19078 Oct 22 19:00 mysql-bin.000001
+-rw-r----- 1 mysql mysql   712921 Oct 22 19:00 mysql-bin.000002
+-rw-r----- 1 mysql mysql      125 Oct 22 19:00 mysql-bin.000003
+-rw-r----- 1 mysql mysql      125 Oct 22 19:00 mysql-bin.000004
+-rw-r----- 1 mysql mysql      351 Oct 22 19:00 mysql-bin.000005
+-rw-r----- 1 mysql mysql   794342 Oct 22 19:00 mysql-bin.000006
+-rw-r----- 1 mysql mysql      114 Oct 22 19:00 mysql-bin.index
+drwxr-x--- 2 mysql mysql     4096 Oct 22 19:00 test
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ll test_datadir/mysql
+total 1024
+-rw-r----- 1 mysql mysql   8820 Oct 22 19:00 columns_priv.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 columns_priv.MYD
+-rw-r----- 1 mysql mysql   4096 Oct 22 19:00 columns_priv.MYI
+-rw-r----- 1 mysql mysql   9582 Oct 22 19:00 db.frm
+-rw-r----- 1 mysql mysql  41800 Oct 22 19:00 db.MYD
+-rw-r----- 1 mysql mysql  11264 Oct 22 19:00 db.MYI
+-rw-r----- 1 mysql mysql  10223 Oct 22 19:00 event.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 event.MYD
+-rw-r----- 1 mysql mysql   2048 Oct 22 19:00 event.MYI
+-rw-r----- 1 mysql mysql   8665 Oct 22 19:00 func.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 func.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 func.MYI
+-rw-r----- 1 mysql mysql     35 Oct 22 19:00 general_log.CSM
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 general_log.CSV
+-rw-r----- 1 mysql mysql   8776 Oct 22 19:00 general_log.frm
+-rw-r----- 1 mysql mysql   8700 Oct 22 19:00 help_category.frm
+-rw-r----- 1 mysql mysql  21497 Oct 22 19:00 help_category.MYD
+-rw-r----- 1 mysql mysql   3072 Oct 22 19:00 help_category.MYI
+-rw-r----- 1 mysql mysql   8612 Oct 22 19:00 help_keyword.frm
+-rw-r----- 1 mysql mysql  88650 Oct 22 19:00 help_keyword.MYD
+-rw-r----- 1 mysql mysql  16384 Oct 22 19:00 help_keyword.MYI
+-rw-r----- 1 mysql mysql   8630 Oct 22 19:00 help_relation.frm
+-rw-r----- 1 mysql mysql   8892 Oct 22 19:00 help_relation.MYD
+-rw-r----- 1 mysql mysql  16384 Oct 22 19:00 help_relation.MYI
+-rw-r----- 1 mysql mysql   8770 Oct 22 19:00 help_topic.frm
+-rw-r----- 1 mysql mysql 417444 Oct 22 19:00 help_topic.MYD
+-rw-r----- 1 mysql mysql  20480 Oct 22 19:00 help_topic.MYI
+-rw-r----- 1 mysql mysql   9510 Oct 22 19:00 host.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 host.MYD
+-rw-r----- 1 mysql mysql   2048 Oct 22 19:00 host.MYI
+-rw-r----- 1 mysql mysql   8778 Oct 22 19:00 ndb_binlog_index.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 ndb_binlog_index.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 ndb_binlog_index.MYI
+-rw-r----- 1 mysql mysql   8586 Oct 22 19:00 plugin.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 plugin.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 plugin.MYI
+-rw-r----- 1 mysql mysql   9996 Oct 22 19:00 proc.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 proc.MYD
+-rw-r----- 1 mysql mysql   2048 Oct 22 19:00 proc.MYI
+-rw-r----- 1 mysql mysql   8875 Oct 22 19:00 procs_priv.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 procs_priv.MYD
+-rw-r----- 1 mysql mysql   4096 Oct 22 19:00 procs_priv.MYI
+-rw-r----- 1 mysql mysql   8838 Oct 22 19:00 servers.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 servers.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 servers.MYI
+-rw-r----- 1 mysql mysql     35 Oct 22 19:00 slow_log.CSM
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 slow_log.CSV
+-rw-r----- 1 mysql mysql   8976 Oct 22 19:00 slow_log.frm
+-rw-r----- 1 mysql mysql   8955 Oct 22 19:00 tables_priv.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 tables_priv.MYD
+-rw-r----- 1 mysql mysql   4096 Oct 22 19:00 tables_priv.MYI
+-rw-r----- 1 mysql mysql   8636 Oct 22 19:00 time_zone.frm
+-rw-r----- 1 mysql mysql   8624 Oct 22 19:00 time_zone_leap_second.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 time_zone_leap_second.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 time_zone_leap_second.MYI
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 time_zone.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 time_zone.MYI
+-rw-r----- 1 mysql mysql   8606 Oct 22 19:00 time_zone_name.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 time_zone_name.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 time_zone_name.MYI
+-rw-r----- 1 mysql mysql   8686 Oct 22 19:00 time_zone_transition.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 time_zone_transition.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 time_zone_transition.MYI
+-rw-r----- 1 mysql mysql   8748 Oct 22 19:00 time_zone_transition_type.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 time_zone_transition_type.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 time_zone_transition_type.MYI
+-rw-r----- 1 mysql mysql  10466 Oct 22 19:00 user.frm
+-rw-r----- 1 mysql mysql  19480 Oct 22 19:00 user.MYD
+-rw-r----- 1 mysql mysql   8192 Oct 22 19:00 user.MYI
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ll
+total 28
+-rw-r--r-- 1 mysql    mysql    12288 Oct 22 19:21 asmt4
+-rwxr-xr-x 1 nmassenk nmassenk  5925 Oct 22 19:19 backup
+-rw-r--r-- 1 mysql    mysql      285 Oct 22 18:59 expl
+drwxr-xr-x 6 mysql    mysql     4096 Oct 22 19:00 test_datadir
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ./backup -b -s test_datadir -a
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ll
+total 488
+-rw-r--r-- 1 mysql    mysql    464088 Oct 22 19:21 20131022_192121.backup
+-rw-r--r-- 1 mysql    mysql     12288 Oct 22 19:21 asmt4
+-rwxr-xr-x 1 nmassenk nmassenk   5925 Oct 22 19:19 backup
+-rw-r--r-- 1 mysql    mysql       285 Oct 22 18:59 expl
+drwxr-xr-x 6 mysql    mysql      4096 Oct 22 19:00 test_datadir
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ rm -R test_datadir/*
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ll test_datadir/
+total 0
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ./backup -r -f 20131022_192121.backup -s test_datadir -a
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ll test_datadir/
+total 22068
+-rw-r----- 1 mysql mysql     4231 Oct 22 19:00 dba3.ccsf.edu.err
+-rw-r----- 1 mysql mysql        6 Oct 22 19:00 dba3.ccsf.edu.pid
+drwx------ 2 mysql mysql     4096 Oct 22 19:00 dkaplan_test
+drwx------ 2 mysql mysql     4096 Oct 22 19:00 dkaplan_test_2
+-rw-r----- 1 mysql mysql 10485760 Oct 22 19:00 ibdata1
+-rw-r----- 1 mysql mysql  5242880 Oct 22 19:00 ib_logfile0
+-rw-r----- 1 mysql mysql  5242880 Oct 22 19:00 ib_logfile1
+drwxr-x--- 2 mysql mysql     4096 Oct 22 19:00 mysql
+-rw-r----- 1 mysql mysql    19078 Oct 22 19:00 mysql-bin.000001
+-rw-r----- 1 mysql mysql   712921 Oct 22 19:00 mysql-bin.000002
+-rw-r----- 1 mysql mysql      125 Oct 22 19:00 mysql-bin.000003
+-rw-r----- 1 mysql mysql      125 Oct 22 19:00 mysql-bin.000004
+-rw-r----- 1 mysql mysql      351 Oct 22 19:00 mysql-bin.000005
+-rw-r----- 1 mysql mysql   794342 Oct 22 19:00 mysql-bin.000006
+-rw-r----- 1 mysql mysql      114 Oct 22 19:00 mysql-bin.index
+drwxr-x--- 2 mysql mysql     4096 Oct 22 19:00 test
+[mysql@dba3 nmassenk]$ ll test_datadir/mysql
+total 1024
+-rw-r----- 1 mysql mysql   8820 Oct 22 19:00 columns_priv.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 columns_priv.MYD
+-rw-r----- 1 mysql mysql   4096 Oct 22 19:00 columns_priv.MYI
+-rw-r----- 1 mysql mysql   9582 Oct 22 19:00 db.frm
+-rw-r----- 1 mysql mysql  41800 Oct 22 19:00 db.MYD
+-rw-r----- 1 mysql mysql  11264 Oct 22 19:00 db.MYI
+-rw-r----- 1 mysql mysql  10223 Oct 22 19:00 event.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 event.MYD
+-rw-r----- 1 mysql mysql   2048 Oct 22 19:00 event.MYI
+-rw-r----- 1 mysql mysql   8665 Oct 22 19:00 func.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 func.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 func.MYI
+-rw-r----- 1 mysql mysql     35 Oct 22 19:00 general_log.CSM
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 general_log.CSV
+-rw-r----- 1 mysql mysql   8776 Oct 22 19:00 general_log.frm
+-rw-r----- 1 mysql mysql   8700 Oct 22 19:00 help_category.frm
+-rw-r----- 1 mysql mysql  21497 Oct 22 19:00 help_category.MYD
+-rw-r----- 1 mysql mysql   3072 Oct 22 19:00 help_category.MYI
+-rw-r----- 1 mysql mysql   8612 Oct 22 19:00 help_keyword.frm
+-rw-r----- 1 mysql mysql  88650 Oct 22 19:00 help_keyword.MYD
+-rw-r----- 1 mysql mysql  16384 Oct 22 19:00 help_keyword.MYI
+-rw-r----- 1 mysql mysql   8630 Oct 22 19:00 help_relation.frm
+-rw-r----- 1 mysql mysql   8892 Oct 22 19:00 help_relation.MYD
+-rw-r----- 1 mysql mysql  16384 Oct 22 19:00 help_relation.MYI
+-rw-r----- 1 mysql mysql   8770 Oct 22 19:00 help_topic.frm
+-rw-r----- 1 mysql mysql 417444 Oct 22 19:00 help_topic.MYD
+-rw-r----- 1 mysql mysql  20480 Oct 22 19:00 help_topic.MYI
+-rw-r----- 1 mysql mysql   9510 Oct 22 19:00 host.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 host.MYD
+-rw-r----- 1 mysql mysql   2048 Oct 22 19:00 host.MYI
+-rw-r----- 1 mysql mysql   8778 Oct 22 19:00 ndb_binlog_index.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 ndb_binlog_index.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 ndb_binlog_index.MYI
+-rw-r----- 1 mysql mysql   8586 Oct 22 19:00 plugin.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 plugin.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 plugin.MYI
+-rw-r----- 1 mysql mysql   9996 Oct 22 19:00 proc.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 proc.MYD
+-rw-r----- 1 mysql mysql   2048 Oct 22 19:00 proc.MYI
+-rw-r----- 1 mysql mysql   8875 Oct 22 19:00 procs_priv.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 procs_priv.MYD
+-rw-r----- 1 mysql mysql   4096 Oct 22 19:00 procs_priv.MYI
+-rw-r----- 1 mysql mysql   8838 Oct 22 19:00 servers.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 servers.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 servers.MYI
+-rw-r----- 1 mysql mysql     35 Oct 22 19:00 slow_log.CSM
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 slow_log.CSV
+-rw-r----- 1 mysql mysql   8976 Oct 22 19:00 slow_log.frm
+-rw-r----- 1 mysql mysql   8955 Oct 22 19:00 tables_priv.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 tables_priv.MYD
+-rw-r----- 1 mysql mysql   4096 Oct 22 19:00 tables_priv.MYI
+-rw-r----- 1 mysql mysql   8636 Oct 22 19:00 time_zone.frm
+-rw-r----- 1 mysql mysql   8624 Oct 22 19:00 time_zone_leap_second.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 time_zone_leap_second.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 time_zone_leap_second.MYI
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 time_zone.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 time_zone.MYI
+-rw-r----- 1 mysql mysql   8606 Oct 22 19:00 time_zone_name.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 time_zone_name.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 time_zone_name.MYI
+-rw-r----- 1 mysql mysql   8686 Oct 22 19:00 time_zone_transition.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 time_zone_transition.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 time_zone_transition.MYI
+-rw-r----- 1 mysql mysql   8748 Oct 22 19:00 time_zone_transition_type.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 time_zone_transition_type.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 time_zone_transition_type.MYI
+-rw-r----- 1 mysql mysql  10466 Oct 22 19:00 user.frm
+-rw-r----- 1 mysql mysql  19480 Oct 22 19:00 user.MYD
+-rw-r----- 1 mysql mysql   8192 Oct 22 19:00 user.MYI
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ rm -R test_datadir/*
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ./backup -r -f 20131022_192121.backup -s test_datadir -d mysql test
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ll test_datadir/
+total 8
+drwxr-x--- 2 mysql mysql 4096 Oct 22 19:00 mysql
+drwxr-x--- 2 mysql mysql 4096 Oct 22 19:00 test
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ll test_datadir/test/
+total 36
+-rw-r----- 1 mysql mysql 8558 Oct 22 19:00 sql_mode_test.frm
+-rw-r----- 1 mysql mysql   21 Oct 22 19:00 sql_mode_test.MYD
+-rw-r----- 1 mysql mysql 1024 Oct 22 19:00 sql_mode_test.MYI
+-rw-r----- 1 mysql mysql 8650 Oct 22 19:00 test_table.frm
+-rw-r----- 1 mysql mysql    0 Oct 22 19:00 test_table.MYD
+-rw-r----- 1 mysql mysql 1024 Oct 22 19:00 test_table.MYI
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ rm -R test_datadir/*
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ./backup -r -f 20131022_192121.backup -s test_datadir -D mysql user db
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ll test_datadir/
+total 4
+drwxr-xr-x 2 mysql mysql 4096 Oct 22 19:22 mysql
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ll test_datadir/mysql/
+total 108
+-rw-r----- 1 mysql mysql  9582 Oct 22 19:00 db.frm
+-rw-r----- 1 mysql mysql 41800 Oct 22 19:00 db.MYD
+-rw-r----- 1 mysql mysql 11264 Oct 22 19:00 db.MYI
+-rw-r----- 1 mysql mysql 10466 Oct 22 19:00 user.frm
+-rw-r----- 1 mysql mysql 19480 Oct 22 19:00 user.MYD
+-rw-r----- 1 mysql mysql  8192 Oct 22 19:00 user.MYI
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ rm -R test_datadir/*
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ./backup -r -f 20131022_192121.backup -s test_datadir -t mysql.user mysql.db test.sql_mode_test
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ll test_datadir/
+total 8
+drwxr-xr-x 2 mysql mysql 4096 Oct 22 19:23 mysql
+drwxr-xr-x 2 mysql mysql 4096 Oct 22 19:23 test
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ll test_datadir/*
+test_datadir/mysql:
+total 108
+-rw-r----- 1 mysql mysql  9582 Oct 22 19:00 db.frm
+-rw-r----- 1 mysql mysql 41800 Oct 22 19:00 db.MYD
+-rw-r----- 1 mysql mysql 11264 Oct 22 19:00 db.MYI
+-rw-r----- 1 mysql mysql 10466 Oct 22 19:00 user.frm
+-rw-r----- 1 mysql mysql 19480 Oct 22 19:00 user.MYD
+-rw-r----- 1 mysql mysql  8192 Oct 22 19:00 user.MYI
+
+test_datadir/test:
+total 20
+-rw-r----- 1 mysql mysql 8558 Oct 22 19:00 sql_mode_test.frm
+-rw-r----- 1 mysql mysql   21 Oct 22 19:00 sql_mode_test.MYD
+-rw-r----- 1 mysql mysql 1024 Oct 22 19:00 sql_mode_test.MYI
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ rm -R test_datadir/*
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ./backup -r -f 20131022_192121.backup -s test_datadir -a
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ll
+total 500
+-rw-r--r-- 1 mysql    mysql    464088 Oct 22 19:21 20131022_192121.backup
+-rw-r--r-- 1 mysql    mysql     24576 Oct 22 19:24 asmt4
+-rwxr-xr-x 1 nmassenk nmassenk   5925 Oct 22 19:19 backup
+-rw-r--r-- 1 mysql    mysql       285 Oct 22 18:59 expl
+drwxr-xr-x 6 mysql    mysql      4096 Oct 22 19:00 test_datadir
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ rm 20131022_192121.backup 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ll test_datadir/
+total 22068
+-rw-r----- 1 mysql mysql     4231 Oct 22 19:00 dba3.ccsf.edu.err
+-rw-r----- 1 mysql mysql        6 Oct 22 19:00 dba3.ccsf.edu.pid
+drwx------ 2 mysql mysql     4096 Oct 22 19:00 dkaplan_test
+drwx------ 2 mysql mysql     4096 Oct 22 19:00 dkaplan_test_2
+-rw-r----- 1 mysql mysql 10485760 Oct 22 19:00 ibdata1
+-rw-r----- 1 mysql mysql  5242880 Oct 22 19:00 ib_logfile0
+-rw-r----- 1 mysql mysql  5242880 Oct 22 19:00 ib_logfile1
+drwxr-x--- 2 mysql mysql     4096 Oct 22 19:00 mysql
+-rw-r----- 1 mysql mysql    19078 Oct 22 19:00 mysql-bin.000001
+-rw-r----- 1 mysql mysql   712921 Oct 22 19:00 mysql-bin.000002
+-rw-r----- 1 mysql mysql      125 Oct 22 19:00 mysql-bin.000003
+-rw-r----- 1 mysql mysql      125 Oct 22 19:00 mysql-bin.000004
+-rw-r----- 1 mysql mysql      351 Oct 22 19:00 mysql-bin.000005
+-rw-r----- 1 mysql mysql   794342 Oct 22 19:00 mysql-bin.000006
+-rw-r----- 1 mysql mysql      114 Oct 22 19:00 mysql-bin.index
+drwxr-x--- 2 mysql mysql     4096 Oct 22 19:00 test
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ./backup -b -f D_test -s test_datadir -D mysql user db
+[mysql@dba3 nmassenk]$ ./backup -b -f d_test -s test_datadir -d mysql test
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ./backup -b -f t_test -s test_datadir -t mysql.user mysql.db test.sql_mode_test
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ll
+total 244
+-rw-r--r-- 1 mysql    mysql     28672 Oct 22 19:26 asmt4
+-rwxr-xr-x 1 nmassenk nmassenk   5925 Oct 22 19:19 backup
+-rw-r--r-- 1 mysql    mysql    172164 Oct 22 19:25 d_test
+-rw-r--r-- 1 mysql    mysql      8997 Oct 22 19:25 D_test
+-rw-r--r-- 1 mysql    mysql       285 Oct 22 18:59 expl
+drwxr-xr-x 6 mysql    mysql      4096 Oct 22 19:00 test_datadir
+-rw-r--r-- 1 mysql    mysql      9323 Oct 22 19:26 t_test
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ rm -R test_datadir/*
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ll test_datadir/
+total 0
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ./backup -r -f D_test -s test_datadir -a
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ll test_datadir/
+total 4
+drwxr-xr-x 2 mysql mysql 4096 Oct 22 19:26 mysql
+[mysql@dba3 nmassenk]$ ll test_datadir/*
+total 108
+-rw-r----- 1 mysql mysql  9582 Oct 22 19:00 db.frm
+-rw-r----- 1 mysql mysql 41800 Oct 22 19:00 db.MYD
+-rw-r----- 1 mysql mysql 11264 Oct 22 19:00 db.MYI
+-rw-r----- 1 mysql mysql 10466 Oct 22 19:00 user.frm
+-rw-r----- 1 mysql mysql 19480 Oct 22 19:00 user.MYD
+-rw-r----- 1 mysql mysql  8192 Oct 22 19:00 user.MYI
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ rm -R test_datadir/*
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ./backup -r -f d_test -s test_datadir -a
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ll test_datadir/
+total 8
+drwxr-x--- 2 mysql mysql 4096 Oct 22 19:00 mysql
+drwxr-x--- 2 mysql mysql 4096 Oct 22 19:00 test
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ll test_datadir/*
+test_datadir/mysql:
+total 1024
+-rw-r----- 1 mysql mysql   8820 Oct 22 19:00 columns_priv.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 columns_priv.MYD
+-rw-r----- 1 mysql mysql   4096 Oct 22 19:00 columns_priv.MYI
+-rw-r----- 1 mysql mysql   9582 Oct 22 19:00 db.frm
+-rw-r----- 1 mysql mysql  41800 Oct 22 19:00 db.MYD
+-rw-r----- 1 mysql mysql  11264 Oct 22 19:00 db.MYI
+-rw-r----- 1 mysql mysql  10223 Oct 22 19:00 event.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 event.MYD
+-rw-r----- 1 mysql mysql   2048 Oct 22 19:00 event.MYI
+-rw-r----- 1 mysql mysql   8665 Oct 22 19:00 func.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 func.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 func.MYI
+-rw-r----- 1 mysql mysql     35 Oct 22 19:00 general_log.CSM
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 general_log.CSV
+-rw-r----- 1 mysql mysql   8776 Oct 22 19:00 general_log.frm
+-rw-r----- 1 mysql mysql   8700 Oct 22 19:00 help_category.frm
+-rw-r----- 1 mysql mysql  21497 Oct 22 19:00 help_category.MYD
+-rw-r----- 1 mysql mysql   3072 Oct 22 19:00 help_category.MYI
+-rw-r----- 1 mysql mysql   8612 Oct 22 19:00 help_keyword.frm
+-rw-r----- 1 mysql mysql  88650 Oct 22 19:00 help_keyword.MYD
+-rw-r----- 1 mysql mysql  16384 Oct 22 19:00 help_keyword.MYI
+-rw-r----- 1 mysql mysql   8630 Oct 22 19:00 help_relation.frm
+-rw-r----- 1 mysql mysql   8892 Oct 22 19:00 help_relation.MYD
+-rw-r----- 1 mysql mysql  16384 Oct 22 19:00 help_relation.MYI
+-rw-r----- 1 mysql mysql   8770 Oct 22 19:00 help_topic.frm
+-rw-r----- 1 mysql mysql 417444 Oct 22 19:00 help_topic.MYD
+-rw-r----- 1 mysql mysql  20480 Oct 22 19:00 help_topic.MYI
+-rw-r----- 1 mysql mysql   9510 Oct 22 19:00 host.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 host.MYD
+-rw-r----- 1 mysql mysql   2048 Oct 22 19:00 host.MYI
+-rw-r----- 1 mysql mysql   8778 Oct 22 19:00 ndb_binlog_index.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 ndb_binlog_index.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 ndb_binlog_index.MYI
+-rw-r----- 1 mysql mysql   8586 Oct 22 19:00 plugin.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 plugin.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 plugin.MYI
+-rw-r----- 1 mysql mysql   9996 Oct 22 19:00 proc.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 proc.MYD
+-rw-r----- 1 mysql mysql   2048 Oct 22 19:00 proc.MYI
+-rw-r----- 1 mysql mysql   8875 Oct 22 19:00 procs_priv.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 procs_priv.MYD
+-rw-r----- 1 mysql mysql   4096 Oct 22 19:00 procs_priv.MYI
+-rw-r----- 1 mysql mysql   8838 Oct 22 19:00 servers.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 servers.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 servers.MYI
+-rw-r----- 1 mysql mysql     35 Oct 22 19:00 slow_log.CSM
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 slow_log.CSV
+-rw-r----- 1 mysql mysql   8976 Oct 22 19:00 slow_log.frm
+-rw-r----- 1 mysql mysql   8955 Oct 22 19:00 tables_priv.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 tables_priv.MYD
+-rw-r----- 1 mysql mysql   4096 Oct 22 19:00 tables_priv.MYI
+-rw-r----- 1 mysql mysql   8636 Oct 22 19:00 time_zone.frm
+-rw-r----- 1 mysql mysql   8624 Oct 22 19:00 time_zone_leap_second.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 time_zone_leap_second.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 time_zone_leap_second.MYI
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 time_zone.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 time_zone.MYI
+-rw-r----- 1 mysql mysql   8606 Oct 22 19:00 time_zone_name.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 time_zone_name.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 time_zone_name.MYI
+-rw-r----- 1 mysql mysql   8686 Oct 22 19:00 time_zone_transition.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 time_zone_transition.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 time_zone_transition.MYI
+-rw-r----- 1 mysql mysql   8748 Oct 22 19:00 time_zone_transition_type.frm
+-rw-r----- 1 mysql mysql      0 Oct 22 19:00 time_zone_transition_type.MYD
+-rw-r----- 1 mysql mysql   1024 Oct 22 19:00 time_zone_transition_type.MYI
+-rw-r----- 1 mysql mysql  10466 Oct 22 19:00 user.frm
+-rw-r----- 1 mysql mysql  19480 Oct 22 19:00 user.MYD
+-rw-r----- 1 mysql mysql   8192 Oct 22 19:00 user.MYI
+
+test_datadir/test:
+total 36
+-rw-r----- 1 mysql mysql 8558 Oct 22 19:00 sql_mode_test.frm
+-rw-r----- 1 mysql mysql   21 Oct 22 19:00 sql_mode_test.MYD
+-rw-r----- 1 mysql mysql 1024 Oct 22 19:00 sql_mode_test.MYI
+-rw-r----- 1 mysql mysql 8650 Oct 22 19:00 test_table.frm
+-rw-r----- 1 mysql mysql    0 Oct 22 19:00 test_table.MYD
+-rw-r----- 1 mysql mysql 1024 Oct 22 19:00 test_table.MYI
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ rm -R test_datadir/*
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ll test_datadir/
+total 0
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ./backup -r -f t_test -s test_datadir -a
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ll test_datadir/
+total 8
+drwxr-xr-x 2 mysql mysql 4096 Oct 22 19:28 mysql
+drwxr-xr-x 2 mysql mysql 4096 Oct 22 19:28 test
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ll test_datadir/*
+test_datadir/mysql:
+total 108
+-rw-r----- 1 mysql mysql  9582 Oct 22 19:00 db.frm
+-rw-r----- 1 mysql mysql 41800 Oct 22 19:00 db.MYD
+-rw-r----- 1 mysql mysql 11264 Oct 22 19:00 db.MYI
+-rw-r----- 1 mysql mysql 10466 Oct 22 19:00 user.frm
+-rw-r----- 1 mysql mysql 19480 Oct 22 19:00 user.MYD
+-rw-r----- 1 mysql mysql  8192 Oct 22 19:00 user.MYI
+
+test_datadir/test:
+total 20
+-rw-r----- 1 mysql mysql 8558 Oct 22 19:00 sql_mode_test.frm
+-rw-r----- 1 mysql mysql   21 Oct 22 19:00 sql_mode_test.MYD
+-rw-r----- 1 mysql mysql 1024 Oct 22 19:00 sql_mode_test.MYI
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ echo "Testing errors"
+Testing errors
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ./backup -b -s test_datadir -D mysql slkdfj
+Error: No matching databases and/or tables found, unable to create backup.
+[mysql@dba3 nmassenk]$ ./backup -b -s test_datadir -D mysql slkdfj user
+Warning: table 'slkdfj' for database 'mysql' doesn't exist
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ./backup -b -s test_datadir -d mysql slkdfj
+Warning: database 'slkdfj' does not exist
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ ./backup -b -s test_datadir -t mysql.ksdf skldf.kdsfj
+Error: No matching databases and/or tables found, unable to create backup.
+[mysql@dba3 nmassenk]$ ./backup -b -s test_datadir -t mysql.ksdf skldf.kdsfj mysql.user
+Warning: table 'ksdf' for database 'mysql' doesn't exist
+Warning: database 'skldf' does not exist
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ 
+[mysql@dba3 nmassenk]$ exit
+exit
+
+Script done on Tue 22 Oct 2013 07:29:54 PM PDT

@@ -24,14 +24,24 @@ using namespace std;
 
 struct Node
 {
+	// Node struct for our linked list
 	int item;
 	Node *next;
 };
 
 void pushItem(Node *&head, int item)
 {
+	// Creates a new Node with item as it's value
+	// and adds it to the end of the linked list referenced
+	// by head
+	// Precondition:  head points to a link list of Nodes,
+	// 		  Item is an integer value
+	// Postcondition: The linked list referenced by head,
+	// 		  has one more Noded added to the list
+	// 		  with the value item and the next Node = NULL
 	if (head == NULL)
 	{
+		// Linked list is empty add node to beginning
 		Node *newPointer = new Node;
 		newPointer->item = item;
 
@@ -40,8 +50,10 @@ void pushItem(Node *&head, int item)
 	} 
 	else
 	{
+		// Linked list is not empty, add node to the end
 		Node *last = head;
 		while (last->next != NULL)
+			// Locate the last Node
 			last = last->next;
 
 		Node *newPointer = new Node;
@@ -54,11 +66,6 @@ void pushItem(Node *&head, int item)
 
 }
 
-void retrieveItem(const Node &head, int index)
-{
-
-}
-
 Node * merge(Node *& head1, Node *& head2)
 {
 	// returns a pointer to a sorted linked list that results from merging the sorted 
@@ -67,86 +74,72 @@ Node * merge(Node *& head1, Node *& head2)
 	// postconditions: returns a pointer to a sorted linked list containing the nodes
 	//   that used to be in the sorted linked lists pointed to by head1 and head2; 
 	//   head1 and head2 are NULL
-	Node *cur1, *cur2, *newHead, *newCur;
-	
-	cur1 = head1;
-	cur2 = head2;
+
+	// Node pointers to keep track of the newly created sorted list
+	Node *newHead, *newCur;
 	newHead = NULL;
 
-	Node *cur;
-	cout << endl;
-	cur = head1;
-	cout << "Head 1 before merge: ";
-	while(cur != NULL)
+	while(head1 != NULL && head2 != NULL)
 	{
-		cout << cur->item << ' ';
-		cur = cur->next;
-	}
-	cout << endl;
-	cur = head2;
-	cout << "Head 2 before merge: ";
-	while(cur != NULL)
-	{
-		cout << cur->item << ' ';
-		cur = cur->next;
-	}
-	cout << endl;
-	while(cur1 != NULL && cur2 != NULL)
-	{
-		if (cur1->item <= cur2->item)
+		// Compare the first value of each list
+		// and whichever one is less than the other
+		// detach from that list and add it to the new
+		// list
+		// If one of the lists reaches the end
+		// then stop
+		if (head1->item <= head2->item)
 		{
+			// First item of head1 is less than or equal to first
+			// item of head2, so detach from list1 and append to new list
+
 			if (newHead == NULL)
 			{
-				newHead = cur1;
+				newHead = head1;
 				newCur = newHead;
-				cur1 = cur1->next;
+				head1 = head1->next;
 			}
 			else
 			{
-				newCur->next = cur1;
+				newCur->next = head1;
 				newCur = newCur->next;
-				cur1 = cur1->next;
+				head1 = head1->next;
 			}
 		}
 		else
 		{
+			// First item of head2 is less than first item
+			// of head1, so detach from list2 and append to new list
 			if (newHead == NULL)
 			{
-				newHead = cur2;
+				newHead = head2;
 				newCur = newHead;
-				cur2 = cur2->next;
+				head2 = head2->next;
 			}
 			else
 			{
-				newCur->next = cur2;
+				newCur->next = head2;
 				newCur = newCur->next;
-				cur2 = cur2->next;
+				head2 = head2->next;
 			}
 		}
 	}
 
-	while (cur1 != NULL)
+	// Either one of head1 or head2 has reached the end
+	// whichever list with more items, add them one by one
+	// to the end of new list
+	while (head1 != NULL)
 	{
-		newCur->next = cur1;
+		newCur->next = head1;
 		newCur = newCur->next;
-		cur1 = cur1->next;
+		head1 = head1->next;
 	}
 
-	while (cur2 != NULL)
+	while (head2 != NULL)
 	{
-		newCur->next = cur2;
+		newCur->next = head2;
 		newCur = newCur->next;
-		cur2 = cur2->next;
+		head2 = head2->next;
 	}
-
-	cur = newHead;
-	cout << "Head after merge: ";
-	while(cur != NULL)
-	{
-		cout << cur->item << ' ';
-		cur = cur->next;
-	}
-	cout << endl;
 
 	return newHead;
 }
@@ -163,58 +156,69 @@ void mergeSort(Node *& head)
 	Node *cur = head;
 	while (cur != NULL)
 	{
+		// For mergesort must split the list in half and then recursively
+		// mergesort each of those halves.
+		// First determine length of list
 		cur = cur->next;
 		length++;
 	}
 	if ( length > 1 )
 	{
+		// Base case is a length of one, at which point no sorting is needed
+		// Otherwise traverse the linked list until reach the middle and split 
+		// the list at that point.  The first half is referenced by head, and the 
+		// second half is referenced by secHead
 		Node *secHead = head;
 		Node *prev = NULL;
 
 		int counter = 0;
-
 		while (counter < length/2)
 		{
 			prev = secHead;
 			secHead = secHead->next;
 			counter++;
 		}
-
 		prev->next = NULL;
 
-
+		// Recursively mergesort each of these halves
 		mergeSort(head);
 		mergeSort(secHead);
 
-		merge(head, secHead);
+		// merge the now sorted halves and head to point to the newly merged list
+		head = merge(head, secHead);
 	}
 }
 
 
 int main(int argc, const char *argv[])
 {
+	// Variables to handle user input
 	stringstream ss;
-	int item;
 	string input;
+	int item;
 	int count = 0;
 
-	cout << "Enter numbers separated by spaces: ";
+	// Prompt user for numbers
+	cout << "Enter numbers separated by spaces: " << endl;
 	getline(cin, input);
 	ss << input;
 
+	// Node head pointer for main list
 	Node *head;
-	head = NULL;
+	head = NULL; // no items yet
 
 	while (ss >> item)
 	{
+		// proccess each item entered by user, adding them to the end of the linked list
+		// referenced by head
 		pushItem(head, item);
 	}
 
 	ss.clear();
 	
+	// Show user original order
 	cout << endl;
-	cout << endl;
-	cout << "The numbers you entered un-sorted are: ";
+	cout << "The numbers you entered un-sorted are: " << endl;
 	Node *cur = head;
 	while(cur != NULL)
 	{
@@ -222,10 +226,12 @@ int main(int argc, const char *argv[])
 		cur = cur->next;
 	}
 
+	// Mergesort the list
 	mergeSort(head);
 
-	cout << endl << endl;
-	cout << "The numbers you entered sorted are: ";
+	// Show user the sorted order
+	cout << endl ;
+	cout << "The numbers you entered sorted are: " << endl;
 	cur = head;
 	while (cur != NULL)
 	{

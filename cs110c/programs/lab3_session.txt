@@ -1,0 +1,303 @@
+     1	Script started on Wed Oct 30 12:52:51 2013
+     2	~/dropbox/documents/ccsf/notes/courses/cs110c/programs 🍔 cat lab_3.cpp
+     3	// =====================================================================================
+     4	// 
+     5	//       Filename:  lab_3.cpp
+     6	// 
+     7	//    Description:  Creates a linked listed of integers as provided by the user
+     8	//    		    and then sorts these integers in ascending order using a mergesort
+     9	//    		    algorithm
+    10	// 
+    11	//        Version:  1.0
+    12	//        Created:  10/29/2013 20:35:23
+    13	//       Revision:  none
+    14	//       Compiler:  g++
+    15	// 
+    16	//         Author:  Nicholas Massenkoff (M4551V3), nmassenkoff@gmail.com
+    17	//        Company:  
+    18	// 
+    19	// =====================================================================================
+    20	
+    21	
+    22	#include <iostream>
+    23	#include <sstream>
+    24	
+    25	using namespace std;
+    26	
+    27	struct Node
+    28	{
+    29		// Node struct for our linked list
+    30		int item;
+    31		Node *next;
+    32	};
+    33	
+    34	void pushItem(Node *&head, int item)
+    35	{
+    36		// Creates a new Node with item as it's value
+    37		// and adds it to the end of the linked list referenced
+    38		// by head
+    39		// Precondition:  head points to a link list of Nodes,
+    40		// 		  Item is an integer value
+    41		// Postcondition: The linked list referenced by head,
+    42		// 		  has one more Noded added to the list
+    43		// 		  with the value item and the next Node = NULL
+    44		if (head == NULL)
+    45		{
+    46			// Linked list is empty add node to beginning
+    47			Node *newPointer = new Node;
+    48			newPointer->item = item;
+    49	
+    50			newPointer->next = head;
+    51			head = newPointer;
+    52		} 
+    53		else
+    54		{
+    55			// Linked list is not empty, add node to the end
+    56			Node *last = head;
+    57			while (last->next != NULL)
+    58				// Locate the last Node
+    59				last = last->next;
+    60	
+    61			Node *newPointer = new Node;
+    62			newPointer->item = item;
+    63	
+    64			newPointer->next = last->next;
+    65			last->next = newPointer;
+    66	
+    67		}
+    68	
+    69	}
+    70	
+    71	Node * merge(Node *& head1, Node *& head2)
+    72	{
+    73		// returns a pointer to a sorted linked list that results from merging the sorted 
+    74		//   linked lists pointed to by head1 and head2
+    75		// preconditions: head1 and head2 point to sorted linked lists
+    76		// postconditions: returns a pointer to a sorted linked list containing the nodes
+    77		//   that used to be in the sorted linked lists pointed to by head1 and head2; 
+    78		//   head1 and head2 are NULL
+    79	
+    80		// Node pointers to keep track of the newly created sorted list
+    81		Node *newHead, *newCur;
+    82		newHead = NULL;
+    83	
+    84		while(head1 != NULL && head2 != NULL)
+    85		{
+    86			// Compare the first value of each list
+    87			// and whichever one is less than the other
+    88			// detach from that list and add it to the new
+    89			// list
+    90			// If one of the lists reaches the end
+    91			// then stop
+    92			if (head1->item <= head2->item)
+    93			{
+    94				// First item of head1 is less than or equal to first
+    95				// item of head2, so detach from list1 and append to new list
+    96	
+    97				if (newHead == NULL)
+    98				{
+    99					newHead = head1;
+   100					newCur = newHead;
+   101					head1 = head1->next;
+   102				}
+   103				else
+   104				{
+   105					newCur->next = head1;
+   106					newCur = newCur->next;
+   107					head1 = head1->next;
+   108				}
+   109			}
+   110			else
+   111			{
+   112				// First item of head2 is less than first item
+   113				// of head1, so detach from list2 and append to new list
+   114				if (newHead == NULL)
+   115				{
+   116					newHead = head2;
+   117					newCur = newHead;
+   118					head2 = head2->next;
+   119				}
+   120				else
+   121				{
+   122					newCur->next = head2;
+   123					newCur = newCur->next;
+   124					head2 = head2->next;
+   125				}
+   126			}
+   127		}
+   128	
+   129		// Either one of head1 or head2 has reached the end
+   130		// whichever list with more items, add them one by one
+   131		// to the end of new list
+   132		while (head1 != NULL)
+   133		{
+   134			newCur->next = head1;
+   135			newCur = newCur->next;
+   136			head1 = head1->next;
+   137		}
+   138	
+   139		while (head2 != NULL)
+   140		{
+   141			newCur->next = head2;
+   142			newCur = newCur->next;
+   143			head2 = head2->next;
+   144		}
+   145	
+   146		return newHead;
+   147	}
+   148	
+   149	void mergeSort(Node *& head)
+   150	{
+   151		// sorts the link list pointed to by head 
+   152		// precondition: head points to a linked list of items
+   153		// postcondition: head points to a sorted linked list, containing the items
+   154		//   that were in the original linked list, but in sorted order
+   155		
+   156	
+   157		int length = 0;
+   158		Node *cur = head;
+   159		while (cur != NULL)
+   160		{
+   161			// For mergesort must split the list in half and then recursively
+   162			// mergesort each of those halves.
+   163			// First determine length of list
+   164			cur = cur->next;
+   165			length++;
+   166		}
+   167		if ( length > 1 )
+   168		{
+   169			// Base case is a length of one, at which point no sorting is needed
+   170			// Otherwise traverse the linked list until reach the middle and split 
+   171			// the list at that point.  The first half is referenced by head, and the 
+   172			// second half is referenced by secHead
+   173			Node *secHead = head;
+   174			Node *prev = NULL;
+   175	
+   176			int counter = 0;
+   177			while (counter < length/2)
+   178			{
+   179				prev = secHead;
+   180				secHead = secHead->next;
+   181				counter++;
+   182			}
+   183			prev->next = NULL;
+   184	
+   185			// Recursively mergesort each of these halves
+   186			mergeSort(head);
+   187			mergeSort(secHead);
+   188	
+   189			// merge the now sorted halves and head to point to the newly merged list
+   190			head = merge(head, secHead);
+   191		}
+   192	}
+   193	
+   194	
+   195	int main(int argc, const char *argv[])
+   196	{
+   197		// Variables to handle user input
+   198		stringstream ss;
+   199		string input;
+   200		int item;
+   201		int count = 0;
+   202	
+   203		// Prompt user for numbers
+   204		cout << "Enter numbers separated by spaces: " << endl;
+   205		getline(cin, input);
+   206		ss << input;
+   207	
+   208		// Node head pointer for main list
+   209		Node *head;
+   210		head = NULL; // no items yet
+   211	
+   212		while (ss >> item)
+   213		{
+   214			// proccess each item entered by user, adding them to the end of the linked list
+   215			// referenced by head
+   216			pushItem(head, item);
+   217		}
+   218	
+   219		ss.clear();
+   220		
+   221		// Show user original order
+   222		cout << endl;
+   223		cout << "The numbers you entered un-sorted are: " << endl;
+   224		Node *cur = head;
+   225		while(cur != NULL)
+   226		{
+   227			cout << cur->item << ' ';
+   228			cur = cur->next;
+   229		}
+   230	
+   231		// Mergesort the list
+   232		mergeSort(head);
+   233	
+   234		// Show user the sorted order
+   235		cout << endl ;
+   236		cout << "The numbers you entered sorted are: " << endl;
+   237		cur = head;
+   238		while (cur != NULL)
+   239		{
+   240			cout << cur->item << ' ';
+   241			cur = cur->next;
+   242		 }
+   243	
+   244		cout << endl;
+   245		return 0;
+   246	}
+   247	~/dropbox/documents/ccsf/notes/courses/cs110c/programs 🍔 
+   248	~/dropbox/documents/ccsf/notes/courses/cs110c/programs 🍔 
+   249	~/dropbox/documents/ccsf/notes/courses/cs110c/programs 🍔 g++ lab_3.cpp -o lab_3
+   250	~/dropbox/documents/ccsf/notes/courses/cs110c/programs 🍔 
+   251	~/dropbox/documents/ccsf/notes/courses/cs110c/programs 🍔 ./lab_3
+   252	Enter numbers separated by spaces: 
+   253	28 37 15 14 49 26 32 9 47 3
+   254	
+   255	The numbers you entered un-sorted are: 
+   256	28 37 15 14 49 26 32 9 47 3 
+   257	The numbers you entered sorted are: 
+   258	3 9 14 15 26 28 32 37 47 49 
+   259	~/dropbox/documents/ccsf/notes/courses/cs110c/programs 🍔 
+   260	~/dropbox/documents/ccsf/notes/courses/cs110c/programs 🍔 ./lab_3
+   261	Enter numbers separated by spaces: 
+   262	384 23 17 3499 27 2 84 7 5 66 493 88 95 99 38  34 84 9 5 84 23 75 88 595 473
+   263	
+   264	The numbers you entered un-sorted are: 
+   265	384 23 17 3499 27 2 84 7 5 66 493 88 95 99 38 34 84 9 5 84 23 75 88 595 473 
+   266	The numbers you entered sorted are: 
+   267	2 5 5 7 9 17 23 23 27 34 38 66 75 84 84 84 88 88 95 99 384 473 493 595 3499 
+   268	~/dropbox/documents/ccsf/notes/courses/cs110c/programs 🍔 
+   269	~/dropbox/documents/ccsf/notes/courses/cs110c/programs 🍔 
+   270	~/dropbox/documents/ccsf/notes/courses/cs110c/programs 🍔 ./lab_3
+   271	Enter numbers separated by spaces: 
+   272	10
+   273	
+   274	The numbers you entered un-sorted are: 
+   275	10 
+   276	The numbers you entered sorted are: 
+   277	10 
+   278	~/dropbox/documents/ccsf/notes/courses/cs110c/programs 🍔 
+   279	~/dropbox/documents/ccsf/notes/courses/cs110c/programs 🍔 
+   280	~/dropbox/documents/ccsf/notes/courses/cs110c/programs 🍔 ./lab_3
+   281	Enter numbers separated by spaces: 
+   282	10 9 8 7 6 5 4 3 2 1
+   283	
+   284	The numbers you entered un-sorted are: 
+   285	10 9 8 7 6 5 4 3 2 1 
+   286	The numbers you entered sorted are: 
+   287	1 2 3 4 5 6 7 8 9 10 
+   288	~/dropbox/documents/ccsf/notes/courses/cs110c/programs 🍔 
+   289	~/dropbox/documents/ccsf/notes/courses/cs110c/programs 🍔 
+   290	~/dropbox/documents/ccsf/notes/courses/cs110c/programs 🍔 ./lab_3
+   291	Enter numbers separated by spaces: 
+   292	1 2 3 4 5 6 7 8 9 10
+   293	
+   294	The numbers you entered un-sorted are: 
+   295	1 2 3 4 5 6 7 8 9 10 
+   296	The numbers you entered sorted are: 
+   297	1 2 3 4 5 6 7 8 9 10 
+   298	~/dropbox/documents/ccsf/notes/courses/cs110c/programs 🍔 
+   299	~/dropbox/documents/ccsf/notes/courses/cs110c/programs 🍔 
+   300	~/dropbox/documents/ccsf/notes/courses/cs110c/programs 🍔 exit
+   301	exit
+   302	
+   303	Script done on Wed Oct 30 12:55:19 2013

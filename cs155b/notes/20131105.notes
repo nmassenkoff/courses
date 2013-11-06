@@ -18,3 +18,94 @@
 	<li>-h</li>
 	<p>Display usage info</p>
 </ul>
+<p>Examples:</p>
+<pre>
+	engine_admin -h
+	engine_admin -d
+	engine_admin -a
+	engine_admin -n
+	engine_admin -c Falcon mydb:employee
+	engine_admin -e mydb:employee
+</pre>
+<p>Useful SQL statement for assignment:</p>
+<pre>
+	select table_name, engine from information_schema
+	where table_schema='mydb' and engine in not null;
+</pre>
+
+<h2>Continue MyIsam</h2>
+
+<p>MyISAM has to types of tables</p>
+<ul>
+	<li>static - (dones not have varchar, text or blob datatypes)</li>
+	<li>dynamic - (contains either varchar, text or blob datatypes)</li>
+</ul>
+
+<p>MyISAM Not capable of doing transactions.</p>
+
+<h2>InnoDB</h2>
+<p>Most popular after MyISAM. Can do transaction</p>
+<p>All system tables are MyISAM so can't forget about this engine, and cannot change.</p>
+
+<p>Problems:</p>
+<ul>
+	<li>Administration is much more involved. Lots of options that are available.</li>
+	<li>Uses to much hard disk space.</li>
+</ul>
+<p>Administration of:</p>
+<p>Very fast engine (designed for speed and very large data)</p>
+<p>No limit to the size of table. Can be any size, regardless of requirements of system. (ie if system says only 4gb limit to table, innoDB is still able to create larger)</p>
+<p>Creates two files</p>
+<ul>
+	<li>tablespace</li>
+	<li>logfile</li>
+</ul>
+<p>To disallow InnoDB add skip-innodb to config file</p>
+<p>To designate table as InnoDB:</p>
+<pre>
+	create table .. (.. .. ..) engine=innodb
+or
+	create table .. (.. .. ..) type=innodb
+</pre>
+<p>Default filesizes: tablespace -&gt; tbdata1 10 MB (8meg increment), logfile -&gt; 5 MB</p>
+<p>Creates two logfiles (5 MB each):</p>
+<ol>
+	<li>ib_logfile0</li>
+	<li>ib_logfile1</li>
+</ol>
+<p>Default path = $DATADIR</p>
+<p>To change defaults, in config file:</p>
+<pre>
+	[mysqld]
+	innodb_data_file_path = in_system:30M;in_users:20M;autoextend:max:2G #(M for MB G for GB)
+</pre>
+<p>Only last tablespace can be autoextended, therefore make sure first one is adequately sized.</p>
+<p>To change increment amount:</p>
+<pre>
+	[mysqld]
+	innodb_autoextend_increment=12M
+</pre>
+<p>To change default location for tablespace and logfile files:</p>
+<pre>
+	[mysqld]
+	innodb_data_home_dir=/usr/home/ibdata
+	innodb_data_home_dir=./  #Set's to $DATADIR
+	innodb_data_home_dir=''  #Set when using full paths in innodb_datafile_path
+</pre>
+<p>To set RAM usage defaults</p>
+<pre>
+	[mysqld]
+	innodb_buffer_pool_size=128M #(50-80% of RAM)
+	innodb_additional_mem_pool_size=10M #Adds more capacity to memory
+	innodb_log_file_size=30M # 25% of buffer_pool
+	innodb_log_buffer_size=8M
+	innodb_flush_log_at_trx_commit=1 #Sets to true
+</pre>
+<p>Structure of table stored in file ending in .frm</p>
+
+<p>To determine default table, in configuration file look for:</p>
+<pre>
+	default_storage_engine=myisam
+</pre>
+
+

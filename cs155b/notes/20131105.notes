@@ -43,6 +43,10 @@
 
 <p>MyISAM Not capable of doing transactions.</p>
 
+<p>To determine default table, in configuration file look for:</p>
+<pre>
+	default_storage_engine=myisam
+</pre>
 <h2>InnoDB</h2>
 <p>Most popular after MyISAM. Can do transaction</p>
 <p>All system tables are MyISAM so can't forget about this engine, and cannot change.</p>
@@ -102,10 +106,59 @@ or
 	innodb_flush_log_at_trx_commit=1 #Sets to true
 </pre>
 <p>Structure of table stored in file ending in .frm</p>
-
-<p>To determine default table, in configuration file look for:</p>
+<p>Also creates file $DATADIR/innodb_status.$PID which gives information like whether or not Innodb is active or not.</p>
 <pre>
-	default_storage_engine=myisam
+	show engine innodb status; #shows info from innodb_status.$PID file
 </pre>
+<p>How to convert table to InnoDB:</p>
+<pre>
+	alter table t1 engine=innodb;
+</pre>
+<p>To see how much space is leftover in tablespace:</p>
+<pre>
+	show table status from mydb like 'customer';
+</pre>
+<p>To make InnoDB default engine, in config file:</p>
+<pre>
+	[mysqld]
+	defaultable_type=innodb
+</pre>
+<p>System tables will still be MyISAM</p>
+
+<pre>
+	insert into t1 select * from t2; #t2 = MyISAM table, t1 = InnoDB table
+</pre>
+<p>Some DBA prefer each table gets own individual tablespace file.</p>
+<p>To do this, in config file:</p>
+<pre>
+	[mysqld]
+	innodb_file_per_table
+</pre>
+<p>Only affects newly created tables.  Tablespace file from previous tables still exists as one big file.</p>
+<p>With this option, the files created are of the form databasename/tablename.ibd</p>
+<p>Initial size is 64kb, and increase if needed</p>
+<p>This file contains both index and data</p>
+
+<p>To convert previous tables to individual ibd file:</p>
+<ol>
+	<li>Make a backup of your tablespace using mysqldump</li>
+	<li>Restore backup</li>
+	<pre>
+		mysql &lt; xxx.sql
+	</pre>
+</ol>
+
+<p>Some DBA's like to designate complete partition as tablespace:</p>
+<pre>
+	[mysqld]
+	innodb_data_file_path=/dev/hdb1:61440Mnewraw #61440 = size of partition
+</pre>
+<p>Afterwards shutdown mysqld and restart</p>
+<p>After running change config file to:</p>
+<pre>
+	[mysqld]
+	innodb_data_file_path=/dev/hdb1:61440Mraw #61440 = size of partition
+</pre>
+
 
 

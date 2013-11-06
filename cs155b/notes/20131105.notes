@@ -1,0 +1,20 @@
+<h1>Notes for November 5, 2013</h1>
+
+<p>Note: Missed last week's lecture</p>
+
+<h2>Homework Assignment</h2>
+<h3>engine_admin</h3>
+<ul>
+	<li>-a</li>
+	<p>Lists all avaliable engines on the system</p>
+	<li>-d</li>
+	<p>Lists default engine</p>
+	<li>-e [tablename]</li>
+	<p>Lists type of engine for given table</p>
+	<li>-n</li>
+	<p>Lists engines not available on system</p>
+	<li>-c [engine] [database]:[tablename]</li>
+	<p>Changes tablename to given engine</p>
+	<li>-h</li>
+	<p>Display usage info</p>
+</ul>

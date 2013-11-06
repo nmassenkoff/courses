@@ -160,5 +160,47 @@ or
 	innodb_data_file_path=/dev/hdb1:61440Mraw #61440 = size of partition
 </pre>
 
+<p>To expand tablespace after the fact:</p>
+<p>Easiest way is to add tablespace (all will logically combine ie if no space in data1 tablespace, put table in next)</p>
+<pre>
+	[mysqld]
+	innodb_data_file_path=ibdata1:1G;ibdata2:1G:ibdata3:4G:autoextend:max:16G
+</pre>
+<p>Tablespaces are completely portable (ie can copy tablespace from linux to mac and everything ok)</p>
 
+<p>To move tablespace from one database to onother:</p>
+<pre>
+	rename db1.mytbs db2.mytbs
+</pre>
+
+<p>Log files are called: ib_logfile0, ib_logfile1, ...</p>
+<p>Two reasons for logfiles:</p>
+<ol>
+	<li>To make large transactions possible. Without logfiles cannot do large transactions.</li>
+	<li>Restore InnoDB data after a crash.</li>
+</ol>
+
+<p>List of engines:</p>
+<ul>
+	<li>SAM</li>
+	<li>MyISAM</li>
+	<li>InnoDB</li>
+	<li>Falcon</li>
+	<li>Maria</li>
+	<li>Heap(Memory)</li>
+	<li>BDB</li>
+	<li>BlackHole</li>
+	<li>Federated</li>
+	<li>Merge</li>
+</ul>
+
+<h2>Falcon engine</h2>
+<p>One of the best and newest.  Very fast and good for large transactions.</p>
+<p>Made for very modern hardware, need large hard disk, large memory, and fast CPU.</p>
+<p>All of the tables, go to one file. That file has .fts extension. Given database mydb, any table created will go to file mydb.fts</p>
+<p>Falcon also creates tempory datafile: falcon_temporary.fts and used for any scratch table. ie if you want to sort a table, some scratch or byproduct tables are stored in falcon_temporary.fts. After finished with task, the file is cleared.</p>
+
+<h2>Heap (Memory)</h2>
+<p>Whatever you are creating will be created in the memory.  If creating table, structure is still stored in .frm on harddisk but any data you add to table is stored only memory. Because of this it is very fast, but as soon as you shutdown or restart your system data is gone.</p>
+<p>Cannot even use mysqldump</p>
 

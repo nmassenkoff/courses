@@ -17,6 +17,23 @@
 	load xml 'info.xml' into table info;
 </pre>
 
+<p>Left board</p>
+<pre>
+	id	int
+	name	text
+	age	int
+
+	select * from info into outfile 'info.txt';
+
+	cat info.txt
+	1	john	30
+	2	abbas	87
+	3	alex	25
+
+	1,john,30
+	2,abbas,87
+	3,alex,25
+
 <p>Center board (current board)</p>
 <pre>
 	mysqlimport [options] dbname emp.txt person.txt
@@ -33,4 +50,51 @@
 
 	--fields-escaped-by=string
 
+	--fields-optionally-enclosed--by=string
+
 	--fields-terminated-by=string
+
+	--force
+
+	--help or -?
+
+	--ignore-lines=n or -N n
+
+	--local or -L, where the data files are on local machine, if not set will assume data files on server
+
+	--lines-terminated-by=string
+
+	--lock-tables or -l
+	
+	--low-priority
+
+	--silent or -s
+
+	--verbose or -v
+
+	--version or -V
+
+	Note: table name will be generated based on name of file
+</pre>
+
+<h3>Using select to assign value to variables</h3>
+<pre>
+	select name, age into @name, #age
+	from emp where id=z limit 1;
+</pre>
+
+<h1>SPs</h1>
+<p>In oracle we use PL/SQL</p>
+<p>In MySQL we use:</p>
+<ul>
+	<li>Stored Procedure</li>
+	<li>Stored Function</li>
+	<li>Stored Trigger</li>
+	<li>Java</li>
+</ul>
+
+
+
+
+
+

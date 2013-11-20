@@ -120,4 +120,9 @@
 	<li>comment<p>text</p></li>
 </ul>
 
-	
+<p>3 ways to develop procedure and function</p>
+<ol>
+	<li>using mysql session</li>
+	<li>use a text editor</li>
+	<li>use mksp/mksf [proc_name] </li>
+</ol>

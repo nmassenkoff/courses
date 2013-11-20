@@ -79,6 +79,18 @@ Node * merge(Node *& head1, Node *& head2)
 	Node *newHead, *newCur;
 	newHead = NULL;
 
+	// First determine first item of newHead
+	if (head1->item <= head2->item)
+	{
+		newHead = head1;
+		head1 = head1->next;
+	} else {
+		newHead = head2;
+		head2 = head2->next;
+	}
+
+	newCur = newHead;
+
 	while(head1 != NULL && head2 != NULL)
 	{
 		// Compare the first value of each list
@@ -87,40 +99,21 @@ Node * merge(Node *& head1, Node *& head2)
 		// list
 		// If one of the lists reaches the end
 		// then stop
+
+		// Now merge rest of list
 		if (head1->item <= head2->item)
 		{
 			// First item of head1 is less than or equal to first
 			// item of head2, so detach from list1 and append to new list
-
-			if (newHead == NULL)
-			{
-				newHead = head1;
-				newCur = newHead;
-				head1 = head1->next;
-			}
-			else
-			{
-				newCur->next = head1;
-				newCur = newCur->next;
-				head1 = head1->next;
-			}
-		}
-		else
-		{
+			newCur->next = head1;
+			newCur = newCur->next;
+			head1 = head1->next;
+		} else {
 			// First item of head2 is less than first item
 			// of head1, so detach from list2 and append to new list
-			if (newHead == NULL)
-			{
-				newHead = head2;
-				newCur = newHead;
-				head2 = head2->next;
-			}
-			else
-			{
-				newCur->next = head2;
-				newCur = newCur->next;
-				head2 = head2->next;
-			}
+			newCur->next = head2;
+			newCur = newCur->next;
+			head2 = head2->next;
 		}
 	}
 

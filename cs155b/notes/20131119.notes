@@ -1,0 +1,36 @@
+<h1>Notes for November 19, 2013</h1>
+
+<h4>Note: 50 min late</h4>
+
+<p>Right board</p>
+<pre>
+	mysql --xml  -e 'select * from info &gt; info.xml
+
+	2xml
+
+	1) import datafile to a table
+
+	2) export the table to xml
+
+	tbl2xml info
+
+	load xml 'info.xml' into table info;
+</pre>
+
+<p>Center board (current board)</p>
+<pre>
+	mysqlimport [options] dbname emp.txt person.txt
+
+	--column=c1,c2,... or -c c1,c2,c3,...
+
+	--compress or -C
+
+	--debug
+
+	--delete or -D
+
+	--fields-enclosed-by=string
+
+	--fields-escaped-by=string
+
+	--fields-terminated-by=string

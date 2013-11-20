@@ -94,8 +94,30 @@
 	<li>Java</li>
 </ul>
 
+<p>Script to run any mysql function:</p>
+<pre>
+	runf.ksh 'sqrt(49)'
 
+	use -b for no frame
+</pre>
 
+<h3>Two helpful scripts</h3>
+<p>mksp (make stored procedure)</p>
+<p>mksf (make stored function)</p>
 
+<h3>Proc table</h3>
+<ul>
+	<li>db</li>
+	<li>name</li>
+	<li>type enum{'FUNCTION', 'PROCEDURE'} (internally represented as integer ie FUNCTION = 1, PROCEDURE = 2)</li>
+	<li>language enum{'SQL'}</li>
+	<li>sql_data_access enum{CONTAINS_SQL, NO_SQL, READS_SQL_DATA, MODIFIES_SQL_DATA}</li>
+	<li>is_deterministic enum{YES, NO}</li>
+	<li>security_type enum{INVOKER, DEFINER}</li>
+	<li>definer char(77)</li>
+	<li>created timestamp</li>
+	<li>modified timestamp</li>
+	<li>comment text</li>
+</ul>
 
-
+	

@@ -66,4 +66,121 @@ Use by saying:
 	call show_time();
 </pre>
 	
+<pre>
+	delimiter $$
+	create procedure count_row( tb_name text, out n int)
+	begin
+		set @cmd= concat"select count(*) from ", tb_name, " into @n");
+		prepare st from @cmd
+		execute st;
+		deallocate prepare st;
+		set n=@n;
+	end$$
+</pre>
 
+<p>More info on prepared statements:</p>
+<pre>
+	prepare st from 'insert into product_codes values (?,?)";
+
+	set @code='QB';
+	set @name='MySql Query Browser';
+	execute st using @code, @name;
+	deallocate st;
+</pre>
+
+<p>Another example:</p>
+<pre>
+	delimiter $$
+	create function cust_status(status char(1))
+	returns varchar(20)
+	begin
+		if status ='O' then
+			return('Over_due');
+		elseif status = 'U' then
+			return('Uptodate');
+		elseif status = 'N' then
+			return('New');
+		end if;
+
+		return('incalid code');
+	end$$
+	delimiter ;
+</pre>
+
+<p>Another kind of loop:</p>
+<pre>
+	set i-0;
+loop1:	loop
+		set i =  i + 1;
+		if &gt;= 10 then leave loop1;
+		elseif mod(i, 2) = 0 then iterate loop1;
+		end if
+		select concat(i, " is an odd number");
+	end loop loop1
+</pre>
+
+<p>Old homework assignment, make function "shorten"</p>
+<pre>
+	create functionn shorten( s varcahr(255), n int)
+	returns varchar(255)
+	begin
+		if isnull(s) then
+			return '';
+		elseif n &lt; 15 then
+			return left(s, n);
+		elseif cahr_length(s) &lt;= n then
+			return s;
+		else
+			return concat( left(s, n-10), '...', right(s, 5));
+		end if;
+	end$$
+</pre>
+
+<p>Another exam question:</p>
+<pre>
+	create function half(value double) returns double
+	deterministic
+	comment "This is a final exam question'
+	begin
+		return value / 2;
+	end$$
+	select half(62);
+</pre>
+
+<p>Another exam question:</p>
+<p>Select all of the nmaes of your functions in mydb database</p>
+<pre>
+	select name from proc where type = 'FUNCTION';
+
+	select * from inforamtion_schema.routines;
+</pre>
+
+<p>Some stored procedure declaration options:</p>
+<pre>
+	LANGUAGE SQL
+	DETERMNISTIC || NON DETERMINISTIC
+	CONTAINS SQL || NO SQL
+	READS SQL DATA || MODIFIES SQL DATA
+	COMMENT "string"
+
+	security also goes here but will go over it later
+</pre>
+
+<p>To change name of routine:</p>
+<pre>
+	alter function abcd name doit;
+or
+	alter procedure abcd name doit;
+</pre>
+
+<p>To see source code of function:</p>
+<pre>
+	show create function abcd;
+</pre>
+
+<p>to back up function:</p>
+<pre>
+	mysqldump mysql proc &gt; mybackup.sql
+</pre>
+
+<p>Can only back up and restore everything at once though</p>

@@ -1,0 +1,36 @@
+<h1>Notes for November 26, 2013</h1>
+
+<p>Note: was 30 min late</p>
+
+<h2>Functions</h2>
+
+<p>List functions:</p>
+<pre>
+	show function status;
+</pre>
+
+<p>results look like:</p>
+<table><tr>
+	<td>DB</td> <td>Name</td> <td>type</td> <td>definer</td> <td>securityType</td> <td>comment</td>
+</tr><tr>
+	<td>mydb</td> <td>good</td> <td>function</td> <td>abbas</td> <td>definer</td>
+</tr><tr>
+	<td>test</td> <td>nice</td> <td>function</td> <td>john</td> <td>definer</td>
+</tr></table>
+
+<p>Can filter list:</p>
+<pre> 
+	show function status where db='test';
+</pre>
+
+<p>Simple function:</p>
+<pre>
+	delimiter $$
+	procedure good_students(IN grade int)
+	begin
+		select lname, fname whereee avg_score &gt;=grade;
+	end$$
+
+	delimiter ;
+
+

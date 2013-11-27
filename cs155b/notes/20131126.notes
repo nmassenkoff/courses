@@ -32,5 +32,38 @@
 	end$$
 
 	delimiter ;
+</pre>
 
+<p>Another example:</p>
+
+<pre>
+	delimiter $$
+	drop function if exists fact$$
+	createfunction fact(n int)
+	returns int
+	NO SQL
+	begin
+		declare p int default 1;
+		while (n &gt;= 1) do
+			set p = p * n;
+			set n = n - 1
+		end while;
+		return p;
+	end$$
+
+</pre>
+
+<p>Example from final exame: create procedure called showTime:</p>
+<pre>
+	delimiter $$
+	create procedure show_time()
+	begin
+		select concat('time is: ', now());
+	end $$
+	delimiter ;
+
+Use by saying:
+	call show_time();
+</pre>
+	
 

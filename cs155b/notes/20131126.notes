@@ -13,9 +13,9 @@
 <table><tr>
 	<td>DB</td> <td>Name</td> <td>type</td> <td>definer</td> <td>securityType</td> <td>comment</td>
 </tr><tr>
-	<td>mydb</td> <td>good</td> <td>function</td> <td>abbas</td> <td>definer</td>
+	<td>mydb</td> <td>good</td> <td>function</td> <td>abbas</td> <td>definer</td><td></td>
 </tr><tr>
-	<td>test</td> <td>nice</td> <td>function</td> <td>john</td> <td>definer</td>
+	<td>test</td> <td>nice</td> <td>function</td> <td>john</td> <td>definer</td><td></td>
 </tr></table>
 
 <p>Can filter list:</p>

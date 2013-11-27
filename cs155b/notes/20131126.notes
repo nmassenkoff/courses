@@ -11,7 +11,7 @@
 
 <p>results look like:</p>
 <table><tr>
-	<td>DB</td> <td>Name</td> <td>type</td> <td>definer</td> <td>securityType</td> <td>comment</td>
+	<th>DB</th> <th>Name</th> <th>type</th> <th>hefiner</th> <th>securityType</th> <th>comment</th>
 </tr><tr>
 	<td>mydb</td> <td>good</td> <td>function</td> <td>abbas</td> <td>definer</td><td></td>
 </tr><tr>

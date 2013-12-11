@@ -1,0 +1,190 @@
+<h1>Notes for December 10th, 2013</h1>
+
+<h1>Triggers</h1>
+
+<p>Bunch of codes that will be activated whenever modifing updating changing tables/database.</p>
+
+<p>Maximun # of trigger per table is 6.</p>
+
+<h3>Naming Convention</h3>
+<pre>
+	[table_name].[(b=before | a=after)(d=delete | i=insert | u=update)]
+</pre>
+
+<p>Example:</p>
+<pre>
+	deliminter $$
+	create table test1(id serial, percent double);  &lt;--(serial = autoincrement NOT NULL)$$
+	create trigger test1.bi
+	before insert on test1 for each row
+	begin
+		if NEW.percent &lt; 0.0 OR NEW.percent &gt; 1.0
+		then
+			set NEW.percent = NULL;
+		end if;
+	end$$
+
+	create trigger test1.bu
+	before update on test1 for each row
+	begin
+		if NEW.percent &lt; 0.0 or NEW.percent &gt; 1.0
+		then
+			set NEW.percent = NULL;
+		end if;
+	end$$
+</pre>
+
+<p>To remove trigger:</p>
+<pre>
+	drop trigger if exists test1.bu;
+</pre>
+
+<p>Set up log:</p>
+<pre>
+	create trigger acct_balance.au after update
+	on acct_balance for each row
+	begin
+		insert into transaction_log (user_id, description)
+		values (user(), concat('adjusted account', 
+			NEW.account_id, 
+			'from', OLD.balance, 
+			'to', NEW.balance));
+	end$$
+
+	create trigger acct_balance.bu before update
+	on acct_balance for each row
+	begin
+		declare dummy varchar(32);
+		if NEW.balance &lt; then
+			select 'Account balance can not be negative into dummy * from acct_balance
+			where account_id = NEW.account_id;
+		end if;
+	end$$
+</pre>
+<p>List of informat_schema info re triggers</p>
+<ul>
+	<li>trigger_catalog</li>
+	<li>trigger_schema</li>
+	<li>trigger_name</li>
+	<li>event_manipulation</li>
+	<li>action_statment</li>
+	<li>action_orientation</li>
+	<li>action_timing</li>
+	<li>event_object_table</li>
+</ul>
+
+<h2>Replication</h2>
+<p>Normally in real world do not have one computer running mysql server</p>
+<p>Normally have one computer known as master, and then several computers as slaves</p>
+
+<p>Slave computers are generally only handling queries because set to read-only. For updating database, master handles jobs.</p>
+<p>Reasons to use:</p>
+<ul>
+	<li>High availability</li>
+	<li>Load balancing</li>
+	<li>off state processing ie backup, maintenance, report</li>
+</ul>
+
+<p>Note: Binary log is how master slave communicate and is asyncronous, (meaning when update is done on master not immediately slave will sync with master). Possible to setup 'semi' syncronous communication.</p>
+<p>Steps to set up one slave and one master topology</p>
+<ol>
+	<li>Set up user accont on master for each slave</li>
+	<pre>
+		grant replication slave on *.* to 
+		'replicuser'@'slave_hostname' identified by '[password]';
+	</pre>
+	<li>Grant also select, reload and super</li>
+	<li>Test if slave can connect</li>
+	<pre>
+		on slave type:
+		mysql -u replicuser -p[password] -h master_hostname
+	</pre>
+	<li>On slave type:</li>
+	<pre>
+		flush tables with read lock;
+		show master status;
+
+	Displays:
+		File			position	binlog-do-db	binlog-ignore-db
+		saturn-bin-00005	375344
+	</pre>
+	<li>Write down file and position</li>
+	<li>shutdown master</li>
+	<li>make back up of all databases or create "snapshot"</li>
+	<pre>
+		cd $DATADIR
+		tar cvzf snapshot.tgz *
+	or
+		mysqldump --all-databases --master-data &gt; my.dump
+	if using InnoDB
+		mysqldump --all-databases --master-data --include-transaction &gt; my.dump
+	</pre>
+	<li>Configure master server</li>
+	<pre>
+		in /etc/my.cnf under [mysqld] add:
+		log-bin=mysqlmaster
+		server-id=1 #each server must have id
+	</pre>
+	<li>Startup master mysql</li>
+	<li>unlock tables</li>
+	<pre>
+		unlock tables;
+	</pre>
+	<li>go to slave</li>
+	<li>make sure remove everything from previous replication</li>
+	<pre>
+		reset slave;
+	</pre>
+	<li>Shutdown mysql on slave</li>
+	<li>Using tar bring back snapshot of master to slave</li>
+	<pre>
+		cd $DATADIR
+		mv mysql/ mysql.bak/
+		mkdir mysql
+		tar xzvf snapshot.tgz
+		cd ..
+		chown mysql.mysql -R mysql/
+	</pre>
+	<li>In /etc/my.cnf of slave under [mysqld] add options</li>
+	<pre>
+		server-id=2
+		read-only
+		copy-all-options-for-innodb-from-master-my.cnf
+	</pre>
+	<li>Then in mysql:</li>
+	<pre>
+		mysqlgt; change master to
+		master_host='[name-of-master]or[ipaddress of master],
+		master_user='replicuser',
+		master_password='[password]',
+		master_log_file='saturn-bin-00005',
+		master_log_pos='375344;
+
+		start slave;
+	</pre>
+	<li>check error log to see if any issues</li>
+</ul>
+
+<p> If error may need to temporarily increase net_read_timeout and net_write_timeout from 30 to 1000</p>
+
+<p>Easy way to stop replication is to on master type:</p>
+<pre>
+	set sql_log_bin=0;
+to start
+	set sql_log_bin=1;
+
+to see status
+
+	show slave status;
+
+pay attention to:
+	slave_IO_running yes
+	slave_SQL_running yes
+</pre>
+
+<p>Another ease way to set up master and slave using command:</p>
+<pre>
+	load data from master;
+</pre>
+<p>Only works if only using MyISAM, otherwise if using other engine must use previous method</p>
+

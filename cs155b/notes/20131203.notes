@@ -1,0 +1,45 @@
+<h1>Notes for December 3rd, 2013</h1>
+
+<p>Note: did not take notes for the first hour and half.  Mostly about procedures and functions.</p>
+
+<h2>Error Handling</h2>
+
+<h3>SQLSTATE</h3>
+
+<ul>
+	<li>SQLWARNING</li>
+		<p>01nnn</p>
+		<p>Program will continue</p>
+	<li>NOT FOUND</li>
+	<li>SQLEXCEPTION</li>
+		<p>Program will stop</p>
+	<li>SQLSTATE</li>
+		<p>Refers to specific error code</p>
+	<li>mysqlerror</li>
+		<p>Specific to MySQL</p>
+</ul>
+
+<p>Error handler example</p>
+
+<pre>
+	declare continue handler for 1265 begin end; (this handler does nothing/ignores error)
+
+Note: if action only one line do not need begin and end
+
+	declare error int default 0;
+	declare continue handler for SQLEXCEPTION
+		set error=1;
+
+Later in program:
+
+	if error = 1 then ... do something
+
+</pre>
+<p>Another example</p>
+<pre>
+	declare error int default 0;
+	declare continue handler for SQLEXCEPTION
+	begin
+		ROLLBACK;
+		select 'error occurred terminating now';
+
